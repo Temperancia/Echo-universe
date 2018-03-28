@@ -1,0 +1,10 @@
+* { white-space: nowrap; }
+@import '../global.scss';
+
+nav {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  background-color: $blue-first;
+  z-index: 1;
+}

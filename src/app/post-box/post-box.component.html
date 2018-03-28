@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<div class="post-box">
+  <input class="form-control" placeholder="Whats that ?" [(ngModel)]="currentPost.name" (focus)="selectTitle()">
+  <textarea class="form-control" placeholder="Say something already" [(ngModel)]="currentPost.content" (focus)="selectContent()"></textarea>
+  <app-emojis ref-emojis class='emojis' (onEmoji)='onEmoji($event)'></app-emojis>
+  <button class="btn btn-primary show-emojis" type="button" (click)="emojis.show()">Emojis :O</button>
+  <button class="w-100 btn btn-primary" type="button" (click)="post()">Echo it !</button>
+</div>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<nav>
+  <div class="row align-items-center">
+    <div class="col-1"><a routerLink="/home"><img class="w-100" src="assets/img/logo.png"></a></div>
+    <div class="col-1">
+      <button class="btn btn-primary" (click)="showPostBox()" *ngIf="isLoggedIn">React</button>
+      <app-post-box *ngIf="showPost"></app-post-box>
+    </div>
+    <div class="col-3">
+      <button class="btn d-block mx-auto" [ngClass]="postService.displayedFluxes.trending ? &quot;btn-primary&quot; : &quot;btn-secondary&quot;" (click)="showTrendingFlux()" *ngIf="router.url === &quot;/home&quot;">Trendy flux</button>
+    </div>
+    <div class="col-2">
+      <input class="form-control" placeholder="Search a trust" *ngIf="isLoggedIn">
+    </div>
+    <div class="col-3">
+      <button class="btn d-block mx-auto" [ngClass]="postService.displayedFluxes.friends ? &quot;btn-primary&quot; : &quot;btn-secondary&quot;" (click)="showFriendsFlux()" *ngIf="router.url === &quot;/home&quot;">Friends flux</button>
+    </div>
+    <div class="col-1"><a routerLink="/my-profile" *ngIf="isLoggedIn">Me</a></div>
+    <div class="col-1">
+      <button class="btn btn-primary" (click)="logout()" *ngIf="isLoggedIn">Out</button>
+    </div>
+  </div>
+</nav>

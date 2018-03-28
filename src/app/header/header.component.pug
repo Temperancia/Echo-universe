@@ -1,0 +1,19 @@
+doctype html
+nav
+  div(class='row align-items-center')
+    div(class='col-1')
+      a(routerLink='/home')
+        img(class='w-100', src='/assets/img/logo.png')
+    div(class='col-1')
+      button(class='btn btn-primary', '(click)'='showPostBox()', *ngIf='isLoggedIn') React
+      app-post-box(*ngIf='showPost')
+    div(class='col-3')
+      button(class='btn d-block mx-auto', '[ngClass]'='postService.displayedFluxes.trending ? "btn-primary" : "btn-secondary"', '(click)'='showTrendingFlux()', *ngIf='router.url === "/home"') Trendy flux
+    div(class='col-2')
+      input(class='form-control', placeholder='Search a trust', *ngIf='isLoggedIn')
+    div(class='col-3')
+      button(class='btn d-block mx-auto', '[ngClass]'='postService.displayedFluxes.friends ? "btn-primary" : "btn-secondary"', '(click)'='showFriendsFlux()', *ngIf='router.url === "/home"') Friends flux
+    div(class='col-1')
+      a(routerLink='/my-profile', *ngIf='isLoggedIn') Me
+    div(class='col-1')
+      button(class='btn btn-primary', '(click)'='logout()', *ngIf='isLoggedIn') Out

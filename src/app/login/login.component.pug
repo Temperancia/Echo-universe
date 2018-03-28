@@ -1,0 +1,11 @@
+doctype html
+app-header([app]='app')
+form(name='form', '(ngSubmit)'='login()', ref-f='ngForm')
+  div(class='row text-center')
+    div(class='col-2')
+      input(name='username', placeholder='Username', ref-username='ngModel', '[(ngModel)]'='model.username')
+    div(class='col-2')
+      input(type='password', placeholder='Password', ref-password='ngModel', name='password', '[(ngModel)]'='model.password')
+    div(class='col-1')
+      button Login
+app-footer
