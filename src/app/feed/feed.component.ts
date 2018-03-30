@@ -9,12 +9,11 @@ import { Post } from '../post';
 })
 export class FeedComponent implements OnInit {
   public posts: Post[];
-  constructor(private postService: PostService) {
+  constructor(protected postService: PostService) {
 
   }
   ngOnInit() {
-    this.postService.getPosts()
-      .subscribe(posts => this.posts = posts);
+
   }
   public close(id) {
     /*

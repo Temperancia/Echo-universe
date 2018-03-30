@@ -1,17 +1,26 @@
-* {
-  white-space: nowrap;
-}
 @import '../global.scss';
 
 nav {
   position: fixed;
   top: 0;
   left: 0;
-<<<<<<< HEAD
-  width: 100vw;
-=======
   width: 100%;
->>>>>>> 884e1ed6588308f67dfa2fd3c8d10022a37cbd31
-  background-color: $blue-first;
+  color: white;
+  background-color: #292522;
   z-index: 1;
+  .board {
+    border-radius: 15px;
+    background-color: rgb(218, 241, 244);
+    .btn {
+      border-radius: 5px;
+      width: 100%;
+    }
+    img {
+      cursor: pointer;
+    }
+    .btn-others {
+      color: inherit;
+      background-color: $blue-third;
+    }
+  }
 }

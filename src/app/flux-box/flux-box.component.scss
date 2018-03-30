@@ -1,0 +1,27 @@
+@import '../global.scss';
+.flux-box {
+  position: absolute;
+}
+.btn {
+  border-radius: 5px;
+  width: 100%;
+}
+.btn-tendance {
+  color: inherit;
+  background-color: $blue-first;
+}
+
+.btn-friend {
+  color: inherit;
+  background-color: $blue-second;
+}
+
+.btn-daily {
+  color: inherit;
+  background-color: $blue-fifth;
+}
+
+.btn-style {
+  color: inherit;
+  background-color: $blue-fourth;
+}

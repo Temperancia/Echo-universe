@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <nav>
   <div class="row align-items-center">
-    <div class="col-1"><a routerLink="/home"><img class="w-100" src="assets/img/logo.png"></a></div>
-    <div class="col-1">
-      <button class="btn btn-primary" (click)="showPostBox()" *ngIf="isLoggedIn">React</button>
-      <app-post-box *ngIf="showPost"></app-post-box>
-    </div>
-    <div class="col-3">
-      <button class="btn d-block mx-auto" [ngClass]="postService.displayedFluxes.trending ? &quot;btn-primary&quot; : &quot;btn-secondary&quot;" (click)="showTrendingFlux()" *ngIf="router.url === &quot;/home&quot;">Trendy flux</button>
-    </div>
     <div class="col-2">
-      <input class="form-control" placeholder="Search a trust" *ngIf="isLoggedIn">
+      <a routerLink="/home"><img class="w-100" src="assets/img/logo_width.png"></a>
     </div>
-    <div class="col-3">
-      <button class="btn d-block mx-auto" [ngClass]="postService.displayedFluxes.friends ? &quot;btn-primary&quot; : &quot;btn-secondary&quot;" (click)="showFriendsFlux()" *ngIf="router.url === &quot;/home&quot;">Friends flux</button>
-    </div>
-    <div class="col-1"><a routerLink="/my-profile" *ngIf="isLoggedIn">Me</a></div>
-    <div class="col-1">
-      <button class="btn btn-primary" (click)="logout()" *ngIf="isLoggedIn">Out</button>
+    <div class="col-10">
+      <div class="container">
+        <div class="row py-2 my-2 board" *ngIf="isLoggedIn">
+          <div class="col-2">
+            <button class="btn btn-others" (click)="showFluxBox()">Fluxes</button>
+            <app-flux-box *ngIf="showFlux"></app-flux-box>
+          </div>
+          <div class="col-3 h-100">
+            <input class="form-control align-self-center" placeholder="Search">
+          </div>
+          <div class="col-2">
+            <button class="btn btn-others" routerLink="/trusts">Trust Center</button>
+          </div>
+          <div class="offset-1 col-1">
+            <img class="w-75" src="assets/img/person.png" routerLink="/my-profile">
+          </div>
+          <div class="offset-1 col-1">
+            <img class="w-75" src="assets/img/write.jpg" (click)="showPostBox()">
+            <app-post-box *ngIf="showPost"></app-post-box>
+          </div>
+          <div class="col-1">
+            <img class="w-75" src="assets/img/wheel.png" (click)="showOptionsBox()" />
+            <app-options-box *ngIf="showOptions"></app-options-box>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </nav>

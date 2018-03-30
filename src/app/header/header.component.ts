@@ -12,9 +12,10 @@ export class HeaderComponent implements OnInit {
   @Input() app: string;
   public isLoggedIn: boolean;
   public showPost = false;
+  public showFlux = false;
+  public showOptions = false;
   constructor(private postService: PostService,
-               private authenticationService: AuthenticationService,
-               public router: Router
+               private authenticationService: AuthenticationService
               ) {
   }
   ngOnInit() {
@@ -23,14 +24,10 @@ export class HeaderComponent implements OnInit {
   public showPostBox(): void {
     this.showPost = !this.showPost;
   }
-  public showTrendingFlux(): void {
-    this.postService.displayedFluxes.trending = !this.postService.displayedFluxes.trending;
+  public showFluxBox(): void {
+    this.showFlux = !this.showFlux;
   }
-  public showFriendsFlux(): void {
-    this.postService.displayedFluxes.friends = !this.postService.displayedFluxes.friends;
-  }
-  public logout(): void {
-    this.authenticationService.logout();
-    this.router.navigate(['/login']);
+  public showOptionsBox(): void {
+    this.showOptions = !this.showOptions;
   }
 }

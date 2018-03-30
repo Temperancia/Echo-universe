@@ -21,7 +21,7 @@ export class TrustsComponent implements OnInit {
       { name: 'Group1', description: 'blablablablablabla', specialDescription: 'owner saying something in this banner', reputation: 23 },
       { name: 'Group1', description: 'blablablablablabla', specialDescription: 'owner saying something in this banner', reputation: 23 },
       { name: 'Group1', description: 'blablablablablabla', specialDescription: 'owner saying something in this banner', reputation: 23 },
-    ]
+    ];
   }
 
 }
