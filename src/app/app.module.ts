@@ -21,6 +21,7 @@ import { AuthGuard } from './auth.guard';
 import { AuthenticationService } from './authentication.service';
 import { PostService } from './post.service';
 import { FriendService } from './friend.service';
+import { TrustsComponent } from './trusts/trusts.component';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { FriendService } from './friend.service';
     EmojisComponent,
     PostBoxComponent,
     LoginComponent,
+    TrustsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'my-app'}),

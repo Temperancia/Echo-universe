@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<app-header></app-header>
+<div class="row">
+  <div class="col-2 card" *ngFor="let trust of trusts">
+    <img class="card-img-top" src="assets/img/logo.png"/>
+    <div class="card-body">
+      <h2 class="card-title">
+        {{trust.name}} / {{trust.reputation}}
+      </h2>
+      <p class="card-text">
+        <i>{{trust.description}}</i>
+      </p>
+      <footer class="blockquote-footer">
+        {{trust.specialDescription}}
+      </footer>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
