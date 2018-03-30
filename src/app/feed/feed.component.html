@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <div *ngIf="posts">
   <div *ngFor="let post of posts">
-    <div class="card" *ngIf="(post.type === &quot;trending&quot; &amp;&amp; postService.displayedFluxes.trending) || post.type === &quot;friends&quot; &amp;&amp; postService.displayedFluxes.friends">
+    <div class="card" *ngIf="(postService.displayedFluxes.trending) || post.type === 'friends' && postService.displayedFluxes.friends">
       <div class="card-body">
         <button class="close-post-button" (click)="close(post.id)">x</button>
         <h2 [innerHTML]="post.name | emojis"></h2>

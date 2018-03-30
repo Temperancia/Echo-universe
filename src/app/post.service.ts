@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Post } from './post';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 @Injectable()
 export class PostService {
@@ -15,7 +17,7 @@ export class PostService {
     'trending': false,
     'friends': false
   };
-  constructor() {
+  constructor(private http: HttpClient) {
     for (let iPost = 0; iPost < this.tposts.length; iPost++) {
       const post = this.tposts[iPost];
       post['type'] = 'trending';
@@ -28,7 +30,8 @@ export class PostService {
     }
   }
   getPosts(): Observable<Post[]> {
-    return of(this.fposts.concat(this.tposts));
+    return this.http.get<Post[]>('/api/posts');
+  //  return of(this.fposts.concat(this.tposts));
   }
   create(post: Post) {
     //post.id = this.posts.length;

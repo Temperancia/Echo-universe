@@ -1,6 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { Ng2EmojiModule } from 'ng2-emoji';
 
 import { AppComponent } from './app.component';
@@ -40,6 +41,7 @@ import { FriendService } from './friend.service';
   imports: [
     BrowserModule.withServerTransition({appId: 'my-app'}),
     routing,
+    HttpClientModule,
     FormsModule,
     //TransferHttpCacheModule,
     Ng2EmojiModule.forRoot()
