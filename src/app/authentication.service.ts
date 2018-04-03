@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+//import 'rxjs/add/operator/map';
+//import 'rxjs/add/operator/catch';
+import 'rxjs/Rx';
 
 
 @Injectable()
 export class AuthenticationService {
   public token: string;
-
+  public result: string;
   constructor(private http: HttpClient) {
     // set token if saved in local storage
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -16,22 +19,25 @@ export class AuthenticationService {
   isLoggedIn(): boolean {
     return localStorage.getItem('currentUser') === null ? false : true;
   }
+  subscribe(email: string, password: string): Observable<Boolean> {
+    this.http.post('http://localhost:4000/api/authentication/user/create', {
+      email: email,
+      password: password
+    }).subscribe(
+      data => console.log(data)
+    );
+    return of(true);
+  }
 
-  login(username: string, password: string): Observable<boolean> {
-    return this.http.post('http://localhost:4000/api/authentication/user/login', {
+  login(username: string, password: string): Observable<Boolean> {
+    this.http.post('http://localhost:4000/api/authentication/user/login', {
       email: username,
       password: password
-    }).map(response => {
-      console.log(response);
-      if (response['success']) {
-        localStorage.setItem('currentUser', JSON.stringify({ username: username, token: response['token'] }));
-        return of(true);
-      } else {
-        return of(false);
-      }
-    });
-    console.log('ok');
-    return of(false);
+    })
+    .subscribe(
+      data => console.log(data)
+    );
+    return of(true);
   }
 
   logout(): void {
