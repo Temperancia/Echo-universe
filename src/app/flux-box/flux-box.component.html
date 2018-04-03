@@ -6,12 +6,10 @@
   <div class="col-12 w-100">
     <button class="btn d-block mx-auto" [ngClass]="postService.displayedFluxes.friends ? 'btn-friend' : 'btn-secondary'" (click)="showFriendsFlux()">Friend</button>
   </div>
-
   <div class="col-12 w-100">
     <button class="btn d-block mx-auto" [ngClass]="postService.displayedFluxes.daily ? 'btn-daily' : 'btn-secondary'" (click)="showDailyFlux()" >Daily Life</button>
   </div>
   <div class="col-12 w-100">
     <button class="btn d-block mx-auto" [ngClass]="postService.displayedFluxes.style ? 'btn-style' : 'btn-secondary'" (click)="showStyleFlux()">Life Style</button>
   </div>
-
 </div>

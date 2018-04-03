@@ -8,7 +8,7 @@ import {PostService} from '../post.service';
 })
 export class FluxBoxComponent implements OnInit {
 
-  constructor(private postService: PostService) { }
+  constructor(public postService: PostService) { }
 
   ngOnInit() {
   }

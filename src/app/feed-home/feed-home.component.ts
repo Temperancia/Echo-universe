@@ -4,7 +4,8 @@ import { FeedComponent } from '../feed/feed.component';
 
 @Component({
   selector: 'app-feed-home',
-  templateUrl: 'feed-home.component.html'
+  templateUrl: 'feed-home.component.html',
+  styleUrls: ['feed-home.component.scss']
 })
 export class FeedHomeComponent extends FeedComponent {
   constructor(protected postService: PostService) {

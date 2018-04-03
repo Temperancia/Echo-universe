@@ -7,13 +7,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class PostService {
   private oposts: Post[] = [
-    {id: 1, name: 'own', content: 'hello'}
+    {id: 1, name: 'own', content: 'hello', createdOn: '23/10/15', reputation: 23}
   ];
   private fposts: Post[] = [
-    {id: 1, name: 'friend', content: 'hello'},
+    {id: 1, name: 'friend', content: 'hello', createdOn: '23/10/15', reputation: 23},
   ];
   private tposts: Post[] = [
-    {id: 1, name: 'trending', content: 'hello'},
+    {id: 1, name: 'trending', content: 'hello', createdOn: '23/10/15', reputation: 23},
   ];
   public displayedFluxes = {
     'trending': false,
@@ -34,7 +34,7 @@ export class PostService {
     }
   }
   getPosts(): Observable<Post[]> {
-    //return this.http.get<Post[]>('/api/posts');
+    //return this.http.get<Post[]>('/api/user');
     return of(this.fposts.concat(this.tposts));
   }
   getOwnPosts(): Observable<Post[]> {

@@ -1,11 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+import { trigger, style, transition, animate, group } from '@angular/animations';
 import { PostService } from '../post.service';
 import { Post } from '../post';
 
 @Component({
   selector: 'app-post-box',
   templateUrl: 'post-box.component.html',
-  styleUrls: ['post-box.component.scss']
+  styleUrls: ['post-box.component.scss'],
+  animations: [
+    trigger('itemAnim', [
+      transition(':enter', [
+        style({transform: 'translateY(-100%)'}),
+        animate(350)
+      ]),
+      transition(':leave', [
+        group([
+          animate('0.2s ease', style({
+            transform: 'translate(150px,25px)'
+          })),
+          animate('0.5s 0.2s ease', style({
+            opacity: 0
+          }))
+        ])
+      ])
+    ])
+  ]
 })
 export class PostBoxComponent implements OnInit {
   public currentPost: Post;
@@ -35,7 +54,9 @@ export class PostBoxComponent implements OnInit {
     this.currentPost = {
       id: -1,
       name: '',
-      content: ''
+      content: '',
+      createdOn: '',
+      reputation: 0
     };
   }
   public post(): void {

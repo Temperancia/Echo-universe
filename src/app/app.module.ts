@@ -3,6 +3,8 @@ import {NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Ng2EmojiModule } from 'ng2-emoji';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AppComponent } from './app.component';
 import { routing } from './app.routing';
 import { LoginComponent } from './login/login.component';
@@ -51,7 +53,8 @@ import { OptionsBoxComponent } from './options-box/options-box.component';
     HttpClientModule,
     FormsModule,
     //TransferHttpCacheModule,
-    Ng2EmojiModule.forRoot()
+    Ng2EmojiModule.forRoot(),
+    BrowserAnimationsModule
   ],
   providers: [
     AuthGuard,

@@ -1,6 +1,6 @@
 .post-box {
   position: absolute;
-  left: -100px;
+  right: 0;
   width: 300px;
   height: 400px;
   textarea {
@@ -10,7 +10,7 @@
   }
   .show-emojis {
     position: absolute;
-    bottom: 0;
+    top: 0;
     right: 0;
   }
   .emojis {

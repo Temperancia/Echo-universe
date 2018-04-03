@@ -19,7 +19,7 @@
         "testTsconfig": "tsconfig.spec.json",
         "prefix": "app",
         "styles": [
-          "styles.css",
+          "styles.scss",
           "assets/vendor/css/bootstrap.min.css",
           "../node_modules/ng2-emoji/css/ng2-emoji.css"
         ],
@@ -45,7 +45,7 @@
         "testTsconfig": "tsconfig.spec.json",
         "prefix": "app",
         "styles": [
-          "styles.css"
+          "styles.scss"
         ],
         "scripts": [],
         "environmentSource": "environments/environment.ts",

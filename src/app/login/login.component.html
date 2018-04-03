@@ -1,16 +1,79 @@
 <!DOCTYPE html>
-<app-header></app-header>
-<form name="form" (ngSubmit)="login()" ref-f="ngForm">
-  <div class="row text-center">
-    <div class="col-2">
-      <input name="username" placeholder="Username" ref-username="ngModel" [(ngModel)]="model.username">
+
+<div class="header">
+  <form name="form" (ngSubmit)="login()" ref-f="ngForm">
+    <div class="row d-flex h-100">
+      <div class="col-2">
+        <a routerLink="/home"><img class="w-100" src="assets/img/logo_width.png"></a>
+      </div>
+      <div class="col-3 justify-content-center align-self-center">
+        <h5>Continue your Echo journey --></h5>
+      </div>
+      <div class="col-2 justify-content-center align-self-center">
+        <input class="pl-3 m-2 w-100" name="username" placeholder="Username" ref-username="ngModel" [(ngModel)]="model.username">
+      </div>
+      <div class="col-2 justify-content-center align-self-center">
+        <input class="pl-3 m-2 w-100" type="password" name="password" placeholder="Password" ref-password="ngModel"[(ngModel)]="model.password">
+      </div>
+      <div class="col-1 justify-content-center align-self-center">
+        <button class="btn-others">Login</button>
+      </div>
+      <div class="col-2" *ngIf="error">
+
+      </div>
     </div>
-    <div class="col-2">
-      <input type="password" placeholder="Password" ref-password="ngModel" name="password" [(ngModel)]="model.password">
+  </form>
+</div>
+
+
+
+<div class="background">
+  <form name="form" (ngSubmit)="subscribe()" ref-f="ngForm">
+
+    <div class="row pt-4 text-center">
+      <div class="offset-3 col-6">
+        <h1>Begin your Echo journey !</h1>
+      </div>
     </div>
-    <div class="col-1">
-      <button>Login</button>
+
+    <div class="row p-4 text-center">
+      <div class="col-6">
+        <h4>Feel at home</h4>
+        <p>
+          Thanks to its lively community, Echo provides you the unique opportunity to create your own world along fellows from the world.
+          <br>Share, enjoy and communicate everything you want.
+        </p>
+      </div>
+      <div class="col-6">
+        <h4>Get to know</h4>
+        <p>
+          Enter a world where information is yours. Take back control of your life and start gathering people inside your own trust.
+          <br>Or perhaps you will prefer a vivid flux providing you everything you need.
+          <br /> Either way, lets start together your journey today
+        </p>
+      </div>
     </div>
-  </div>
-</form>
+    <div class="row pt-4">
+      <div class="offset-2 col-3">
+        <input class="pl-3 m-2 w-100" name="username" placeholder="Username" ref-username="ngModel" [(ngModel)]="model.username">
+      </div>
+      <div class="col-3">
+        <input class="pl-3 m-2 w-100" type="password" name="password" placeholder="Password" ref-password="ngModel"[(ngModel)]="model.password">
+      </div>
+
+      <div class="col-2 justify-content-center align-self-center">
+        <button class="btn-others">Subscribe</button>
+      </div>
+    </div>
+    <div class="row pt-4">
+      <div class="offset-2 col-3">
+        <input class="pl-3 m-2 w-100" name="email" placeholder="Email" ref-username="ngModel" [(ngModel)]="model.email">
+      </div>
+      <div class="col-3">
+        <input class="pl-3 m-2 w-100" type="password" name="confirmPassword" placeholder="Confirm password" ref-password="ngModel"[(ngModel)]="model.confirmPassword">
+      </div>
+    </div>
+  </form>
+</div>
+
 <app-footer></app-footer>

@@ -4,8 +4,7 @@ import { Post } from '../post';
 
 @Component({
   selector: 'app-feed',
-  templateUrl: 'feed.component.html',
-  styleUrls: ['feed.component.scss']
+  templateUrl: 'feed.component.html'
 })
 export class FeedComponent implements OnInit {
   public posts: Post[];
@@ -15,13 +14,13 @@ export class FeedComponent implements OnInit {
   ngOnInit() {
 
   }
-  public close(id) {
-    /*
-    for (let index = 0; index < this.posts.length; index++) {
-      if (this.posts[index].id === id) {
-        this.posts.splice(index, 1);
-      }
+  getPostTypeStyle (type: string): string {
+    console.log(type);
+    if (type === 'friends') {
+      return 'post-friend';
+    } else if (type === 'trending') {
+      return 'post-tendance';
     }
-    */
   }
+
 }

@@ -9,6 +9,7 @@ import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import {join} from 'path';
+import bodyParser = require('body-parser');
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
@@ -16,14 +17,6 @@ enableProdMode();
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  var kittySchema = mongoose.Schema({
-    name: String
-  });
-  var Kitten = mongoose.model('Kitten', kittySchema);
-  var silence = new Kitten({ name: 'Silence' });
-  console.log(silence.name);
-});
 
 // Express server
 const app = express();
@@ -45,12 +38,15 @@ app.engine('html', ngExpressEngine({
 app.set('view engine', 'html');
 app.set('views', join(DIST_FOLDER, 'browser'));
 
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+
 /* - Example Express Rest API endpoints -
   app.get('/api/**', (req, res) => { });
 */
-var api = require('./routes');
+import api = require('./routes/api');
 app.use('/api', api);
-/*
+
 // Server static files from /browser
 app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
   maxAge: '1y'
@@ -60,7 +56,7 @@ app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
 app.get('*', (req, res) => {
   res.render('index', { req });
 });
-*/
+
 app.use(function(req, res){
   res.send(404);
 });

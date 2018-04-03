@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<div class="post-box">
+<div class="post-box" [@itemAnim]>
   <input class="form-control" placeholder="Whats that ?" [(ngModel)]="currentPost.name" (focus)="selectTitle()">
   <textarea class="form-control" placeholder="Say something already" [(ngModel)]="currentPost.content" (focus)="selectContent()"></textarea>
   <app-emojis ref-emojis class='emojis' (onEmoji)='onEmoji($event)'></app-emojis>
