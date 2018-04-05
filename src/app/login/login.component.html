@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <div class="container-fluid px-0 pb-4 login">
   <div class="header">
-    <form name="form" (ngSubmit)="login()" ref-f="ngForm">
+    <form name="form" (ngSubmit)="login()">
       <div class="row d-flex w-100 h-100">
         <div class="col-5 align-self-center text-right">
-          <h5 class='m-2'>Continue your <em>Echo</em> journey ------></h5>
+          <h5>Continue your <em>Echo</em> journey ------></h5>
         </div>
         <div class="col-2 justify-content-center align-self-center">
-          <input class="pl-3 m-2 w-100" name="email" placeholder="Email" ref-email="ngModel" [(ngModel)]="user.email">
+          <input class="form-control pl-3 m-2 w-100" id="email" required name="email" placeholder="Email" [(ngModel)]="user.email" #email="ngModel">
+          <div [hidden]="name.valid || name.pristine"
+               class="alert alert-danger">
+            Name is required
+          </div>
+          <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+            <p *ngIf="email.errors.required">This field is required.</p>
+            <p *ngIf="email.errors.incorrectMailFormat">Email format is invalid.</p>
+          </div>
         </div>
         <div class="col-2 justify-content-center align-self-center">
-          <input class="pl-3 m-2 w-100" type="password" name="password" placeholder="Password" ref-password="ngModel"[(ngModel)]="user.password">
+          <input class="pl-3 m-2 w-100" type="password" name="password" placeholder="Password" [(ngModel)]="user.password">
         </div>
         <div class="col-1 justify-content-center align-self-center">
           <button class="btn-others">Login</button>
         </div>
       </div>
       <div class="row d-flex w-100 h-100">
-        <div class="offset-5 col-6 text-danger align-self-center" *ngIf="error">
-          {{error}}
+        <div class="offset-5 col-6 text-danger align-self-center" *ngIf="errors.login">
+          {{errors.login}}
         </div>
       </div>
     </form>
@@ -165,11 +173,11 @@
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input class="pl-3 m-2 w-100" id="email" type="text" name="email" placeholder="john.doe@mail.com" ref-email="ngModel" [(ngModel)]="newUser.email">
+            <input class="pl-3 m-2 w-100" id="newEmail" type="email" name="email" placeholder="john.doe@mail.com" ref-email="ngModel" [(ngModel)]="newUser.email">
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input class="pl-3 m-2 w-100" id="password" type="password" name="password" ref-password="ngModel"[(ngModel)]="newUser.password">
+            <input class="pl-3 m-2 w-100" id="newPassword" type="password" name="password" ref-password="ngModel"[(ngModel)]="newUser.password">
           </div>
           <div class="form-group">
             <label for="confirmPassword">Confirm password</label>

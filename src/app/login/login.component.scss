@@ -17,10 +17,10 @@
   .header {
     background-color: $black;
     button {
-      width: 50px;
-      height: 50px;
-      font-size: 14px;
-      line-height: 14px;
+      width: 100px;
+      height: 40px;
+      font-size: 20px;
+      line-height: 20px;
       margin: 5px 0;
     }
   }
@@ -43,11 +43,12 @@
       height: 1080px;
       .banner {
         background-color: $black;
+        line-height: 4rem;
         $border-size: 15px;
-        border-top: $border-size solid $azureon;
-        border-right: $border-size solid $yorel;
-        border-bottom: $border-size solid $bodel;
-        border-left: $border-size solid $rendeez;
+        //border-top: $border-size solid $azureon;
+        //border-right: $border-size solid $yorel;
+        //border-bottom: $border-size solid $bodel;
+        //border-left: $border-size solid $rendeez;
         em {
           font-family: 'Modum';
           font-style: normal;
