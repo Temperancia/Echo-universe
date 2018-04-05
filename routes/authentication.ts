@@ -23,6 +23,14 @@ authentication.post('/user/create', (req, res) => {
 
 authentication.post('/user/login', (req, res) => {
   console.log(req.body);
+  const email = req.body['email'];
+  const password = req.body['password'];
+  if (email === '' || password === '') {
+    return res.json({
+      success: false,
+      error: 'Wrong email or password'
+    });
+  }
   User.findOne(req.body, '_id', (err, user) => {
     if (err) {
 

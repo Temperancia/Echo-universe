@@ -1,17 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'app/global.scss';
+*:focus {
+    outline: none;
+}
+body {
+  color: white !important;
+  font-family: 'Roboto-Regular' !important;
+}
 button {
-  border-radius: 25px;
-  width: 100%;
-  font-size: 12px !important;
 }
 .btn-others {
   color: white;
-  background-color: $blue-third;
+  background-color: $trickle;
 }
 
 .content {
-  background-color: rgb(218, 241, 244);
   margin-top: 80px;
 }
 
@@ -20,6 +23,9 @@ input, button {
 }
 
 input:focus, button:focus {
+  box-shadow: 0 0 3pt 2pt $yorel;
+
   outline: none;
-  box-shadow: 0 0 3pt 2pt $blue-third;
+  text-decoration: none;
+  text-align: center;
 }

@@ -1,5 +1,26 @@
-$blue-first: #03b0f5;
-$blue-second: #0669b2;
-$blue-third: #044476;
-$blue-fourth: #0a7584;
-$blue-fifth: #1e3d56;
+$azureon: #03b0f5;
+$azureon-smooth: rgba(255, 0, 0, 0.4);
+$yorel: #0669b2;
+$trickle: #044476;
+$rendeez: #0a7584;
+$bodel: #1e3d56;
+$black: #292522;
+$green: #68bd90;
+
+@font-face {
+  font-family: 'Modum';
+  src: url('assets/font/Modum/Modum.eot?#iefix') format('embedded-opentype'),  url('assets/font/Modum/Modum.woff') format('woff'), url('assets/font/Modum/Modum.ttf')  format('truetype'), url('assets/font/Modum/Modum.svg#Modum') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.modum {
+  font-family: 'Modum';
+}
+
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: url('assets/font/Roboto/Roboto-Regular.eot?#iefix') format('embedded-opentype'),  url('assets/font/Roboto/Roboto-Regular.woff') format('woff'), url('assets/font/Roboto/Roboto-Regular.ttf')  format('truetype'), url('assets/font/Roboto/Roboto-Regular.svg#Roboto-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

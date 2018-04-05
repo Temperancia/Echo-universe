@@ -1,77 +1,186 @@
 <!DOCTYPE html>
-
-<div class="header">
-  <form name="form" (ngSubmit)="login()" ref-f="ngForm">
-    <div class="row d-flex h-100">
-      <div class="col-2">
-        <a routerLink="/home"><img class="w-100" src="assets/img/logo_width.png"></a>
+<div class="container-fluid px-0 pb-4 login">
+  <div class="header">
+    <form name="form" (ngSubmit)="login()" ref-f="ngForm">
+      <div class="row d-flex w-100 h-100">
+        <div class="col-5 align-self-center text-right">
+          <h5 class='m-2'>Continue your <em>Echo</em> journey ------></h5>
+        </div>
+        <div class="col-2 justify-content-center align-self-center">
+          <input class="pl-3 m-2 w-100" name="email" placeholder="Email" ref-email="ngModel" [(ngModel)]="user.email">
+        </div>
+        <div class="col-2 justify-content-center align-self-center">
+          <input class="pl-3 m-2 w-100" type="password" name="password" placeholder="Password" ref-password="ngModel"[(ngModel)]="user.password">
+        </div>
+        <div class="col-1 justify-content-center align-self-center">
+          <button class="btn-others">Login</button>
+        </div>
       </div>
-      <div class="col-3 justify-content-center align-self-center">
-        <h5>Continue your Echo journey --></h5>
+      <div class="row d-flex w-100 h-100">
+        <div class="offset-5 col-6 text-danger align-self-center" *ngIf="error">
+          {{error}}
+        </div>
       </div>
-      <div class="col-2 justify-content-center align-self-center">
-        <input class="pl-3 m-2 w-100" name="username" placeholder="Username" ref-username="ngModel" [(ngModel)]="user.username">
+    </form>
+  </div>
+  <div class="background">
+    <div class="blocks">
+      <div class="row pt-4 py-5 w-100 text-center">
+        <div class="offset-3 col-6">
+          <h1 class="banner">Begin your <em id="app-title">Echo</em> journey !</h1>
+        </div>
       </div>
-      <div class="col-2 justify-content-center align-self-center">
-        <input class="pl-3 m-2 w-100" type="password" name="password" placeholder="Password" ref-password="ngModel"[(ngModel)]="user.password">
-      </div>
-      <div class="col-1 justify-content-center align-self-center">
-        <button class="btn-others">Login</button>
-      </div>
-      <div class="col-2" *ngIf="error">
-
+      <div class="row p-4 w-100 mt-3 body">
+        <div class="col-6">
+          <div class="block">
+            <h3 class="modum text-center">
+              Feel at home
+              <span class="clickit" (click)="feel=!feel;" *ngIf="!feel">+</span>
+              <span class="clickit" (click)="feel=!feel;" *ngIf="feel">x</span>
+              <small><== Click me !</small>
+            </h3>
+            <div *ngIf="feel">
+              <p>
+                Thanks to its lively community, Echo provides you the unique opportunity to create your own world along fellows from the world.
+              </p>
+              <p>
+                Share, enjoy and communicate everything you want.
+              </p>
+            </div>
+          </div>
+          <div class="block">
+            <h3 class="modum text-center">
+              Dislike the spotlight ?
+              <span (click)="spotlight=!spotlight;" *ngIf="!spotlight">+</span>
+              <span (click)="spotlight=!spotlight;" *ngIf="spotlight">x</span>
+            </h3>
+            <div *ngIf="spotlight">
+              <p>
+                Here in Echo, you will find comforting having the choice between being under the spotlight and working from the shadows.
+              </p>
+              <p>
+                We understand and respect your choice, click this <a routerLink='/home'>link</a> and we will grant you an anonymous account. Find below the specifities between a "pub" and an "ano" :
+              </p>
+              <table class="table table-bordered table-striped table-hover">
+                <tr>
+                  <th>
+                    Type
+                  </th>
+                  <th>
+                    Public
+                  </th>
+                  <th>
+                    Anonymous
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    Data Collection
+                  </th>
+                  <td>
+                    Everything you feel free to give us, but please do tell us your name at least.
+                  </td>
+                  <td>
+                    Nothing. Really.
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Access & Posting
+                  </th>
+                  <td>
+                    Everywhere.
+                  </td>
+                  <td>
+                    Flux only.
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    Friends
+                  </th>
+                  <td>
+                    Yes !
+                  </td>
+                  <td>
+                    No ...
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="block">
+            <h3 class="modum text-center">
+              Make the most of your optics
+              <span (click)="know=!know;" *ngIf="!know">+</span>
+              <span (click)="know=!know;" *ngIf="know">x</span>
+            </h3>
+            <div *ngIf="know">
+              <p>
+                Enter a world where information is yours. Take back control of your life and start gathering people inside your own trust.
+              </p>
+              <p>
+                Or perhaps you will prefer a vivid flux providing you everything you need.
+              </p>
+              <p>
+                Either way, lets start together your journey today !
+              </p>
+            </div>
+          </div>
+          <div class="block">
+            <h3 class="modum text-center">
+              fama inodora est, doxa non est
+              <span (click)="motto=!motto;" *ngIf="!motto">+</span>
+              <span (click)="motto=!motto;" *ngIf="motto">x</span>
+            </h3>
+            <div *ngIf="motto">
+              <p>
+                "Fame does not smell, reputation does" is the motto here ! Meet success or disgrace, it's up to you.
+              </p>
+              <p>
+                Each post you make will influence your reputation score, calculated from several sources.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </form>
-</div>
-
-
-
-<div class="background">
-  <div class="row pt-4 text-center">
-    <div class="offset-3 col-6">
-      <h1>Begin your Echo journey !</h1>
+    <div class="row w-100">
+      <div class="offset-8 col-4">
+        <form class="subscribe" name="form" (ngSubmit)="subscribe()" ref-f="ngForm">
+          <div class="header text-center">
+            <h3 class="m-0">
+              Join us !
+            </h3>
+          </div>
+          <div class="form-group">
+            <label for="firstname">Firstname</label>
+            <input class="pl-3 m-2 w-100" id="firstname" type="text" name="firstname" placeholder="Ex: John" ref-firstname="ngModel" [(ngModel)]="newUser.firstname">
+          </div>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input class="pl-3 m-2 w-100" id="name" type="text" name="name" placeholder="Ex: Doe" ref-name="ngModel" [(ngModel)]="newUser.name">
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input class="pl-3 m-2 w-100" id="email" type="text" name="email" placeholder="john.doe@mail.com" ref-email="ngModel" [(ngModel)]="newUser.email">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input class="pl-3 m-2 w-100" id="password" type="password" name="password" ref-password="ngModel"[(ngModel)]="newUser.password">
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm password</label>
+            <input class="pl-3 m-2 w-100" id="confirmPassword" type="password" name="confirmPassword" ref-password="ngModel"[(ngModel)]="newUser.confirmPassword">
+          </div>
+          <div class="text-center">
+            <button class="m-2 btn-others">Get public</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-
-  <div class="row p-4">
-    <div class="col-6">
-      <h4 class="text-center">Feel at home</h4>
-      <p>
-        Thanks to its lively community, Echo provides you the unique opportunity to create your own world along fellows from the world.
-        <br>Share, enjoy and communicate everything you want.
-      </p>
-    </div>
-    <div class="col-6">
-      <h4 class="text-center">Get to know</h4>
-      <p>
-        Enter a world where information is yours. Take back control of your life and start gathering people inside your own trust.
-        <br>Or perhaps you will prefer a vivid flux providing you everything you need.
-        <br>Either way, lets start together your journey today
-      </p>
-    </div>
-  </div>
-  <form name="form" (ngSubmit)="subscribe()" ref-f="ngForm">
-    <div class="row pt-4">
-      <div class="offset-2 col-3">
-        <input class="pl-3 m-2 w-100" name="username" placeholder="Username" ref-username="ngModel" [(ngModel)]="newUser.username">
-      </div>
-      <div class="col-3">
-        <input class="pl-3 m-2 w-100" type="password" name="password" placeholder="Password" ref-password="ngModel"[(ngModel)]="newUser.password">
-      </div>
-      <div class="col-2 justify-content-center align-self-center">
-        <button class="btn-others">Subscribe</button>
-      </div>
-    </div>
-    <div class="row pt-4">
-      <div class="offset-2 col-3">
-        <input class="pl-3 m-2 w-100" name="newEmail" placeholder="Email" ref-username="ngModel" [(ngModel)]="newUser.email">
-      </div>
-      <div class="col-3">
-        <input class="pl-3 m-2 w-100" type="newPassword" name="confirmPassword" placeholder="Confirm password" ref-password="ngModel"[(ngModel)]="newUser.confirmPassword">
-      </div>
-    </div>
-  </form>
+  <app-footer></app-footer>
 </div>
-
-<app-footer></app-footer>
