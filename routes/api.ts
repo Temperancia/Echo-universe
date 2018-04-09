@@ -35,6 +35,4 @@ api.use((req, res, next) => {
 
 api.use('/posting', require('./posting'));
 
-
-
 module.exports = api;

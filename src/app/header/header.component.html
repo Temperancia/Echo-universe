@@ -6,25 +6,30 @@
     </div>
     <div class="col-10">
       <div class="container">
-        <div class="row py-2 my-2 board" *ngIf="isLoggedIn">
-          <div class="col-2">
+        <div class="row d-flex my-2 board" *ngIf="isLoggedIn">
+          <div class="col-2 align-self-center">
             <button class="h-100 button btn-others" (click)="showFluxBox()">Feeds</button>
             <app-flux-box *ngIf="showFlux"></app-flux-box>
           </div>
-          <div class="col-3">
+          <div class="col-3 align-self-center">
             <input class="h-100 form-control" placeholder="Search">
           </div>
-          <div class="col-2">
+          <div class="col-2 align-self-center" *ngIf="!isAnonymous">
             <button class="h-100 button btn-others" routerLink="/trusts">Trust Center</button>
           </div>
-          <div class="offset-2 col-1">
+          <div class="offset-2 col-1 align-self-center" *ngIf="!isAnonymous">
             <img src="assets/img/idk.png" routerLink="/my-profile">
           </div>
-          <div class="col-1">
+          <div class="col-1 align-self-center" *ngIf="!isAnonymous">
             <img src="assets/img/idk2.png" (click)="showPostBox()">
             <app-post-box *ngIf="showPost" [@itemAnim]></app-post-box>
           </div>
-          <div class="col-1">
+          <div class="col-5 d-flex align-self-center" *ngIf="isAnonymous">
+            <p class="m-0 align-self-center">
+              Want more ? Become a public echoer <a pageScroll routerLink="/login" href="#subscribe">now</a> !
+            </p>
+          </div>
+          <div class="col-1 align-self-center">
             <img src="assets/img/wheel.png" (click)="showOptionsBox()" />
             <app-options-box *ngIf="showOptions"></app-options-box>
           </div>

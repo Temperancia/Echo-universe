@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Ng2EmojiModule } from 'ng2-emoji';
+import {Ng2PageScrollModule} from 'ng2-page-scroll';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
@@ -19,6 +20,7 @@ import { FooterComponent } from './footer/footer.component';
 import { EmojisComponent } from './emojis/emojis.component';
 import { PostBoxComponent } from './post-box/post-box.component';
 import { AuthGuard } from './auth.guard';
+import { PublicGuard } from './public.guard';
 import { AuthenticationService } from './authentication.service';
 import { PostService } from './post.service';
 import { FriendService } from './friend.service';
@@ -54,6 +56,7 @@ import { OptionsBoxComponent } from './options-box/options-box.component';
     FormsModule,
     //TransferHttpCacheModule,
     Ng2EmojiModule.forRoot(),
+    Ng2PageScrollModule,
     BrowserAnimationsModule
   ],
   providers: [
@@ -61,7 +64,7 @@ import { OptionsBoxComponent } from './options-box/options-box.component';
     AuthenticationService,
     PostService,
     FriendService,
-
+    PublicGuard
 
   ],
   bootstrap: [AppComponent]

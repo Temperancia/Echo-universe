@@ -3,6 +3,14 @@ import { Types } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 const User = require('../models/user');
 
+function makeToken(id = undefined) {
+  const token = jwt.sign({
+    id: id
+  }, global['secret'], {
+    expiresIn: '24h'
+  });
+}
+
 let authentication = Router();
 
 authentication.post('/user/create', (req, res) => {
@@ -21,11 +29,19 @@ authentication.post('/user/create', (req, res) => {
   });
 });
 
+authentication.get('/user/login', (req, res) => {
+  return res.json({
+    success: true,
+    id: undefined,
+    token: makeToken()
+  });
+});
+
 authentication.post('/user/login', (req, res) => {
   console.log(req.body);
   const email = req.body['email'];
   const password = req.body['password'];
-  if (email === '' || password === '') {
+  if (!email || !password) {
     return res.json({
       success: false,
       error: 'Wrong email or password'
@@ -41,14 +57,10 @@ authentication.post('/user/login', (req, res) => {
         error: 'Wrong email or password'
       });
     } else {
-      const token = jwt.sign({
-        id: user._id
-      }, global['secret'], {
-        expiresIn: '24h'
-      });
       return res.json({
         success: true,
-        token: token
+        id: user._id,
+        token: makeToken(user._id)
       });
     }
   });

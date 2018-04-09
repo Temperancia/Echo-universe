@@ -8,7 +8,6 @@
   }
   button {
     border-radius: 50% !important;
-    font-family: 'Modum';
     &:focus {
       outline: none;
     }
@@ -17,10 +16,9 @@
   .header {
     background-color: $black;
     button {
-      width: 100px;
-      height: 40px;
-      font-size: 20px;
-      line-height: 20px;
+      padding: 10px;
+      font-size: 12px;
+      line-height: 12px;
       margin: 5px 0;
     }
   }
@@ -107,9 +105,6 @@
     border-radius: 5px;
     padding: 20px 40px 20px 20px;
     background-color: $rendeez;
-    .form-group {
-      padding: 20px;
-    }
     button {
       width: 100px;
       height: 100px;

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<div *ngIf="posts">
+  <div *ngFor="let post of posts">
+    <div class="row" *ngIf="post.type === 'trending' && postService.displayedFluxes.trending
+    || post.type === 'friends' && postService.displayedFluxes.friends">
+      <div class="col-1" [ngClass]="getPostTypeStyle(post.type)">
+        {{post.reputation}}
+        {{post.createdOn}}
+      </div>
+      <div class="card-body">
+        <h2 [innerHTML]="post.name | emojis"></h2>
+        <div [innerHTML]="post.content | emojis"></div>
+        <a class="btn btn-primary">More</a>
+      </div>
+    </div>
+  </div>
+</div>

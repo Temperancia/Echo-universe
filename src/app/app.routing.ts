@@ -4,19 +4,19 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
-//import {TransferHttpCacheModule} from '@nguniversal/common';
 import { FindHelpComponent } from './find-help/find-help.component';
 import { TrustsComponent } from './trusts/trusts.component';
 import { AuthGuard } from './auth.guard';
+import { PublicGuard } from './public.guard';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
-  { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] },
+  { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard, PublicGuard] },
   { path: 'help', component: FindHelpComponent, canActivate: [AuthGuard] },
-  { path: 'trusts', component: TrustsComponent, canActivate: [AuthGuard] },
+  { path: 'trusts', component: TrustsComponent, canActivate: [AuthGuard, PublicGuard] },
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];

@@ -19,20 +19,25 @@ export class AuthenticationService {
  * @param operation - name of the operation that failed
  * @param result - optional value to return as the observable result
  */
-private handleError<T> (operation = 'operation', result?: T) {
-  return (error: any): Observable<T> => {
+  private handleError<T> (operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
 
-    // TODO: send the error to remote logging infrastructure
-    console.error(error); // log to console instead
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
 
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }
 
-    // Let the app keep running by returning an empty result.
-    return of(result as T);
-  };
-}
   isLoggedIn(): boolean {
     return localStorage.getItem('currentUser') === null ? false : true;
   }
+
+  isAnonymous(): boolean {
+    return localStorage.getItem('currentUser')['id'] === undefined ? true : false;
+  }
+
   subscribe(email: string, password: string): Observable<any> {
     return this.http.post('http://localhost:4000/api/authentication/user/create', {
       email: email,
@@ -40,15 +45,17 @@ private handleError<T> (operation = 'operation', result?: T) {
     });
   }
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post('http://localhost:4000/api/authentication/user/login', {
-      email: username,
-      password: password
-    })
-    .pipe(
-      catchError(this.handleError<any>('login'))
-    );
-
+  login(credentials): Observable<any> {
+    if (credentials) {
+      return this.http.post('http://localhost:4000/api/authentication/user/login', {
+        email: credentials.email,
+        password: credentials.password
+      })
+      .pipe(
+        catchError(this.handleError<any>('login'))
+      );
+    }
+    return this.http.get('http://localhost:4000/api/authentication/user/login');
   }
 
   logout(): void {

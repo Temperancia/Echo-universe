@@ -29,10 +29,18 @@ export class LoginComponent implements OnInit {
   }
 
   get email() { return this.userForm.get('email'); }
-  public login() {
-    this.authenticationService.login(this.user.email, this.user.password)
+  public login(pub: boolean) {
+    let credentials = undefined;
+    if (pub) {
+      credentials = {
+        'email': this.user.email,
+        'password': this.user.password
+      };
+    }
+    this.authenticationService.login(credentials)
       .subscribe(response => {
         let user = {
+          'id': response.id,
           'token': response.token
         }
         console.log(response);
@@ -47,6 +55,7 @@ export class LoginComponent implements OnInit {
       });
 
   }
+
   public subscribe() {
     this.authenticationService.subscribe(this.newUser.email, this.newUser.password)
     .subscribe(result => {
