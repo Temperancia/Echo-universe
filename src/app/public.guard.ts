@@ -7,7 +7,7 @@ export class PublicGuard implements CanActivate {
   constructor(private router: Router) { }
 
   canActivate() {
-    if (localStorage.getItem('currentUser')['id'] !== undefined) {
+    if (JSON.parse(localStorage.getItem('currentUser'))['id'] !== undefined) {
       // logged in so return true
       return true;
     }

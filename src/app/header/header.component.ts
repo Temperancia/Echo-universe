@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
   public showPost = false;
   public showFlux = false;
   public showOptions = false;
-  
+
   constructor(private postService: PostService,
                private authenticationService: AuthenticationService
               ) {

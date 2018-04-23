@@ -35,13 +35,12 @@ export class AuthenticationService {
   }
 
   isAnonymous(): boolean {
-    return localStorage.getItem('currentUser')['id'] === undefined ? true : false;
+    return JSON.parse(localStorage.getItem('currentUser'))['id'] === undefined ? true : false;
   }
 
-  subscribe(email: string, password: string): Observable<any> {
+  subscribe(user: any): Observable<any> {
     return this.http.post('http://localhost:4000/api/authentication/user/create', {
-      email: email,
-      password: password
+      user: user
     });
   }
 

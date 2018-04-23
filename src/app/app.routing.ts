@@ -13,10 +13,10 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
-  { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard, PublicGuard] },
-  { path: 'help', component: FindHelpComponent, canActivate: [AuthGuard] },
+  { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] },
   { path: 'trusts', component: TrustsComponent, canActivate: [AuthGuard, PublicGuard] },
+  { path: 'help', component: FindHelpComponent, canActivate: [AuthGuard] },
+  { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];

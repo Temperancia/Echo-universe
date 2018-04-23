@@ -8,7 +8,7 @@
         </div>
         <div class="col-2 justify-content-center align-self-center">
           <input class="pl-3 m-2 w-100" id="email" required name="email" placeholder="Email" [(ngModel)]="user.email" #email="ngModel">
-          <div [hidden]="name.valid || name.pristine"
+          <div [hidden]="email.valid || email.pristine"
                class="alert alert-danger">
             Name is required
           </div>
@@ -61,7 +61,6 @@
               </p>
             </div>
           </div>
-
         </div>
         <div class="col-6">
           <div class="block">
@@ -169,38 +168,71 @@
         </div>
       </div>
     </div>
-    <div class="row w-100">
+    <div id="subscribe" class="row w-100">
       <div class="offset-8 col-4">
-        <form class="subscribe" id="subscribe" name="form" (ngSubmit)="subscribe()" ref-f="ngForm">
-          <div class="header text-center">
-            <h3 class="m-0">
-              Join us !
-            </h3>
+        <div class="header text-center">
+          <h3 class="m-0">
+            Join us !
+          </h3>
+          <div class="row">
+            <div class="col-6">
+              <button class="btn-others" (click)="public = true">Publically</button>
+            </div>
+            <div class="col-6">
+              <button class="btn-others" (click)="public = false">Eminently</button>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="firstname">Firstname</label>
-            <input class="pl-3 m-2 w-100" id="firstname" type="text" name="firstname" placeholder="Ex: John" ref-firstname="ngModel" [(ngModel)]="newUser.firstname">
-          </div>
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input class="pl-3 m-2 w-100" id="name" type="text" name="name" placeholder="Ex: Doe" ref-name="ngModel" [(ngModel)]="newUser.name">
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input class="pl-3 m-2 w-100" id="newEmail" type="email" name="email" placeholder="john.doe@mail.com" ref-email="ngModel" [(ngModel)]="newUser.email">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input class="pl-3 m-2 w-100" id="newPassword" type="password" name="password" ref-password="ngModel"[(ngModel)]="newUser.password">
-          </div>
-          <div class="form-group">
-            <label for="confirmPassword">Confirm password</label>
-            <input class="pl-3 m-2 w-100" id="confirmPassword" type="password" name="confirmPassword" ref-password="ngModel"[(ngModel)]="newUser.confirmPassword">
-          </div>
-          <div class="text-center">
-            <button class="m-2 btn-others">Get public</button>
-          </div>
-        </form>
+        </div>
+        <div *ngIf="public">
+          <form class="subscribe" name="publicSubscriptionForm" (ngSubmit)="subscribe(true)">
+            <div class="form-group">
+              <label for="newPublicFirstname">Firstname</label>
+              <input class="pl-3 m-2 w-100" id="newPublicFirstname" type="text" name="newPublicFirstname" placeholder="Ex: Jahn" [(ngModel)]="newPublicUser.firstName">
+            </div>
+            <div class="form-group">
+              <label for="newPublicLastName">LastName</label>
+              <input class="pl-3 m-2 w-100" id="newPublicLastName" type="text" name="newPublicLastName" placeholder="Ex: Doe" [(ngModel)]="newPublicUser.lastName">
+            </div>
+            <div class="form-group">
+              <label for="newPublicEmail">Email</label>
+              <input class="pl-3 m-2 w-100" id="newPublicEmail" type="email" name="newPublicEmail" placeholder="Ex: jahn.doe@mail.com" [(ngModel)]="newPublicUser.email">
+            </div>
+            <div class="form-group">
+              <label for="newPublicPassword">Password</label>
+              <input class="pl-3 m-2 w-100" id="newPublicPassword" type="password" name="newPublicPassword" [(ngModel)]="newPublicUser.password">
+            </div>
+            <div class="form-group">
+              <label for="newPublicConfirmPassword">Confirm password</label>
+              <input class="pl-3 m-2 w-100" id="newPublicConfirmPassword" type="password" name="newPublicConfirmPassword" [(ngModel)]="newPublicUser.confirmPassword">
+            </div>
+            <div class="text-center">
+              <button class="m-2 btn-others">Get public</button>
+            </div>
+          </form>
+        </div>
+        <div *ngIf="!public">
+          <form class="subscribe" name="eminentSubscriptionForm" (ngSubmit)="subscribe(false)">
+            <div class="form-group">
+              <label for="newEminentUsername">Username</label>
+              <input class="pl-3 m-2 w-100" id="newEminentUsername" type="text" name="newEminentUsername" placeholder="Ex: Jahnie" [(ngModel)]="newEminentUser.username">
+            </div>
+            <div class="form-group">
+              <label for="newEminentEmail">Email</label>
+              <input class="pl-3 m-2 w-100" id="newEminentEmail" type="email" name="newEminentEmail" placeholder="Ex: jahnie.doe@mail.com" [(ngModel)]="newEminentUser.email">
+            </div>
+            <div class="form-group">
+              <label for="newEminentPassword">Password</label>
+              <input class="pl-3 m-2 w-100" id="newPassword" type="password" name="newEminentPassword" [(ngModel)]="newEminentUser.password">
+            </div>
+            <div class="form-group">
+              <label for="newEminentConfirmPassword">Confirm password</label>
+              <input class="pl-3 m-2 w-100" id="newEminentConfirmPassword" type="password" name="newEminentConfirmPassword" [(ngModel)]="newEminentUser.confirmPassword">
+            </div>
+            <div class="text-center">
+              <button class="m-2 btn-others">Get eminent</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

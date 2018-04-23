@@ -14,16 +14,31 @@ function makeToken(id = undefined) {
 let authentication = Router();
 
 authentication.post('/user/create', (req, res) => {
-  req.body._id = new Types.ObjectId;
-  User.create(req.body, (err, user) => {
+  console.log(req.body);
+  console.log(req.body.user);
+  const user = req.body.user;
+  let newUser: any = {};
+  newUser._id = new Types.ObjectId;
+  newUser.type = user.type;
+  if (newUser.type === 'Public') {
+    newUser.firstName = user.firstName;
+    newUser.lastName = user.lastName;
+  } else if (newUser.type === 'Eminent') {
+    newUser.userName = user.userName;
+  }
+  newUser.email = user.email;
+  newUser.password = user.password;
+  User.create(newUser, (err, user) => {
     if (err) {
       res.status(500).json({
         success: false,
         error: 'User already exists'
       });
     } else {
-      res.json({
-        success: true
+      return res.json({
+        success: true,
+        id: user._id,
+        token: makeToken(user._id)
       });
     }
   });

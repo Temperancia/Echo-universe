@@ -11,16 +11,19 @@ import { AuthenticationService } from '../authentication.service';
 })
 export class LoginComponent implements OnInit {
   user: any = {};
-  newUser: any = {};
+  newPublicUser: any = {};
+  newEminentUser: any = {};
   errors: any = {};
   userForm: FormGroup;
   feel: boolean;
   spotlight: boolean;
   know: boolean;
   motto: boolean;
+  public: boolean;
   constructor(private router: Router, private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
+    this.public = true;
     this.userForm = new FormGroup({
       'email': new FormControl(this.user.email, [
         Validators.required
@@ -39,11 +42,10 @@ export class LoginComponent implements OnInit {
     }
     this.authenticationService.login(credentials)
       .subscribe(response => {
-        let user = {
+        const user = {
           'id': response.id,
           'token': response.token
         }
-        console.log(response);
         if (response && response['success'] === true) {
           // login successful
           localStorage.setItem('currentUser', JSON.stringify(user));
@@ -53,14 +55,29 @@ export class LoginComponent implements OnInit {
           this.errors['login'] = 'Email or password is incorrect';
         }
       });
-
   }
 
-  public subscribe() {
-    this.authenticationService.subscribe(this.newUser.email, this.newUser.password)
-    .subscribe(result => {
-      console.log(result);
+  public subscribe(pub) {
+    let user;
+    if (pub) {
+      user = this.newPublicUser;
+      user['type'] = 'Public';
+    } else {
+      user = this.newEminentUser;
+      user['type'] = 'Eminent';
+    }
+    this.authenticationService.subscribe(user)
+    .subscribe(response => {
+      const user = {
+        'id': response.id,
+        'token': response.token
+      }
+      if (response && response['success'] === true) {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.router.navigate(['/']);
+      } else {
+        // server should not fail to create a user ?
+      }
     });
   }
-
 }
