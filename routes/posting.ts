@@ -27,9 +27,9 @@ posting.post('/posts/create', (req, res) => {
   });
 });
 
+// get posts from the user
 posting.get('/posts/user/:id', (req, res) => {
   console.log(req.decoded.id);
-
   res.json({
     success: true
   });

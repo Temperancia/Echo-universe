@@ -34,5 +34,6 @@ api.use((req, res, next) => {
 });
 
 api.use('/posting', require('./posting'));
+api.use('/trusting', require('./trusting'));
 
 module.exports = api;
