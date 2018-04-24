@@ -19,11 +19,10 @@ posting.post('/posts/create', (req, res) => {
         success: false,
         error: 'Error while creating post : ' + err
       });
-    } else {
-      return res.json({
-        success: true
-      });
     }
+    return res.json({
+      success: true
+    });
   });
 });
 
