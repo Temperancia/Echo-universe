@@ -28,6 +28,18 @@ trusting.post('/trusts/create', (req, res) => {
 
 // data from the trust
 trusting.get('/trusts/:trust', (req, res) => {
+  Trust.findOne({name: req.params.trust}, 'name owner moderators members reputation', (err, trust) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: 'Error while finding trust : ' + err
+      });
+    }
+    return res.json({
+      success: true,
+      trust: trust
+    });
+  });
 });
 
 // owner changes the trust
@@ -35,7 +47,18 @@ trusting.post('/trusts/:trust/update', (req, res) => {
 });
 
 // owner deletes the trust
-trusting.get('/trusts/:trust/delete', (req, res) => {
+trusting.delete('/trusts/:trust/delete', (req, res) => {
+  Trust.findOneAndRemove({name: req.params.trust}, (err, trust) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: 'Error while deleting trust : ' + err
+      });
+    }
+    return res.json({
+      success: true,
+    });
+  });
 });
 
 module.exports = trusting;

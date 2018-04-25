@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 
   get email() { return this.userForm.get('email'); }
   public login(pub: boolean) {
-    let credentials = undefined;
+    let credentials;
     if (pub) {
       credentials = {
         'email': this.user.email,
