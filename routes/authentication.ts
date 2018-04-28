@@ -15,8 +15,8 @@ function makeToken(id = undefined) {
 let authentication = Router();
 
 authentication.post('/user/create', (req, res) => {
-  console.log(req.body);
   const user = req.body.user;
+  console.log(user);
   let newUser: any = {};
   newUser._id = new Types.ObjectId;
   newUser.type = user.type;
