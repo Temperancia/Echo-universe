@@ -7,6 +7,7 @@ const trustSchema = new Schema({
     type: String,
     unique: true
   },
+  description: String,
   owner: Schema.Types.ObjectId,
   moderators: [Schema.Types.ObjectId],
   members: [Schema.Types.ObjectId],

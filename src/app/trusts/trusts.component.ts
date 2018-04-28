@@ -1,27 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-
-class Trust {
-  name: string;
-  description: string;
-  specialDescription: string;
-  reputation: number;
-}
+import { TrustService } from '../trust.service';
+import { Trust } from '../trust';
 
 @Component({
   selector: 'app-trusts',
   templateUrl: 'trusts.component.html',
-  styles: []
+  styleUrls: ['trusts.component.scss']
 })
 export class TrustsComponent implements OnInit {
+  newTrust: any = {};
   trusts: Trust[];
-  constructor() { }
-
-  ngOnInit() {
-    this.trusts = [
-      { name: 'Group1', description: 'blablablablablabla', specialDescription: 'owner saying something in this banner', reputation: 23 },
-      { name: 'Group1', description: 'blablablablablabla', specialDescription: 'owner saying something in this banner', reputation: 23 },
-      { name: 'Group1', description: 'blablablablablabla', specialDescription: 'owner saying something in this banner', reputation: 23 },
-    ];
+  constructor(private trustService: TrustService) {
   }
-
+  ngOnInit() {
+    this.getTrusts();
+  }
+  createTrust() {
+    this.trustService.createTrust(this.newTrust);
+  }
+  getTrusts() {
+    this.trustService.getTrusts()
+    .subscribe(trusts => {
+      this.trusts = trusts;
+    });
+  }
 }

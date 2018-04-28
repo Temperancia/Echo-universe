@@ -33,7 +33,9 @@ api.use((req, res, next) => {
   }
 });
 
+api.use('/user', require('./user'));
 api.use('/posting', require('./posting'));
 api.use('/trusting', require('./trusting'));
+api.use('/friends', require('./friends'));
 
 module.exports = api;

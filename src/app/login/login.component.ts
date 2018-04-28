@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
 
   get email() { return this.userForm.get('email'); }
   public login(pub: boolean) {
-    let credentials = undefined;
+    let credentials;
     if (pub) {
       credentials = {
         'email': this.user.email,
@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
         const user = {
           'id': response.id,
           'token': response.token
-        }
+        };
         if (response && response['success'] === true) {
           // login successful
           localStorage.setItem('currentUser', JSON.stringify(user));
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
       const user = {
         'id': response.id,
         'token': response.token
-      }
+      };
       if (response && response['success'] === true) {
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.router.navigate(['/']);

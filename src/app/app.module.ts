@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { HeaderComponent } from './header/header.component';
 import { AboutComponent } from './about/about.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
+import { CirclesComponent } from './circles/circles.component';
 //import {TransferHttpCacheModule} from '@nguniversal/common';
 import { FindHelpComponent } from './find-help/find-help.component';
 import { FeedComponent } from './feed/feed.component';
@@ -24,6 +25,7 @@ import { PublicGuard } from './public.guard';
 import { AuthenticationService } from './authentication.service';
 import { PostService } from './post.service';
 import { FriendService } from './friend.service';
+import { TrustService } from './trust.service';
 import { TrustsComponent } from './trusts/trusts.component';
 import { FeedHomeComponent } from './feed-home/feed-home.component';
 import { FeedMyProfileComponent } from './feed-my-profile/feed-my-profile.component';
@@ -37,6 +39,7 @@ import { OptionsBoxComponent } from './options-box/options-box.component';
     HeaderComponent,
     AboutComponent,
     MyProfileComponent,
+    CirclesComponent,
     FindHelpComponent,
     FeedComponent,
     FooterComponent,
@@ -64,6 +67,7 @@ import { OptionsBoxComponent } from './options-box/options-box.component';
     AuthenticationService,
     PostService,
     FriendService,
+    TrustService,
     PublicGuard
 
   ],

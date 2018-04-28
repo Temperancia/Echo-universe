@@ -9,13 +9,13 @@ function makeToken(id = undefined) {
   }, global['secret'], {
     expiresIn: '24h'
   });
+  return token;
 }
 
 let authentication = Router();
 
 authentication.post('/user/create', (req, res) => {
   console.log(req.body);
-  console.log(req.body.user);
   const user = req.body.user;
   let newUser: any = {};
   newUser._id = new Types.ObjectId;
@@ -28,19 +28,22 @@ authentication.post('/user/create', (req, res) => {
   }
   newUser.email = user.email;
   newUser.password = user.password;
+  newUser.reputation = 0;
+  newUser.friends = [];
+  newUser.friendsRequested = [];
+  newUser.friendsRequesting = [];
   User.create(newUser, (err, user) => {
     if (err) {
       res.status(500).json({
         success: false,
         error: 'User already exists'
       });
-    } else {
-      return res.json({
-        success: true,
-        id: user._id,
-        token: makeToken(user._id)
-      });
     }
+    return res.json({
+      success: true,
+      id: user._id,
+      token: makeToken(user._id)
+    });
   });
 });
 
@@ -64,20 +67,22 @@ authentication.post('/user/login', (req, res) => {
   }
   User.findOne(req.body, '_id', (err, user) => {
     if (err) {
-
+      return res.status(500).json({
+        success: false,
+        error: 'Error while finding user : ' + err
+      });
     }
     if (!user) {
       return res.status(500).json({
         success: false,
         error: 'Wrong email or password'
       });
-    } else {
-      return res.json({
-        success: true,
-        id: user._id,
-        token: makeToken(user._id)
-      });
     }
+    return res.json({
+      success: true,
+      id: user._id,
+      token: makeToken(user._id)
+    });
   });
 });
 

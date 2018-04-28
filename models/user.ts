@@ -15,14 +15,16 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
-  password: String,
   reputation: Number,
   birth: Date,
+  friends: [Schema.Types.ObjectId],
+  friendsRequested: [Schema.Types.ObjectId],
+  friendsRequesting: [Schema.Types.ObjectId],
+  password: String,
   createdOn: Date,
   updatedOn: {
     type: Date,
     default: Date.now
   },
-  friends: [Schema.Types.ObjectId],
 });
 module.exports = mongoose.model('User', userSchema);
