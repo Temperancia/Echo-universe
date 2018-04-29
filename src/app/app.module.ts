@@ -27,6 +27,7 @@ import { PostService } from './post.service';
 import { FriendService } from './friend.service';
 import { TrustService } from './trust.service';
 import { TrustsComponent } from './trusts/trusts.component';
+import { TrustComponent } from './trust/trust.component';
 import { FeedHomeComponent } from './feed-home/feed-home.component';
 import { FeedMyProfileComponent } from './feed-my-profile/feed-my-profile.component';
 import { FluxBoxComponent } from './flux-box/flux-box.component';
@@ -47,6 +48,7 @@ import { OptionsBoxComponent } from './options-box/options-box.component';
     PostBoxComponent,
     LoginComponent,
     TrustsComponent,
+    TrustComponent,
     FeedHomeComponent,
     FeedMyProfileComponent,
     FluxBoxComponent,
