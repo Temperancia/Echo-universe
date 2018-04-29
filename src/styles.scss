@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'app/global.scss';
+* {
+  border-radius: 5px !important;
+}
 *:focus {
     outline: none;
 }
@@ -19,7 +22,7 @@ button {
   margin-top: 80px;
 }
 
-input, button {
+input, button, textarea {
   border-radius: 25px !important;
 }
 /*

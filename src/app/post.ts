@@ -1,9 +1,10 @@
 export class Post {
-  id: number;
   name: string;
+  owner: string;
   content: string;
   createdOn: string;
   reputation: number;
+  /*
   constructor(id, name, content, createdOn, reputation) {
     this.id = id;
     this.name = name;
@@ -11,4 +12,5 @@ export class Post {
     this.createdOn = createdOn;
     this.reputation = reputation;
   }
+  */
 }

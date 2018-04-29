@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TrustService } from '../trust.service';
+import { Friend } from '../friend';
 import { Trust } from '../trust';
+import { Post } from '../post';
 
 @Component({
   selector: 'app-trust',
@@ -8,9 +10,62 @@ import { Trust } from '../trust';
   styleUrls: ['trust.component.scss']
 })
 export class TrustComponent implements OnInit {
-  trust: string = "A trust";
+  trust: string = 'Coventry Starbuckers';
+  public members: Friend[];
+  currentPost: any = {};
+  toggles = {
+    'home': true,
+    'members': false,
+    'policies': false
+  };
+  posts: Post[] = [
+    {
+      name: 'Free coffee for new joiners',
+      content: 'Dear employees , from now on , we will be providing you fresh free coffee from our own machines as long as you work with our daring team Cheers !',
+      owner: 'James Laper',
+      createdOn: '13/11/2018 6:39 PM',
+      reputation: 34
+    },
+    {
+      name: 'OMG',
+      content: 'I cannot believe you joined this one , cheers Oliver',
+      owner: 'Vanessa Prikles',
+      createdOn: '13/11/2018 4:20 PM',
+      reputation: 5
+    },
+    {
+      name: 'Hey !!',
+      content: 'Super glad to join this trust , thanks for letting me in. Fond of Starbucks since ever !!!',
+      owner: 'Oliver Thomson',
+      createdOn: '13/11/2018 3:28 AM',
+      reputation: 3
+    },
+    {
+      name: 'Hey !!',
+      content: 'Super glad to join this trust , thanks for letting me in. Fond of Starbucks since ever !!!',
+      owner: 'Oliver Thomson',
+      createdOn: '13/11/2018 3:28 AM',
+      reputation: 3
+    },
+    {
+      name: 'Hey !!',
+      content: 'Super glad to join this trust , thanks for letting me in. Fond of Starbucks since ever !!!',
+      owner: 'Oliver Thomson',
+      createdOn: '13/11/2018 3:28 AM',
+      reputation: 3
+    }
+  ];
   constructor(private trustService: TrustService) {
   }
   ngOnInit() {
+    this.trustService.getMembers(this.trust)
+      .subscribe(members => this.members = members);
+  }
+  toggle(tab) {
+    for (let toggle in this.toggles) {
+      this.toggles[toggle] = false;
+    }
+    this.toggles[tab] = true;
+    console.log(this.toggles[tab], tab);
   }
 }
