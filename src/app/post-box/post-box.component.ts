@@ -52,9 +52,9 @@ export class PostBoxComponent implements OnInit {
   }
   public newPost () {
     this.currentPost = {
-      id: -1,
       name: '',
       content: '',
+      owner: '',
       createdOn: '',
       reputation: 0
     };

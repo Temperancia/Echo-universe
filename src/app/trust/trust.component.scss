@@ -8,16 +8,6 @@
   width: 100px;
   height: 200px;
 }
-.members {
-  position: fixed;
-  top: 30vh;
-  right: 0;
-  height: 60vh;
-  background-color: yellow;
-  .member {
-    background-color: red;
-  }
-}
 .feed {
   background-color: blue;
   .post {
@@ -29,4 +19,17 @@
       right: 10px;
     }
   }
+}
+.members {
+  position: fixed;
+  top: 30vh;
+  right: 0;
+  height: 60vh;
+  background-color: yellow;
+  .member {
+    background-color: red;
+  }
+}
+.inspiration {
+  border: solid 1px black;
 }

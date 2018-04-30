@@ -2,7 +2,7 @@
 <div class="container-fluid content">
   <app-header></app-header>
   <div class="row">
-    <div class="navbar">
+    <div class="col-1 navbar">
       <div>
         <button (click)="toggle('home');">Home</button>
       </div>
@@ -13,51 +13,72 @@
         <button (click)="toggle('policies');">Policies</button>
       </div>
     </div>
-  </div>
-  <div *ngIf="toggles['home']">
-    <div class="row">
-      <h1 class="text-center w-100 my-5">
-        {{trust}}
-      </h1>
-    </div>
-    <div class="row">
-      <div class="offset-4 col-4 justify-content-center align-self-center">
-        <form>
-          <input class="form-control" placeholder="Whats that ?" name="currentPostName" [(ngModel)]="currentPost.name">
-          <app-emojis ref-emojis class='emojis' (onEmoji)='onEmoji($event)'></app-emojis>
-          <textarea class="form-control" placeholder="Say something already" name="currentPostContent" [(ngModel)]="currentPost.content"></textarea>
-        </form>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="offset-1 col-7 feed">
-        <div class="post m-3 p-3" *ngFor="let post of posts">
-          <h3>
-            {{post.name}} -- {{post.owner}}
-          </h3>
-          <div class="reputation">
-            {{post.reputation}}
+    <div class="offset-2 col-6">
+      <div class="container">
+        <div *ngIf="toggles['home']">
+          <div class="row">
+            <h1 class="col-12 text-center w-100 my-5">
+              {{trust}}
+            </h1>
           </div>
-          <p>
-            {{post.content}}
-          </p>
-          <div>
-            {{post.createdOn}}
+          <div class="row">
+            <div class="col-12 justify-content-center align-self-center">
+              <form>
+                <input class="form-control" placeholder="Whats that ?" name="currentPostName" [(ngModel)]="currentPost.name">
+                <app-emojis ref-emojis class='emojis' (onEmoji)='onEmoji($event)'></app-emojis>
+                <textarea class="form-control" placeholder="Say something already" name="currentPostContent" [(ngModel)]="currentPost.content"></textarea>
+              </form>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 feed">
+              <div class="post m-3 p-3" *ngFor="let post of posts">
+                <h3>
+                  {{post.name}} -- {{post.owner}}
+                </h3>
+                <div class="reputation">
+                  {{post.reputation}}
+                </div>
+                <p>
+                  {{post.content}}
+                </p>
+                <div>
+                  {{post.createdOn}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-3 members">
+            <h2 class="m-2">
+              Your fellow members !
+            </h2>
+            <div class="member m-2 p-2" *ngFor="let member of members">
+              <div>
+                {{member.name}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="toggles['members']">
+          <div class="row inspiration">
+            <h2 class="offset-4 col-4 text-center w-100 mt-2">
+              Inspiration
+            </h2>
+            <h3 class="offset-4 col-4 text-center w-100 mt-2">
+              {{owner}}
+            </h3>
+          </div>
+          <div class="row trustees">
+            <h2>
+              Trustees
+            </h2>
+            <div class="col-2 trustee" *ngFor="let trustee of trustees">
+              {{trustee.name}} {{trustee.reputation}}
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-3 members">
-      <h2 class="m-2">
-        Your fellow members !
-      </h2>
-      <div class="member m-2 p-2" *ngFor="let member of members">
-        <div>
-          {{member.name}}
-        </div>
-      </div>
-    </div>
   </div>
-
   <app-footer></app-footer>
 </div>

@@ -11,7 +11,9 @@ import { Post } from '../post';
 })
 export class TrustComponent implements OnInit {
   trust: string = 'Coventry Starbuckers';
-  public members: Friend[];
+  owner = 'James Laper';
+  trustees: any[];
+  members: any[];
   currentPost: any = {};
   toggles = {
     'home': true,
@@ -60,12 +62,13 @@ export class TrustComponent implements OnInit {
   ngOnInit() {
     this.trustService.getMembers(this.trust)
       .subscribe(members => this.members = members);
+    this.trustService.getMembers(this.trust)
+      .subscribe(members => this.trustees = members);
   }
   toggle(tab) {
     for (let toggle in this.toggles) {
       this.toggles[toggle] = false;
     }
     this.toggles[tab] = true;
-    console.log(this.toggles[tab], tab);
   }
 }
