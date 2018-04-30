@@ -32,7 +32,8 @@ export class HeaderComponent implements OnInit {
   public showOptions = false;
 
   constructor(private postService: PostService,
-               private authenticationService: AuthenticationService
+               private authenticationService: AuthenticationService,
+               private router: Router
               ) {
   }
 
@@ -48,9 +49,13 @@ export class HeaderComponent implements OnInit {
   }
 
   public showFluxBox(): void {
-    this.showFlux = !this.showFlux;
-    this.showPost = false;
-    this.showOptions = false;
+    if (this.router.url !== '/home') {
+      this.router.navigate(['/home']);
+    } else {
+      this.showFlux = !this.showFlux;
+      this.showPost = false;
+      this.showOptions = false;
+    }
   }
 
   public showOptionsBox(): void {

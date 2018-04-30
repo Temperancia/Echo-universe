@@ -5,8 +5,10 @@
   position: fixed;
   top: 50vh;
   left: 10px;
-  width: 100px;
-  height: 200px;
+  height: 100px;
+  button {
+    width: 100%;
+  }
 }
 .feed {
   background-color: blue;
@@ -30,6 +32,15 @@
     background-color: red;
   }
 }
+.title {
+  font-family: 'Modum';
+}
 .inspiration {
+  border: solid 1px black;
+}
+.trustees {
+  border: solid 1px black;
+}
+.followers {
   border: solid 1px black;
 }

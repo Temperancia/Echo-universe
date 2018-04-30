@@ -2,18 +2,18 @@
 <div class="container-fluid content">
   <app-header></app-header>
   <div class="row">
-    <div class="col-1 navbar">
-      <div>
+    <div class="col-1 p-0 navbar">
+      <div class="w-100">
         <button (click)="toggle('home');">Home</button>
       </div>
-      <div>
+      <div class="w-100">
         <button (click)="toggle('members');">Members</button>
       </div>
-      <div>
+      <div class="w-100">
         <button (click)="toggle('policies');">Policies</button>
       </div>
     </div>
-    <div class="offset-2 col-6">
+    <div class="offset-1 col-10">
       <div class="container">
         <div *ngIf="toggles['home']">
           <div class="row">
@@ -48,32 +48,66 @@
               </div>
             </div>
           </div>
+          <!--
           <div class="col-3 members">
             <h2 class="m-2">
               Your fellow members !
             </h2>
             <div class="member m-2 p-2" *ngFor="let member of members">
-              <div>
-                {{member.name}}
+              {{member.name}}
+            </div>
+          </div>
+        -->
+        </div>
+        <div *ngIf="toggles['members']">
+          <div class="row mt-2">
+            <div class="offset-4 col-4 text-center w-100 inspiration">
+              <h2 class="title">
+                Inspiration
+              </h2>
+              <h3 class="">
+                {{owner}}
+              </h3>
+            </div>
+          </div>
+          <div class="row mt-2 trustees">
+            <h2 class="col-3 title">
+              Trustees
+            </h2>
+            <div class="col-3 trustee" *ngFor="let trustee of trustees">
+              <div class="text-center">
+                {{trustee.name}}
+              </div>
+              <div class="text-center">
+                {{trustee.reputation}}
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2 followers">
+            <h2 class="col-3 title">
+              Followers
+            </h2>
+            <div class="col-3 follower" *ngFor="let follower of followers">
+              <div class="text-center">
+                {{follower.name}}
+              </div>
+              <div class="text-center">
+                {{follower.reputation}}
               </div>
             </div>
           </div>
         </div>
-        <div *ngIf="toggles['members']">
-          <div class="row inspiration">
-            <h2 class="offset-4 col-4 text-center w-100 mt-2">
-              Inspiration
-            </h2>
-            <h3 class="offset-4 col-4 text-center w-100 mt-2">
-              {{owner}}
-            </h3>
+        <div *ngIf="toggles['policies']">
+          <div class="row mt-2">
+            <div class="offset-3 col-6">
+              Members agree to :
+              {{policies.dos}}
+            </div>
           </div>
-          <div class="row trustees">
-            <h2>
-              Trustees
-            </h2>
-            <div class="col-2 trustee" *ngFor="let trustee of trustees">
-              {{trustee.name}} {{trustee.reputation}}
+          <div class="row mt-2">
+            <div class="offset-3 col-6">
+              Members agree to not :
+              {{policies.donots}}
             </div>
           </div>
         </div>

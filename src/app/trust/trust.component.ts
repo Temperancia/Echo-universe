@@ -10,10 +10,15 @@ import { Post } from '../post';
   styleUrls: ['trust.component.scss']
 })
 export class TrustComponent implements OnInit {
-  trust: string = 'Coventry Starbuckers';
+  trust = 'Coventry Starbuckers';
   owner = 'James Laper';
+  policies = {
+    'dos': 'be employees of the Starbucks shop in Coventry',
+    'donots': 'dislike coffee !'
+  }
   trustees: any[];
   members: any[];
+  followers: any[];
   currentPost: any = {};
   toggles = {
     'home': true,
@@ -64,6 +69,8 @@ export class TrustComponent implements OnInit {
       .subscribe(members => this.members = members);
     this.trustService.getMembers(this.trust)
       .subscribe(members => this.trustees = members);
+    this.trustService.getMembers(this.trust)
+      .subscribe(members => this.followers = members);
   }
   toggle(tab) {
     for (let toggle in this.toggles) {
