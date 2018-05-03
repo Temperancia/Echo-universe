@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import { AppSettings } from './app.settings';
 
 @Injectable()
 export class AuthenticationService {
@@ -39,14 +40,14 @@ export class AuthenticationService {
   }
 
   subscribe(user: any): Observable<any> {
-    return this.http.post('http://localhost:4000/api/authentication/user/create', {
+    return this.http.post(AppSettings.API_ENDPOINT + 'authentication/user/create', {
       user: user
     });
   }
 
   login(credentials): Observable<any> {
     if (credentials) {
-      return this.http.post('http://localhost:4000/api/authentication/user/login', {
+      return this.http.post(AppSettings.API_ENDPOINT + 'authentication/user/login', {
         email: credentials.email,
         password: credentials.password
       })
@@ -54,7 +55,7 @@ export class AuthenticationService {
         catchError(this.handleError<any>('login'))
       );
     }
-    return this.http.get('http://localhost:4000/api/authentication/user/login');
+    return this.http.get(AppSettings.API_ENDPOINT + 'authentication/user/login');
   }
 
   logout(): void {

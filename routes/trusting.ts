@@ -1,16 +1,16 @@
-import * as express from 'express';
+import { Router } from 'express';
 import { Types } from 'mongoose';
 
-let trusting = express.Router();
+let trusting = Router();
 
 const Trust = require('../models/trust');
 const User = require('../models/user');
 
 // owner creates a trust
 trusting.post('/trusts/create', (req, res) => {
-  console.log('receiving : ' + req.body);
+  console.log('BODY', req.body);
   let data = req.body.trust;
-  User.findOne({'_id': req.body['owner']}, (err, owner) => {
+  User.findOne({'_id': req.decoded.id}, (err, owner) => {
     if (err) {
       return res.status(500).json({
         success: false,
@@ -39,7 +39,8 @@ trusting.post('/trusts/create', (req, res) => {
   });
 });
 
-trusting.get('/trusts', (req, res) => {
+trusting.get('/trusts/get', (req, res) => {
+  console.log('get trusts');
   Trust.find({}, 'name description owner members reputation', (err, trusts) => {
     if (err) {
       return res.status(500).json({
@@ -55,7 +56,7 @@ trusting.get('/trusts', (req, res) => {
 });
 
 // data from the trust
-trusting.get('/trusts/:trust', (req, res) => {
+trusting.get('/trust/:trust', (req, res) => {
   Trust.findOne({name: req.params.trust}, 'name owner moderators members reputation', (err, trust) => {
     if (err) {
       return res.status(500).json({
@@ -71,11 +72,11 @@ trusting.get('/trusts/:trust', (req, res) => {
 });
 
 // owner changes the trust
-trusting.post('/trusts/:trust/update', (req, res) => {
+trusting.post('/trust/:trust/update', (req, res) => {
 });
 
 // owner deletes the trust
-trusting.delete('/trusts/:trust/delete', (req, res) => {
+trusting.delete('/trust/:trust/delete', (req, res) => {
   Trust.findOneAndRemove({name: req.params.trust}, (err, trust) => {
     if (err) {
       return res.status(500).json({
@@ -87,6 +88,10 @@ trusting.delete('/trusts/:trust/delete', (req, res) => {
       success: true,
     });
   });
+});
+
+trusting.get('/trust/:trust/join', (req, res) => {
+
 });
 
 module.exports = trusting;

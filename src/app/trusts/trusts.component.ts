@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TrustService } from '../trust.service';
 import { Trust } from '../trust';
 
@@ -10,18 +11,29 @@ import { Trust } from '../trust';
 export class TrustsComponent implements OnInit {
   newTrust: any = {};
   trusts: Trust[];
-  constructor(private trustService: TrustService) {
+  constructor(private trustService: TrustService, private router: Router) {
   }
   ngOnInit() {
     this.getTrusts();
   }
   createTrust() {
-    this.trustService.createTrust(this.newTrust);
+    this.trustService.createTrust(this.newTrust).subscribe(response => {
+      if (response && response.success) {
+        this.router.navigate(['/trust/' + this.newTrust.name]);
+      }
+    });
   }
   getTrusts() {
     this.trustService.getTrusts()
-    .subscribe(trusts => {
-      this.trusts = trusts;
+    .subscribe(response => {
+      this.trusts = response['trusts'];
+    });
+  }
+  joinTrust(name: string) {
+    this.trustService.joinTrust(name).subscribe(response => {
+      if (response && response.success) {
+        this.router.navigate(['/trust/' + name]);
+      }
     });
   }
 }

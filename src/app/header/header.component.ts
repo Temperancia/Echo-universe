@@ -24,7 +24,6 @@ import { Router } from '@angular/router';
   ]
 })
 export class HeaderComponent implements OnInit {
-  @Input() app: string;
   public isLoggedIn: boolean;
   public isAnonymous: boolean;
   public showPost = false;

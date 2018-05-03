@@ -56,7 +56,6 @@ authentication.get('/user/login', (req, res) => {
 });
 
 authentication.post('/user/login', (req, res) => {
-  console.log(req.body);
   const email = req.body['email'];
   const password = req.body['password'];
   if (!email || !password) {

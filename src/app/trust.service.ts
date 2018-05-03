@@ -3,20 +3,23 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Trust } from './trust';
 import { Friend } from './friend';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { AppSettings } from './app.settings';
 
 @Injectable()
 export class TrustService {
   constructor(private http: HttpClient) {
   }
-  createTrust(trust: Trust): void {
-    this.http.post('http://localhost:4000/api/trusting/trusts/create', {
-      trust: trust,
-      owner: JSON.parse(localStorage.getItem('currentUser'))['id']
+  createTrust(trust: any): Observable<any> {
+    return this.http.post(AppSettings.API_ENDPOINT + 'trusting/trusts/create', {
+      trust: trust
     });
   }
+  joinTrust(name: string): Observable<any> {
+    return this.http.get(AppSettings.API_ENDPOINT + 'trusting/trust/' + name + '/join');
+  }
   getTrusts(): Observable<Trust[]> {
-    return this.http.get<Trust[]>('http://localhost:4000/api/trusting/trusts/?token=' + JSON.parse(localStorage.getItem('currentUser'))['token']);
+    return this.http.get<Trust[]>(AppSettings.API_ENDPOINT + 'trusting/trusts/get/?token=' + JSON.parse(localStorage.getItem('currentUser'))['token']);
   }
   getMembers(trust): Observable<Friend[]> {
     let members = [

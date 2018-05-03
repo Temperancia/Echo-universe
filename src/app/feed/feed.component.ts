@@ -15,7 +15,6 @@ export class FeedComponent implements OnInit {
 
   }
   getPostTypeStyle (type: string): string {
-    console.log(type);
     if (type === 'friends') {
       return 'post-friend';
     } else if (type === 'trending') {

@@ -20,6 +20,7 @@ const userSchema = new Schema({
   friends: [Schema.Types.ObjectId],
   friendsRequested: [Schema.Types.ObjectId],
   friendsRequesting: [Schema.Types.ObjectId],
+  trusts: [String],
   password: String,
   createdOn: Date,
   updatedOn: {
