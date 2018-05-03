@@ -5,17 +5,9 @@
   position: fixed;
   top: 50vh;
   left: 10px;
-  width: 100px;
-  height: 200px;
-}
-.members {
-  position: fixed;
-  top: 30vh;
-  right: 0;
-  height: 60vh;
-  background-color: yellow;
-  .member {
-    background-color: red;
+  height: 100px;
+  button {
+    width: 100%;
   }
 }
 .feed {
@@ -29,4 +21,26 @@
       right: 10px;
     }
   }
+}
+.members {
+  position: fixed;
+  top: 30vh;
+  right: 0;
+  height: 60vh;
+  background-color: yellow;
+  .member {
+    background-color: red;
+  }
+}
+.title {
+  font-family: 'Modum';
+}
+.inspiration {
+  border: solid 1px black;
+}
+.trustees {
+  border: solid 1px black;
+}
+.followers {
+  border: solid 1px black;
 }

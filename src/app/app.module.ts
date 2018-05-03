@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Ng2EmojiModule } from 'ng2-emoji';
 import {Ng2PageScrollModule} from 'ng2-page-scroll';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -32,6 +32,7 @@ import { FeedHomeComponent } from './feed-home/feed-home.component';
 import { FeedMyProfileComponent } from './feed-my-profile/feed-my-profile.component';
 import { FluxBoxComponent } from './flux-box/flux-box.component';
 import { OptionsBoxComponent } from './options-box/options-box.component';
+import { JwtInterceptor } from './jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,7 @@ import { OptionsBoxComponent } from './options-box/options-box.component';
     OptionsBoxComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({appId: 'my-app'}),
+    BrowserModule.withServerTransition({appId: 'echo'}),
     routing,
     HttpClientModule,
     FormsModule,
@@ -70,7 +71,12 @@ import { OptionsBoxComponent } from './options-box/options-box.component';
     PostService,
     FriendService,
     TrustService,
-    PublicGuard
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    PublicGuard,
 
   ],
   bootstrap: [AppComponent]
