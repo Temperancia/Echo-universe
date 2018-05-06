@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { trigger, style, transition, animate, group } from '@angular/animations';
 import {PostService} from '../post.service';
 import { AuthenticationService } from '../authentication.service';
@@ -26,10 +26,12 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   public isLoggedIn: boolean;
   public isAnonymous: boolean;
+  public searchInput: string;
+  public showSearch = false;
   public showPost = false;
   public showFlux = false;
   public showOptions = false;
-
+  @ViewChild('search') search;
   constructor(private postService: PostService,
                private authenticationService: AuthenticationService,
                private router: Router
@@ -41,8 +43,16 @@ export class HeaderComponent implements OnInit {
     this.isAnonymous = this.authenticationService.isAnonymous();
   }
 
+  public showSearchBox(): void {
+    this.showSearch = true;
+    this.showPost = false;
+    this.showFlux = false;
+    this.showOptions = false;
+  }
+
   public showPostBox(): void {
     this.showPost = !this.showPost;
+    this.showSearch = false;
     this.showFlux = false;
     this.showOptions = false;
   }
@@ -52,6 +62,7 @@ export class HeaderComponent implements OnInit {
       this.router.navigate(['/home']);
     } else {
       this.showFlux = !this.showFlux;
+      this.showSearch = false;
       this.showPost = false;
       this.showOptions = false;
     }
@@ -59,6 +70,7 @@ export class HeaderComponent implements OnInit {
 
   public showOptionsBox(): void {
     this.showOptions = !this.showOptions;
+    this.showSearch = false;
     this.showFlux = false;
     this.showPost = false;
   }

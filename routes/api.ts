@@ -7,7 +7,7 @@ global['secret'] = 'jsdjrfozej654541fkn';
 api.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Authorization,X-Requested-With,content-type,x-access-token,hello,test');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization,X-Requested-With,content-type,x-access-token');
   next();
 });
 
@@ -15,7 +15,6 @@ api.use('/authentication', require('./authentication'));
 
 api.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
-      console.log('!OPTIONS');
       let headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',

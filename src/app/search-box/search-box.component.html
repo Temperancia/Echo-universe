@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<div class="search-box">
+  <div *ngFor="let user of usersDisplayed">
+    {{user.firstName}} {{user.lastName}}
+    <a (click)="addFriend(user._id)">+</a>
+  </div>
+</div>

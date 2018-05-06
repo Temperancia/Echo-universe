@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Friend} from '../friend';
-import {FriendService} from '../friend.service';
+import {User} from '../user';
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -8,14 +8,14 @@ import {FriendService} from '../friend.service';
   styles: []
 })
 export class MyProfileComponent implements OnInit {
-  public friends: Friend[];
-  constructor(private friendService: FriendService) { }
+  public friends: User[];
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
-    this.friendService.getFriends()
+    this.userService.getFriends()
       .subscribe(friends => this.friends = friends);
   }
-  public getReputation(friend: Friend): string {
+  public getReputation(friend: User): string {
     return friend.reputation >= 0 ? 'green' : 'red';
   }
   public getFeedClass(): string {

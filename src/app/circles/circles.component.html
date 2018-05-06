@@ -6,26 +6,56 @@
       Your trusts
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="ownedTrusts.length !== 0">
     <div class="col-4">
       Owned trusts
     </div>
-    <div class="col-4">
-      Trust 1
+    <div class="col-4" *ngFor="let trust of ownedTrusts">
+      <a routerLink="/trust/{{trust}}">
+        {{trust}}
+      </a>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="joinedTrusts.length !== 0">
     <div class="col-4">
       Joined trusts
     </div>
-    <div class="col-4">
-      Trust 1
+    <div class="col-4" *ngFor="let trust of joinedTrusts">
+      <a routerLink="/trust/{{trust}}">
+        {{trust}}
+      </a>
     </div>
-    <div class="col-4">
-      Trust 2
+  </div>
+  <div class="row">
+    <div class="col-12">
+      Your friends
     </div>
-    <div class="col-4">
-      Trust 3
+  </div>
+  <div class="row" *ngIf="friends.length !== 0">
+    <div class="col-4" *ngFor="let friend of friends">
+      {{friend.firstName}} {{friend.lastName}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      Your requests
+    </div>
+  </div>
+  <div class="row" *ngIf="trustsRequests.length !== 0 || friendsRequests.length !== 0">
+    <div [ngClass]="getRequestsClass()" *ngIf="trustsRequests.length !== 0">
+      <div *ngFor="let request of trustsRequests">
+        {{request}}
+      </div>
+    </div>
+    <div [ngClass]="getRequestsClass()" *ngIf="friendsRequests.length !== 0">
+      <div *ngFor="let request of friendsRequests">
+        <div *ngIf="request.firstName && request.lastName">
+          {{request.firstName}} {{request.lastName}}
+        </div>
+        <div *ngIf="request.userName">
+          {{request.userName}}
+        </div>
+      </div>
     </div>
   </div>
   <app-footer></app-footer>

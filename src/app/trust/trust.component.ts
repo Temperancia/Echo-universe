@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TrustService } from '../trust.service';
-import { Friend } from '../friend';
 import { Trust } from '../trust';
 import { Post } from '../post';
 
@@ -65,12 +64,14 @@ export class TrustComponent implements OnInit {
   constructor(private trustService: TrustService) {
   }
   ngOnInit() {
+    /*
     this.trustService.getMembers(this.trust)
       .subscribe(members => this.members = members);
     this.trustService.getMembers(this.trust)
       .subscribe(members => this.trustees = members);
     this.trustService.getMembers(this.trust)
       .subscribe(members => this.followers = members);
+      */
   }
   toggle(tab) {
     for (let toggle in this.toggles) {

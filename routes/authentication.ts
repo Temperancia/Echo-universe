@@ -32,6 +32,8 @@ authentication.post('/user/create', (req, res) => {
   newUser.friends = [];
   newUser.friendsRequested = [];
   newUser.friendsRequesting = [];
+  newUser.trustsOwned = [];
+  newUser.trustsJoined = [];
   User.create(newUser, (err, user) => {
     if (err) {
       res.status(500).json({

@@ -10,7 +10,7 @@ const User = require('../models/user');
 trusting.post('/trusts/create', (req, res) => {
   console.log('BODY', req.body);
   let data = req.body.trust;
-  User.findOne({'_id': req.decoded.id}, (err, owner) => {
+  User.findById(req.decoded.id, (err, owner) => {
     if (err) {
       return res.status(500).json({
         success: false,
@@ -32,8 +32,16 @@ trusting.post('/trusts/create', (req, res) => {
           error: 'Error while creating trust : ' + err
         });
       }
-      return res.json({
-        success: true
+      User.findByIdAndUpdate(req.decoded.id, {$push: {'trustsOwned': data.name}}, (err, user) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            error: 'Error while updating user : ' + err
+          });
+        }
+        return res.json({
+          success: true
+        });
       });
     });
   });
@@ -54,6 +62,8 @@ trusting.get('/trusts/get', (req, res) => {
     });
   });
 });
+
+
 
 // data from the trust
 trusting.get('/trust/:trust', (req, res) => {

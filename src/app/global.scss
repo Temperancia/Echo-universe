@@ -1,5 +1,4 @@
 $azureon: #03b0f5;
-$azureon-smooth: rgba(255, 0, 0, 0.4);
 $yorel: #0669b2;
 $trickle: #044476;
 $rendeez: #0a7584;
@@ -9,7 +8,7 @@ $green: #68bd90;
 
 @font-face {
   font-family: 'Modum';
-  src: url('assets/font/Modum/Modum.eot?#iefix') format('embedded-opentype'),  url('assets/font/Modum/Modum.woff') format('woff'), url('assets/font/Modum/Modum.ttf')  format('truetype'), url('assets/font/Modum/Modum.svg#Modum') format('svg');
+  src: url('/assets/font/Modum/Modum.eot?#iefix') format('embedded-opentype'),  url('/assets/font/Modum/Modum.woff') format('woff'), url('/assets/font/Modum/Modum.ttf')  format('truetype'), url('/assets/font/Modum/Modum.svg#Modum') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -20,7 +19,7 @@ $green: #68bd90;
 
 @font-face {
   font-family: 'Roboto-Regular';
-  src: url('assets/font/Roboto/Roboto-Regular.eot?#iefix') format('embedded-opentype'),  url('assets/font/Roboto/Roboto-Regular.woff') format('woff'), url('assets/font/Roboto/Roboto-Regular.ttf')  format('truetype'), url('assets/font/Roboto/Roboto-Regular.svg#Roboto-Regular') format('svg');
+  src: url('/assets/font/Roboto/Roboto-Regular.eot?#iefix') format('embedded-opentype'),  url('/assets/font/Roboto/Roboto-Regular.woff') format('woff'), url('/assets/font/Roboto/Roboto-Regular.ttf')  format('truetype'), url('/assets/font/Roboto/Roboto-Regular.svg#Roboto-Regular') format('svg');
   font-weight: normal;
   font-style: normal;
 }

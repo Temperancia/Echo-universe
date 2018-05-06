@@ -20,12 +20,14 @@ import { FeedComponent } from './feed/feed.component';
 import { FooterComponent } from './footer/footer.component';
 import { EmojisComponent } from './emojis/emojis.component';
 import { PostBoxComponent } from './post-box/post-box.component';
+import { SearchBoxComponent } from './search-box/search-box.component';
 import { AuthGuard } from './auth.guard';
 import { PublicGuard } from './public.guard';
 import { AuthenticationService } from './authentication.service';
 import { PostService } from './post.service';
 import { FriendService } from './friend.service';
 import { TrustService } from './trust.service';
+import { UserService } from './user.service';
 import { TrustsComponent } from './trusts/trusts.component';
 import { TrustComponent } from './trust/trust.component';
 import { FeedHomeComponent } from './feed-home/feed-home.component';
@@ -47,6 +49,7 @@ import { JwtInterceptor } from './jwt.interceptor';
     FooterComponent,
     EmojisComponent,
     PostBoxComponent,
+    SearchBoxComponent,
     LoginComponent,
     TrustsComponent,
     TrustComponent,
@@ -71,6 +74,7 @@ import { JwtInterceptor } from './jwt.interceptor';
     PostService,
     FriendService,
     TrustService,
+    UserService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
