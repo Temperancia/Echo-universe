@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Trust} from '../trust';
 import {User} from '../user';
 import {UserService} from '../user.service';
+import {FriendService} from '../friend.service';
 
 @Component({
   selector: 'circles-component',
@@ -15,7 +16,7 @@ export class CirclesComponent implements OnInit {
   trustsRequests: any = [];
   friendsRequests: any = [];
   friends: User[] = [];
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private friendService: FriendService) {
 
   }
   ngOnInit() {
@@ -29,7 +30,6 @@ export class CirclesComponent implements OnInit {
     this.userService.getRequests()
     .subscribe(response => {
       if (response && response['success']) {
-        console.log(response);
         this.trustsRequests = response['trustsRequesting'];
         this.friendsRequests = response['friendsRequests'];
       }
@@ -46,5 +46,13 @@ export class CirclesComponent implements OnInit {
       return 'col-6';
     }
     return 'offset-3 col-6';
+  }
+  acceptFriend(id: string): void {
+    this.friendService.acceptFriend(id)
+    .subscribe(response => {
+      if (response && response['success']) {
+        location.reload();
+      }
+    });
   }
 }

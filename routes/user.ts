@@ -75,7 +75,6 @@ user.get('/requests', (req, res) => {
           error: 'Error while finding user : ' + err
         });
       }
-      console.log(friendsRequests);
       return res.json({
         success: true,
         trustsRequesting: thisUser.trustsRequesting,

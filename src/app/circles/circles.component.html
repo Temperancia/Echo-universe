@@ -49,12 +49,15 @@
     </div>
     <div [ngClass]="getRequestsClass()" *ngIf="friendsRequests.length !== 0">
       <div *ngFor="let request of friendsRequests">
-        <div *ngIf="request.firstName && request.lastName">
+        <span *ngIf="request.firstName && request.lastName">
           {{request.firstName}} {{request.lastName}}
-        </div>
-        <div *ngIf="request.userName">
+        </span>
+        <span *ngIf="request.userName">
           {{request.userName}}
-        </div>
+        </span>
+        <span (click)="acceptFriend(request._id)">
+          <a>+</a>
+        </span>
       </div>
     </div>
   </div>

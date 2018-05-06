@@ -18,7 +18,10 @@ export class FriendService {
   }
   addFriend(id: string): Observable<boolean> {
     const url = AppSettings.API_ENDPOINT + 'friends/user/request/' + id;
-    console.log(url);
+    return this.http.get<boolean>(url);
+  }
+  acceptFriend(id: string): Observable<boolean> {
+    const url = AppSettings.API_ENDPOINT + 'friends/user/accept/' + id;
     return this.http.get<boolean>(url);
   }
 }
