@@ -5,17 +5,30 @@ const Trust = require('../models/trust');
 
 let user = express.Router();
 
-user.get('/profile', (req, res) => {
-  User.findById(req.decoded.id, 'type firstName lastName email reputation birth', (err, user) => {
+user.get('/:user/profile', (req, res) => {
+  const thisUserId = req.decoded.id;
+  const thatUserId = req.params.user;
+  User.findById(thatUserId, 'type firstName lastName userName reputation birth friends', (err, thatUser) => {
     if (err) {
       return res.status(500).json({
         success: false,
         error: 'Error while finding user : ' + err
       });
     }
+    let returnedUser = {
+      'type': user.type,
+      'firstName': user.firstName,
+      'lastName': user.lastName,
+      'userName': user.userName,
+      'reputation': user.reputation,
+      'birth': user.birth
+    };
+    if (thisUserId in user.friends) {
+      returnedUser['friends'] = user.friends;
+    }
     return res.json({
       success: true,
-      user: user
+      user: returnedUser
     });
   });
 });

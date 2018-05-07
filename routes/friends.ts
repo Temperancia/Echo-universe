@@ -77,16 +77,27 @@ friends.get('/user/request/:id', (req, res) => {
 });
 
 friends.get('/user/accept/:id', (req, res) => {
-  User.findByIdAndUpdate(req.decoded.id,
-  {$push: {friends: req.params['id']}, $pull: {friendsRequesting: req.params['id']}}, (err, user) => {
+  const thisUserId = req.decoded.id;
+  const thatUserId = req.params['id'];
+  User.findByIdAndUpdate(thisUserId,
+  {$push: {friends: thatUserId}, $pull: {friendsRequesting: thatUserId}}, (err, thisUser) => {
     if (err) {
       return res.status(500).json({
         success: false,
         error: 'Error while finding or updating user : ' + err
       });
     }
-    return res.json({
-      success: true,
+    User.findByIdAndUpdate(thatUserId,
+    {$push: {friends: thisUserId}, $pull: {friendsRequested: thisUserId}}, (err, thatUser) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          error: 'Error while finding or updating user : ' + err
+        });
+      }
+      return res.json({
+        success: true,
+      });
     });
   });
 });

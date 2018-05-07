@@ -33,4 +33,8 @@ export class UserService {
     const url = AppSettings.API_ENDPOINT + 'user/users';
     return this.http.get<User[]>(url);
   }
+  getUser(id=AppSettings.getId()): Observable<User> {
+    const url = AppSettings.API_ENDPOINT + 'user/' + id + '/profile';
+    return this.http.get<User>(url);
+  }
 }
