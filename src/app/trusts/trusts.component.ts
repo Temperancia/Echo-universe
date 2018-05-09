@@ -19,7 +19,7 @@ export class TrustsComponent implements OnInit {
   createTrust() {
     this.trustService.createTrust(this.newTrust).subscribe(response => {
       if (response && response.success) {
-        this.router.navigate(['/trust/' + this.newTrust.name]);
+        this.router.navigate(['/trust/' + this.newTrust.key]);
       }
     });
   }
@@ -29,10 +29,10 @@ export class TrustsComponent implements OnInit {
       this.trusts = response['trusts'];
     });
   }
-  joinTrust(name: string) {
-    this.trustService.joinTrust(name).subscribe(response => {
+  joinTrust(id: string, key: string) {
+    this.trustService.joinTrust(id).subscribe(response => {
       if (response && response.success) {
-        this.router.navigate(['/trust/' + name]);
+        this.router.navigate(['/trust/' + key]);
       }
     });
   }

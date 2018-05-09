@@ -61,8 +61,8 @@ trusting.get('/trusts/get', (req, res) => {
 });
 
 // data from the trust
-trusting.get('/trust/:trust/get', (req, res) => {
-  Trust.findOne({key: req.params.trust}, 'name reputation')
+trusting.get('/trust/:key/get', (req, res) => {
+  Trust.findOne({key: req.params.key}, 'name reputation')
   .populate('owner', 'firstName lastName')
   .populate('moderators', 'firstName lastName')
   .populate('members', 'firstName lastName')
@@ -99,8 +99,47 @@ trusting.delete('/trust/:trust/delete', (req, res) => {
   });
 });
 
-trusting.get('/trust/:trust/join', (req, res) => {
-
+trusting.get('/trust/:id/join', (req, res) => {
+  const thisUserId = req.decoded.id;
+  Trust.findById(req.params.id, 'owner', (err, trust) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        error: 'Error while finding trust : ' + err
+      });
+    }
+    const ownerId = trust.owner;
+    if (ownerId === thisUserId) {
+      return res.status(500).json({
+        success: false,
+        error: 'Cannot add yourself'
+      });
+    }
+    const trustId = trust._id;
+    User.findByIdAndUpdate(ownerId,
+      {$push: {trustsRequesting: {user: thisUserId, trust: trustId}}},
+      (err, thatUser) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          error: 'Error while finding and updating user : ' + err
+        });
+      }
+      User.findByIdAndUpdate(thisUserId,
+        {$push: {trustsRequested: trustId}},
+        (err, thisUser) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            error: 'Error while finding and updating user : ' + err
+          });
+        }
+        return res.json({
+          success: true,
+        });
+      });
+    });
+  });
 });
 
 module.exports = trusting;

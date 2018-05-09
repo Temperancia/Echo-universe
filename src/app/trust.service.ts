@@ -22,8 +22,8 @@ export class TrustService {
       trust: trust
     });
   }
-  joinTrust(name: string): Observable<any> {
-    return this.http.get(AppSettings.API_ENDPOINT + 'trusting/trust/' + name + '/join');
+  joinTrust(trustId: string): Observable<any> {
+    return this.http.get(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustId + '/join');
   }
   getTrusts(): Observable<Trust[]> {
     return this.http.get<Trust[]>(AppSettings.API_ENDPOINT + 'trusting/trusts/get');
