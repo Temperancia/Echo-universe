@@ -2,6 +2,11 @@
 <div class="container-fluid content">
   <app-header></app-header>
   <div class="row">
+    <h1 class="col-12 text-center w-100 my-5">
+      {{trust?.name}}
+    </h1>
+  </div>
+  <div class="row">
     <div class="col-1 p-0 navbar">
       <div class="w-100">
         <button (click)="toggle('home');">Home</button>
@@ -16,11 +21,6 @@
     <div class="offset-1 col-10">
       <div class="container">
         <div *ngIf="toggles['home']">
-          <div class="row">
-            <h1 class="col-12 text-center w-100 my-5">
-              {{trust}}
-            </h1>
-          </div>
           <div class="row">
             <div class="col-12 justify-content-center align-self-center">
               <form>
@@ -48,16 +48,6 @@
               </div>
             </div>
           </div>
-          <!--
-          <div class="col-3 members">
-            <h2 class="m-2">
-              Your fellow members !
-            </h2>
-            <div class="member m-2 p-2" *ngFor="let member of members">
-              {{member.name}}
-            </div>
-          </div>
-        -->
         </div>
         <div *ngIf="toggles['members']">
           <div class="row mt-2">
@@ -100,23 +90,25 @@
         <div *ngIf="toggles['policies']">
           <div class="row mt-2">
             <div class="offset-3 col-6">
-              Members agree to :
-              {{policies.dos}}
+              Our policies
             </div>
           </div>
-          <div class="row mt-2">
+          <div class="row mt-2" *ngFor="let policy of trust.policies">
             <div class="offset-3 col-6">
-              Members agree to not :
-              {{policies.donots}}
+              {{policy}}
             </div>
           </div>
+          <form>
+            <div class="row mt-2">
+              <div class="offset-3 col-6">
+                <textarea name="newPolicy" [(ngModel)]="newPolicy"></textarea>
+                <button (click)="createPolicy()"
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  </div>
-  <div *ngIf="toggles['members']">
-  </div>
-  <div *ngIf="toggles['policies']">
   </div>
   <app-footer></app-footer>
 </div>

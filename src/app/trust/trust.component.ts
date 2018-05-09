@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { TrustService } from '../trust.service';
 import { Trust } from '../trust';
 import { Post } from '../post';
+import { AppSettings } from '../app.settings';
+import { TrustRole } from '../trust.service';
 
 @Component({
   selector: 'app-trust',
@@ -9,12 +12,18 @@ import { Post } from '../post';
   styleUrls: ['trust.component.scss']
 })
 export class TrustComponent implements OnInit {
-  trust = 'Coventry Starbuckers';
+  trust: any;
+  /* = {
+    name: 'Coventry Starbuckers',
+    policies: [
+      'be employees of the Starbucks shop in Coventry',
+      'dislike coffee !'
+    ]
+  };
+  */
+  role: TrustRole;
   owner = 'James Laper';
-  policies = {
-    'dos': 'be employees of the Starbucks shop in Coventry',
-    'donots': 'dislike coffee !'
-  }
+  newPolicy: string;
   trustees: any[];
   members: any[];
   followers: any[];
@@ -61,9 +70,11 @@ export class TrustComponent implements OnInit {
       reputation: 3
     }
   ];
-  constructor(private trustService: TrustService) {
+  constructor(private router: Router, private trustService: TrustService) {
   }
   ngOnInit() {
+    this.getTrust();
+    this.defineRole();
     /*
     this.trustService.getMembers(this.trust)
       .subscribe(members => this.members = members);
@@ -72,6 +83,35 @@ export class TrustComponent implements OnInit {
     this.trustService.getMembers(this.trust)
       .subscribe(members => this.followers = members);
       */
+  }
+  private defineRole(): void {
+    if (!this.trust) {
+      return;
+    }
+    const id = AppSettings.getId();
+    if (id === this.trust.owner.id) {
+      this.role = TrustRole.Inspiration;
+    } else if (id in this.trust.moderators) {
+      this.role = TrustRole.Trustee;
+    } else if (id in this.trust.members) {
+      this.role = TrustRole.Follower;
+    } else {
+      this.role = TrustRole.None;
+    }
+  }
+  private getTrust() {
+    const url = this.router.url;
+    const trustKey = url.substr(url.lastIndexOf('/') + 1);
+    this.trustService.getTrust(trustKey)
+    .subscribe(response => {
+      console.log(response);
+      if (response && response['success']) {
+        this.trust = response['trust'];
+      }
+    });
+  }
+  createPolicy(): void {
+    this.trustService.createPolicy(this.trust.key, this.newPolicy);
   }
   toggle(tab) {
     for (let toggle in this.toggles) {

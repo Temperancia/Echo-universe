@@ -9,25 +9,34 @@ import {UserService} from '../user.service';
 })
 export class MyProfileComponent implements OnInit {
   public friends: User[];
-  user: any;
+  public user: User;
   constructor(private userService: UserService) { }
-
   ngOnInit() {
-    this.userService.getFriends()
-      .subscribe(friends => this.friends = friends);
+    this.getFriends();
     this.getProfile();
+  }
+  public getFriends(): void {
+    this.userService.getFriends()
+    .subscribe(response => {
+      console.log(response);
+      if (response && response['success']) {
+        this.friends = response['friends'];
+      }
+    });
   }
   public getProfile(): void {
     this.userService.getUser()
-    .subscribe(user => {
-      
+    .subscribe(response => {
+      console.log(response);
+      if (response && response['success']) {
+        this.user = response['user'];
+      }
     });
   }
   public getReputation(friend: User): string {
     return friend.reputation >= 0 ? 'green' : 'red';
   }
   public getFeedClass(): string {
-
     return 'col-12';
   }
 }

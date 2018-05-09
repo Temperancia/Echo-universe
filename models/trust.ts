@@ -7,10 +7,24 @@ const trustSchema = new Schema({
     type: String,
     unique: true
   },
+  key: {
+    type: String,
+    unique: true
+  },
   description: String,
-  owner: Schema.Types.ObjectId,
-  moderators: [Schema.Types.ObjectId],
-  members: [Schema.Types.ObjectId],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  moderators: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  members: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  policies: [String],
   reputation: Number,
   createdOn: Date,
   updatedOn: {

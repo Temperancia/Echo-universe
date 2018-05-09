@@ -18,7 +18,7 @@ authentication.post('/user/create', (req, res) => {
   const user = req.body.user;
   console.log(user);
   let newUser: any = {};
-  newUser._id = new Types.ObjectId;
+  newUser._id = new Types.ObjectId();
   newUser.type = user.type;
   if (newUser.type === 'Public') {
     newUser.firstName = user.firstName;
@@ -61,7 +61,7 @@ authentication.post('/user/login', (req, res) => {
   const email = req.body['email'];
   const password = req.body['password'];
   if (!email || !password) {
-    return res.json({
+    return res.status(401).json({
       success: false,
       error: 'Wrong email or password'
     });
@@ -74,7 +74,7 @@ authentication.post('/user/login', (req, res) => {
       });
     }
     if (!user) {
-      return res.status(500).json({
+      return res.status(401).json({
         success: false,
         error: 'Wrong email or password'
       });

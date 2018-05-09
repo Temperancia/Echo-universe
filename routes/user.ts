@@ -16,15 +16,15 @@ user.get('/:user/profile', (req, res) => {
       });
     }
     let returnedUser = {
-      'type': user.type,
-      'firstName': user.firstName,
-      'lastName': user.lastName,
-      'userName': user.userName,
-      'reputation': user.reputation,
-      'birth': user.birth
+      'type': thatUser.type,
+      'firstName': thatUser.firstName,
+      'lastName': thatUser.lastName,
+      'userName': thatUser.userName,
+      'reputation': thatUser.reputation,
+      'birth': thatUser.birth
     };
-    if (thisUserId in user.friends) {
-      returnedUser['friends'] = user.friends;
+    if (thisUserId in thatUser.friends) {
+      returnedUser['friends'] = thatUser.friends;
     }
     return res.json({
       success: true,
@@ -52,7 +52,10 @@ user.get('/:user/trusts', (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.user;
   // check if the requiring user is friend with the required user
-  User.findById(thatUserId, 'friends trustsOwned trustsJoined', (err, thatUser) => {
+  User.findById(thatUserId, 'friends')
+  .populate('trustsOwned', 'name key')
+  .populate('trustsJoined', 'name key')
+  .exec((err, thatUser) => {
     if (err) {
       return res.status(500).json({
         success: false,
@@ -70,29 +73,24 @@ user.get('/:user/trusts', (req, res) => {
       trustsOwned: thatUser.trustsOwned,
       trustsJoined: thatUser.trustsJoined
     });
-  })
+  });
 });
 
 user.get('/requests', (req, res) => {
-  User.findById(req.decoded.id, 'trustsRequesting friendsRequesting', (err, thisUser) => {
+  User.findById(req.decoded.id, '')
+  .populate('friendsRequesting', 'firstName lastName userName')
+  .populate('trustsRequesting', 'firstName lastName userName')
+  .exec((err, thisUser) => {
     if (err) {
       return res.status(500).json({
         success: false,
         error: 'Error while finding user : ' + err
       });
     }
-    User.find({'_id': {$in: thisUser.friendsRequesting}}, 'firstName lastName userName', (err, friendsRequests) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          error: 'Error while finding user : ' + err
-        });
-      }
-      return res.json({
-        success: true,
-        trustsRequesting: thisUser.trustsRequesting,
-        friendsRequests: friendsRequests
-      });
+    return res.json({
+      success: true,
+      trustsRequesting: thisUser.trustsRequesting,
+      friendsRequests: thisUser.friendsRequesting
     });
   });
 });
@@ -101,7 +99,9 @@ user.get('/:user/friends', (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.user;
   // check if the requiring user is friend with the required user
-  User.findById(thatUserId, 'friends', (err, thatUser) => {
+  User.findById(thatUserId, '')
+  .populate('friends')
+  .exec((err, thatUser) => {
     if (err) {
       return res.status(500).json({
         success: false,

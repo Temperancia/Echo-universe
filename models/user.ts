@@ -17,13 +17,28 @@ const userSchema = new Schema({
   },
   reputation: Number,
   birth: Date,
-  friends: [Schema.Types.ObjectId],
+  friends: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
   friendsRequested: [Schema.Types.ObjectId],
-  friendsRequesting: [Schema.Types.ObjectId],
-  trustsOwned: [String],
-  trustsJoined: [String],
-  trustsRequested: [String],
-  trustsRequesting: [Schema.Types.Mixed],
+  friendsRequesting: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  trustsOwned: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Trust'
+  }],
+  trustsJoined: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Trust'
+  }],
+  trustsRequested: [Schema.Types.ObjectId],
+  trustsRequesting: [{
+    type: Schema.Types.Mixed,
+    ref: 'User'
+  }],
   password: String,
   createdOn: Date,
   updatedOn: {

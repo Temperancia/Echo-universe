@@ -6,6 +6,13 @@ import { User } from './user';
 import { HttpClient } from '@angular/common/http';
 import { AppSettings } from './app.settings';
 
+export enum TrustRole {
+  Inspiration,
+  Trustee,
+  Follower,
+  None
+}
+
 @Injectable()
 export class TrustService {
   constructor(private http: HttpClient) {
@@ -21,7 +28,12 @@ export class TrustService {
   getTrusts(): Observable<Trust[]> {
     return this.http.get<Trust[]>(AppSettings.API_ENDPOINT + 'trusting/trusts/get');
   }
+  getTrust(trustKey: string): Observable<Trust> {
+    return this.http.get<Trust>(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustKey + '/get')
+  }
+  createPolicy(trustKey: string, newPolicy: string) {
 
+  }
   /*
   getMembers(trust): Observable<User[]> {
     let members = [

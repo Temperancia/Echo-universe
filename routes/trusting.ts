@@ -9,39 +9,36 @@ const User = require('../models/user');
 // owner creates a trust
 trusting.post('/trusts/create', (req, res) => {
   console.log('BODY', req.body);
-  let data = req.body.trust;
-  User.findById(req.decoded.id, (err, owner) => {
+  const data = req.body.trust;
+  const thisUserId = req.decoded.id;
+  const newTrust = {
+    '_id': new Types.ObjectId,
+    'name': data.name,
+    'key': encodeURIComponent(data.name),
+    'description': data.description,
+    'owner': thisUserId,
+    'moderators': [],
+    'members': [],
+    'policies': [],
+    'reputation': 0,
+    'createdOn': Date.now()
+  };
+  Trust.create(newTrust, (err, trust) => {
     if (err) {
       return res.status(500).json({
         success: false,
-        error: 'Error while finding user : ' + err
+        error: 'Error while creating trust : ' + err
       });
     }
-    let trust = {
-      '_id': new Types.ObjectId,
-      'name': data.name,
-      'description': data.description,
-      'owner': owner,
-      'members': [owner],
-      'createdOn': Date.now()
-    };
-    Trust.create(trust, (err, post) => {
+    User.findByIdAndUpdate(thisUserId, {$push: {'trustsOwned': newTrust._id}}, (err, user) => {
       if (err) {
         return res.status(500).json({
           success: false,
-          error: 'Error while creating trust : ' + err
+          error: 'Error while updating user : ' + err
         });
       }
-      User.findByIdAndUpdate(req.decoded.id, {$push: {'trustsOwned': data.name}}, (err, user) => {
-        if (err) {
-          return res.status(500).json({
-            success: false,
-            error: 'Error while updating user : ' + err
-          });
-        }
-        return res.json({
-          success: true
-        });
+      return res.json({
+        success: true
       });
     });
   });
@@ -63,11 +60,13 @@ trusting.get('/trusts/get', (req, res) => {
   });
 });
 
-
-
 // data from the trust
-trusting.get('/trust/:trust', (req, res) => {
-  Trust.findOne({name: req.params.trust}, 'name owner moderators members reputation', (err, trust) => {
+trusting.get('/trust/:trust/get', (req, res) => {
+  Trust.findOne({key: req.params.trust}, 'name reputation')
+  .populate('owner', 'firstName lastName')
+  .populate('moderators', 'firstName lastName')
+  .populate('members', 'firstName lastName')
+  .exec((err, trust) => {
     if (err) {
       return res.status(500).json({
         success: false,
@@ -82,7 +81,7 @@ trusting.get('/trust/:trust', (req, res) => {
 });
 
 // owner changes the trust
-trusting.post('/trust/:trust/update', (req, res) => {
+trusting.put('/trust/:trust/update', (req, res) => {
 });
 
 // owner deletes the trust
