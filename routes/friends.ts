@@ -8,7 +8,6 @@ friends.get('/user', (req, res) => {
   User.findById(req.decoded.id, 'friends', (err, user) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding user : ' + err
       });
     }
@@ -16,7 +15,6 @@ friends.get('/user', (req, res) => {
       User.findById(id, 'type firstName lastName userName', (err, friend) => {
         if (err) {
           return res.status(500).json({
-            success: false,
             error: 'Error while finding friend : ' + err
           });
         }
@@ -24,7 +22,6 @@ friends.get('/user', (req, res) => {
       });
     }
     return res.json({
-      success: true,
       friends: friends
     });
   });
@@ -32,23 +29,22 @@ friends.get('/user', (req, res) => {
 
 friends.get('/user/request/:id', (req, res) => {
   const thisUserId = req.decoded.id;
-  const thatUserId = req.params['id'];
+  const thatUserId = req.params.id;
   if (thisUserId === thatUserId) {
     return res.status(500).json({
-      success: false,
       error: 'Cannot ask out yourself'
     });
   }
   User.findById(thatUserId, 'friendsRequesting', (err, thatUser) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding user : ' + err
       });
     }
-    if (thisUserId in thatUser.friendsRequesting) {
+    if (thatUser.friendsRequesting.find((request) => {
+      return request == thisUserId;
+    })) {
       return res.status(500).json({
-        success: false,
         error: 'Friend request is still pending'
       });
     }
@@ -56,7 +52,6 @@ friends.get('/user/request/:id', (req, res) => {
     {$push: {friendsRequesting: thisUserId}}, (err, thatUser) => {
       if (err) {
         return res.status(500).json({
-          success: false,
           error: 'Error while finding user : ' + err
         });
       }
@@ -64,13 +59,10 @@ friends.get('/user/request/:id', (req, res) => {
       {$push: {friendsRequested: thatUserId}}, (err, thisUser) => {
         if (err) {
           return res.status(500).json({
-            success: false,
             error: 'Error while finding user : ' + err
           });
         }
-        return res.json({
-          success: true,
-        });
+        return res.json({});
       })
     });
   });
@@ -83,7 +75,6 @@ friends.get('/user/accept/:id', (req, res) => {
   {$push: {friends: thatUserId}, $pull: {friendsRequesting: thatUserId}}, (err, thisUser) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding or updating user : ' + err
       });
     }
@@ -91,13 +82,10 @@ friends.get('/user/accept/:id', (req, res) => {
     {$push: {friends: thisUserId}, $pull: {friendsRequested: thisUserId}}, (err, thatUser) => {
       if (err) {
         return res.status(500).json({
-          success: false,
           error: 'Error while finding or updating user : ' + err
         });
       }
-      return res.json({
-        success: true,
-      });
+      return res.json({});
     });
   });
 });

@@ -36,11 +36,8 @@ export class NotificationsComponent implements OnInit {
   private getRequests() {
     this.userService.getRequests()
     .subscribe(response => {
-      if (response && response.success) {
-        this.requests = response.requests;
-        console.log(this.requests);
-
-      }
+      this.requests = response.requests;
+      console.log(this.requests);
     });
   }
   getRequestsClass(): string {

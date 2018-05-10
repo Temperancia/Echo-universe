@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { tap } from 'rxjs/operators';
+import 'rxjs/add/observable/forkJoin';
+import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { User } from './user';
 import { Trust } from './trust';
@@ -15,14 +16,6 @@ export enum UserType {
 
 @Injectable()
 export class UserService {
-
-  /*
-  private friends: Friend[] = [
-    {name: 'Nadir', reputation: 23},
-    {name: 'Bruno', reputation: 9000},
-    {name: 'James', reputation: -42}
-  ];
-  */
   friends: User[];
   constructor(private http: HttpClient) {
   }
@@ -42,30 +35,48 @@ export class UserService {
     const url = AppSettings.API_ENDPOINT + 'user/' + id + '/friends';
     return this.http.get<any>(url)
     .pipe(
-      tap(response => {
-        if (response && response.success) {
-          this.convertIntoFullNames(response.friends);
-        }
-      })
+      tap(friends => {
+        this.convertIntoFullNames(friends);
+      }),
+      catchError(AppSettings.handleError('getFriends', []))
     );
   }
   getRequests(): Observable<any> {
     const url = AppSettings.API_ENDPOINT + 'user/requests';
-    return this.http.get<any>(url);
+    return this.http.get<any>(url)
+    .pipe(
+      catchError(AppSettings.handleError('getRequests', []))
+    )
   }
   getTrusts(id=AppSettings.getId()): Observable<any> {
     const url = AppSettings.API_ENDPOINT + 'user/' + id + '/trusts';
-    return this.http.get<any>(url);
-  }
-  getUsers(): Observable<any> {
-    const url = AppSettings.API_ENDPOINT + 'user/users';
     return this.http.get<any>(url)
     .pipe(
-      tap(response => {
-        if (response && response.success) {
-          this.convertIntoFullNames(response.users);
+      catchError(AppSettings.handleError('getTrusts', []))
+    );
+  }
+  getUsers(name = undefined): Observable<any> {
+    let url = AppSettings.API_ENDPOINT + 'user/users';
+    if (name) {
+      url += '?name=' + name;
+    }
+    return this.http.get<any>(url);
+  }
+  getFriendableUsers(name: string = undefined): Observable<any> {
+    return Observable.forkJoin([
+      this.getFriends(),
+      this.getUsers(name)
+    ])
+    .pipe(
+      tap(data => {
+        const friends = data[0].map((friend) => { return friend._id });
+        let users = data[1];
+        for (let user of users) {
+          user.friendWith = (user._id in friends);
         }
-      })
+        this.convertIntoFullNames(users);
+      }),
+      map((data: any[]) => data[1])
     );
   }
   getUser(id=AppSettings.getId()): Observable<any> {
@@ -73,10 +84,9 @@ export class UserService {
     return this.http.get<any>(url)
     .pipe(
       tap(response => {
-        if (response && response.success) {
-          this.convertIntoFullName(response.user);
-        }
-      })
+        this.convertIntoFullName(response.user);
+      }),
+      catchError(AppSettings.handleError('getUser', []))
     );
   }
 }

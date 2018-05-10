@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { Trust } from './trust';
 import { User } from './user';
@@ -26,10 +27,25 @@ export class TrustService {
     return this.http.get(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustId + '/requesting/send');
   }
   getTrusts(): Observable<any> {
-    return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trusts/get');
+    return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trusts/get')
+    .pipe(
+      tap(trusts => {
+        const id = AppSettings.getId();
+        for (let trust of trusts) {
+          if (trust.owner._id === id ||
+            (trust.moderators && id in trust.moderators)
+            || (trust.members && id in trust.members)) {
+            trust.partOf = true;
+          } else {
+            trust.partOf = false;
+          }
+        }
+      }),
+      catchError(AppSettings.handleError('getTrusts', []))
+    );
   }
   getTrust(trustKey: string): Observable<any> {
-    return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustKey + '/get')
+    return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustKey + '/get');
   }
   createPolicy(trustKey: string, newPolicy: string) {
 

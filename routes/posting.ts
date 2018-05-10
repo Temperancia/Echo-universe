@@ -16,22 +16,17 @@ posting.post('/posts/create', (req, res) => {
   Post.create(post, (err, post) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while creating post : ' + err
       });
     }
-    return res.json({
-      success: true
-    });
+    return res.end();
   });
 });
 
 // get posts from the user
 posting.get('/posts/user/:id', (req, res) => {
   console.log(req.decoded.id);
-  res.json({
-    success: true
-  });
+  res.end();
 });
 
 module.exports = posting;

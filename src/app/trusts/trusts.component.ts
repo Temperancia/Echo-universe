@@ -16,24 +16,23 @@ export class TrustsComponent implements OnInit {
   ngOnInit() {
     this.getTrusts();
   }
-  createTrust() {
-    this.trustService.createTrust(this.newTrust).subscribe(response => {
-      if (response && response.success) {
-        this.router.navigate(['/trust/' + this.newTrust.key]);
-      }
-    });
-  }
   getTrusts() {
     this.trustService.getTrusts()
     .subscribe(response => {
       this.trusts = response.trusts;
+    }, err => {
+      console.log(err);
+    });
+  }
+  createTrust() {
+    this.trustService.createTrust(this.newTrust).subscribe(response => {
+      this.router.navigate(['/trust/' + this.newTrust.key]);
     });
   }
   joinTrust(id: string, key: string) {
+    console.log(key);
     this.trustService.joinTrust(id).subscribe(response => {
-      if (response && response.success) {
-        //this.router.navigate(['/trust/' + key]);
-      }
+      //this.router.navigate(['/trust/' + key]);
     });
   }
 }

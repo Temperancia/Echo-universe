@@ -6,13 +6,6 @@ import { AppSettings } from './app.settings';
 
 @Injectable()
 export class FriendService {
-  /*
-  private friends: Friend[] = [
-    {name: 'Nadir', reputation: 23},
-    {name: 'Bruno', reputation: 9000},
-    {name: 'James', reputation: -42}
-  ];
-  */
   friends: User[];
   constructor(private http: HttpClient) {
   }

@@ -11,7 +11,6 @@ user.get('/:user/profile', (req, res) => {
   User.findById(thatUserId, 'type firstName lastName userName reputation birth friends', (err, thatUser) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding user : ' + err
       });
     }
@@ -21,30 +20,38 @@ user.get('/:user/profile', (req, res) => {
       'lastName': thatUser.lastName,
       'userName': thatUser.userName,
       'reputation': thatUser.reputation,
-      'birth': thatUser.birth
+      'birth': thatUser.birth,
+      'friends': []
     };
     if (thisUserId in thatUser.friends) {
-      returnedUser['friends'] = thatUser.friends;
+      returnedUser.friends = thatUser.friends;
     }
     return res.json({
-      success: true,
       user: returnedUser
     });
   });
 });
 
 user.get('/users', (req, res) => {
-  User.find({}, 'firstName lastName userName', (err, users) => {
+  let options = {};
+  const name = req.query.name;
+  if (name) {
+    options = {$or: [
+      {'firstName': new RegExp('^' + name, 'i')},
+      {'lastName': new RegExp('^' + name, 'i')},
+      {'userName': new RegExp('^' + name, 'i')},
+    ]};
+  }
+  User.find(options)
+  .select('firstName lastName userName type')
+  .where('_id').ne(req.decoded.id)
+  .exec((err, users) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding users : ' + err
       });
     }
-    return res.json({
-      success: true,
-      users: users
-    });
+    return res.json(users);
   });
 });
 
@@ -58,18 +65,15 @@ user.get('/:user/trusts', (req, res) => {
   .exec((err, thatUser) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding user : ' + err
       });
     }
     if (thisUserId !== thatUserId && !(thisUserId in thatUser.friends)) {
       return res.status(403).json({
-        success: false,
         error: 'Forbidden access'
       });
     }
     return res.json({
-      success: true,
       trustsOwned: thatUser.trustsOwned,
       trustsJoined: thatUser.trustsJoined
     });
@@ -98,7 +102,6 @@ user.get('/requests', (req, res) => {
   .exec((err, thisUser) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding user : ' + err
       });
     }
@@ -111,7 +114,6 @@ user.get('/requests', (req, res) => {
     requests = addRequests(requests, 'trustInvitationReceived', thisUser.trustInvitationsReceived);
     console.log(requests);
     return res.json({
-      success: true,
       requests: requests,
     });
   });
@@ -126,20 +128,15 @@ user.get('/:user/friends', (req, res) => {
   .exec((err, thatUser) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding user : ' + err
       });
     }
     if (thisUserId !== thatUserId && !(thisUserId in thatUser.friends)) {
       return res.status(403).json({
-        success: false,
         error: 'Forbidden access'
       });
     }
-    return res.json({
-      success: true,
-      friends: thatUser.friends
-    });
+    return res.json(thatUser.friends);
   })
 });
 

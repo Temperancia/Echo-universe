@@ -31,7 +31,7 @@ api.use((req, res, next) => {
     if (token) {
       jwt.verify(token, global['secret'], (err, decoded) => {
          if (err) {
-           return res.json({ success: false, error: 'Failed to authenticate token.' });
+           return res.json({ error: 'Failed to authenticate token.' });
          } else {
            // if everything is good, save to request for use in other routes
            req.decoded = decoded;
@@ -40,7 +40,6 @@ api.use((req, res, next) => {
        });
     } else {
       return res.status(403).send({
-        success: false,
         error: 'No token provided.'
       });
     }

@@ -19,18 +19,14 @@ export class MyProfileComponent implements OnInit {
     this.userService.getFriends()
     .subscribe(response => {
       console.log(response);
-      if (response && response.success) {
-        this.friends = response.friends;
-      }
+      this.friends = response.friends;
     });
   }
   public getProfile(): void {
     this.userService.getUser()
     .subscribe(response => {
       console.log(response);
-      if (response && response.success) {
-        this.user = response.user;
-      }
+      this.user = response.user;
     });
   }
   public getReputation(friend: User): string {

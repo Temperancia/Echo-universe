@@ -12,7 +12,7 @@
             <app-flux-box *ngIf="showFlux"></app-flux-box>
           </div>
           <div class="col-3 align-self-center">
-            <input class="h-100 form-control" placeholder="Search" name="searchInput" [(ngModel)]="searchInput" (click)="showSearchBox();" (input)="search.update(searchInput);">
+            <input class="h-100 form-control" placeholder="Search" name="searchInput" [(ngModel)]="searchInput" (click)="showSearchBox();" (keyup)="search.search(searchInput);">
             <app-search-box #search *ngIf="showSearch"></app-search-box>
           </div>
           <div class="col-2 align-self-center" *ngIf="!isAnonymous">

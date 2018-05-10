@@ -37,12 +37,10 @@ authentication.post('/user/create', (req, res) => {
   User.create(newUser, (err, user) => {
     if (err) {
       res.status(500).json({
-        success: false,
         error: 'User already exists'
       });
     }
     return res.json({
-      success: true,
       id: user._id,
       token: makeToken(user._id)
     });
@@ -51,7 +49,6 @@ authentication.post('/user/create', (req, res) => {
 
 authentication.get('/user/login', (req, res) => {
   return res.json({
-    success: true,
     id: undefined,
     token: makeToken()
   });
@@ -62,25 +59,21 @@ authentication.post('/user/login', (req, res) => {
   const password = req.body['password'];
   if (!email || !password) {
     return res.status(401).json({
-      success: false,
       error: 'Wrong email or password'
     });
   }
   User.findOne(req.body, '_id', (err, user) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding user : ' + err
       });
     }
     if (!user) {
       return res.status(401).json({
-        success: false,
         error: 'Wrong email or password'
       });
     }
     return res.json({
-      success: true,
       id: user._id,
       token: makeToken(user._id)
     });

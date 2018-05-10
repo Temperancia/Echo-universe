@@ -26,37 +26,30 @@ trusting.post('/trusts/create', (req, res) => {
   Trust.create(newTrust, (err, trust) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while creating trust : ' + err
       });
     }
     User.findByIdAndUpdate(thisUserId, {$push: {'trustsOwned': newTrust._id}}, (err, user) => {
       if (err) {
         return res.status(500).json({
-          success: false,
           error: 'Error while updating user : ' + err
         });
       }
-      return res.json({
-        success: true
-      });
+      return res.end();
     });
   });
 });
 
 trusting.get('/trusts/get', (req, res) => {
-  console.log('get trusts');
-  Trust.find({}, 'name description owner members reputation', (err, trusts) => {
+  Trust.find({}, 'name key description owner members reputation')
+  .populate('owner', 'firstName lastName')
+  .exec((err, trusts) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding trusts : ' + err
       });
     }
-    return res.json({
-      success: true,
-      trusts: trusts
-    });
+    return res.json(trusts);
   });
 });
 
@@ -69,12 +62,10 @@ trusting.get('/trust/:key/get', (req, res) => {
   .exec((err, trust) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding trust : ' + err
       });
     }
     return res.json({
-      success: true,
       trust: trust
     });
   });
@@ -89,13 +80,10 @@ trusting.delete('/trust/:trust/delete', (req, res) => {
   Trust.findOneAndRemove({name: req.params.trust}, (err, trust) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while deleting trust : ' + err
       });
     }
-    return res.json({
-      success: true,
-    });
+    return res.end();
   });
 });
 
@@ -106,7 +94,6 @@ trusting.get('/trust/:id/requesting/send', (req, res) => {
   Trust.findById(trustId, 'owner', (err, trust) => {
     if (err) {
       return res.status(500).json({
-        success: false,
         error: 'Error while finding trust : ' + err
       });
     }
@@ -115,7 +102,6 @@ trusting.get('/trust/:id/requesting/send', (req, res) => {
       (err, thatUser) => {
       if (err) {
         return res.status(500).json({
-          success: false,
           error: 'Error while finding and updating user : ' + err
         });
       }
@@ -124,13 +110,10 @@ trusting.get('/trust/:id/requesting/send', (req, res) => {
         (err, thisUser) => {
         if (err) {
           return res.status(500).json({
-            success: false,
             error: 'Error while finding and updating user : ' + err
           });
         }
-        return res.json({
-          success: true,
-        });
+        return res.end();
       });
     });
   });

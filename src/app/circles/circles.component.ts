@@ -25,29 +25,27 @@ export class CirclesComponent implements OnInit {
   private getTrusts() {
     this.userService.getTrusts()
     .subscribe(response => {
-      if (response && response.success) {
-        console.log(response);
-        this.ownedTrusts = response.trustsOwned;
-        this.joinedTrusts = response.trustsJoined;
-      }
+      console.log(response);
+      this.ownedTrusts = response.trustsOwned;
+      this.joinedTrusts = response.trustsJoined;
+    }, err => {
+      console.log(err);
     });
   }
 
   private getFriends() {
     this.userService.getFriends()
     .subscribe(response => {
-      if (response && response.success) {
-        this.friends = response.friends;
-      }
+      this.friends = response.friends;
+    }, err => {
+      console.log(err);
     });
   }
 
   acceptFriend(id: string): void {
     this.friendService.acceptFriend(id)
     .subscribe(response => {
-      if (response && response.success) {
-        location.reload();
-      }
+      location.reload();
     });
   }
 }

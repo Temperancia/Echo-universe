@@ -46,7 +46,8 @@ app.use(bodyParser.json());
 */
 import api = require('./routes/api');
 app.use('/api', api);
-
+import helmet = require('helmet');
+app.use(helmet);
 // Server static files from /browser
 app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
   maxAge: '1y'

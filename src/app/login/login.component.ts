@@ -46,14 +46,10 @@ export class LoginComponent implements OnInit {
           'id': response.id,
           'token': response.token
         };
-        if (response && response.success) {
-          // login successful
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.router.navigate(['/']);
-        } else {
-          // login failed
-          this.errors.login = 'Email or password is incorrect';
-        }
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.router.navigate(['/']);
+      }, err => {
+        this.errors.login = 'Email or password is incorrect';
       });
   }
 
@@ -72,12 +68,10 @@ export class LoginComponent implements OnInit {
         'id': response.id,
         'token': response.token
       };
-      if (response && response.success) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.router.navigate(['/']);
-      } else {
-        // server should not fail to create a user ?
-      }
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      this.router.navigate(['/']);
+    }, err => {
+      // server should not fail to create a user ?
     });
   }
 }

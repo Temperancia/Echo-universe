@@ -80,7 +80,7 @@ export class TrustComponent implements OnInit {
   ngOnInit() {
     this.getTrust();
     this.defineRole();
-  
+
   }
   private defineRole(): void {
     if (!this.trust) {
@@ -103,9 +103,7 @@ export class TrustComponent implements OnInit {
     this.trustService.getTrust(trustKey)
     .subscribe(response => {
       console.log(response);
-      if (response && response.success) {
-        this.trust = response.trust;
-      }
+      this.trust = response.trust;
     });
   }
   createPolicy(): void {
