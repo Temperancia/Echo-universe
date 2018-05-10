@@ -12,6 +12,6 @@ export class FeedHomeComponent extends FeedComponent {
     super(postService);
   }
   ngOnInit() {
-    this.postService.getPosts().subscribe(posts => this.posts = posts);
+    //this.postService.getPosts().subscribe(posts => this.posts = posts);
   }
 }

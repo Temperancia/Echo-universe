@@ -19,8 +19,8 @@ export class MyProfileComponent implements OnInit {
     this.userService.getFriends()
     .subscribe(response => {
       console.log(response);
-      if (response && response['success']) {
-        this.friends = response['friends'];
+      if (response && response.success) {
+        this.friends = response.friends;
       }
     });
   }
@@ -28,8 +28,8 @@ export class MyProfileComponent implements OnInit {
     this.userService.getUser()
     .subscribe(response => {
       console.log(response);
-      if (response && response['success']) {
-        this.user = response['user'];
+      if (response && response.success) {
+        this.user = response.user;
       }
     });
   }

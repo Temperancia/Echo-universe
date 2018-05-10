@@ -7,7 +7,7 @@
     <div class="col-10">
       <div class="container">
         <div class="row d-flex my-2 board" *ngIf="isLoggedIn">
-          <div class="col-2 align-self-center">
+          <div class="col-1 align-self-center">
             <button class="h-100 button btn-others" (click)="showFluxBox()">Feeds</button>
             <app-flux-box *ngIf="showFlux"></app-flux-box>
           </div>
@@ -18,10 +18,13 @@
           <div class="col-2 align-self-center" *ngIf="!isAnonymous">
             <button class="h-100 button btn-others" routerLink="/trusts">Trust Center</button>
           </div>
-          <div class="col-1 align-self-center" *ngIf="!isAnonymous">
+          <div class="col-2 align-self-center" *ngIf="!isAnonymous">
             <button class="h-100 button btn-others" routerLink="/circles">Circles</button>
           </div>
-          <div class="offset-1 col-1 align-self-center" *ngIf="!isAnonymous">
+          <div class="col-1 align-self-center" *ngIf="!isAnonymous">
+            <img src="assets/img/notification.png" routerLink="/notifications">
+          </div>
+          <div class="col-1 align-self-center" *ngIf="!isAnonymous">
             <img src="assets/img/idk.png" routerLink="/my-profile">
           </div>
           <div class="col-1 align-self-center" *ngIf="!isAnonymous">

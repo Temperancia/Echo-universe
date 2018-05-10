@@ -76,10 +76,25 @@ user.get('/:user/trusts', (req, res) => {
   });
 });
 
+function addRequests(requests, type, source) {
+  for (const request of source) {
+    let newRequest = JSON.parse(JSON.stringify(request));
+    newRequest.type = type;
+    requests.push(newRequest);
+  }
+  return requests;
+}
+
 user.get('/requests', (req, res) => {
-  User.findById(req.decoded.id, '')
+  User.findById(req.decoded.id)
+  .populate('friendsRequested', 'firstName lastName userName')
   .populate('friendsRequesting', 'firstName lastName userName')
-  .populate('trustsRequesting', 'firstName lastName userName')
+  .populate('trustsRequested', 'name key')
+  .populate('trustsRequesting.user', 'firstName lastName userName')
+  .populate('trustsRequesting.trust', 'name key')
+  .populate('trustInvitationsSent.user', 'firstName lastName userName')
+  .populate('trustInvitationsSent.trust', 'name key')
+  .populate('trustInvitationsReceived', 'firstName lastName userName')
   .exec((err, thisUser) => {
     if (err) {
       return res.status(500).json({
@@ -87,10 +102,17 @@ user.get('/requests', (req, res) => {
         error: 'Error while finding user : ' + err
       });
     }
+    let requests = [];
+    requests = addRequests(requests, 'friendRequestSent', thisUser.friendsRequested);
+    requests = addRequests(requests, 'friendRequestReceived', thisUser.friendsRequesting);
+    requests = addRequests(requests, 'trustRequestSent', thisUser.trustsRequested);
+    requests = addRequests(requests, 'trustRequestReceived', thisUser.trustsRequesting);
+    requests = addRequests(requests, 'trustInvitationSent', thisUser.trustInvitationsSent);
+    requests = addRequests(requests, 'trustInvitationReceived', thisUser.trustInvitationsReceived);
+    console.log(requests);
     return res.json({
       success: true,
-      trustsRequesting: thisUser.trustsRequesting,
-      friendsRequests: thisUser.friendsRequesting
+      requests: requests,
     });
   });
 });

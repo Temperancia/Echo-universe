@@ -46,13 +46,13 @@ export class LoginComponent implements OnInit {
           'id': response.id,
           'token': response.token
         };
-        if (response && response['success'] === true) {
+        if (response && response.success) {
           // login successful
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.router.navigate(['/']);
         } else {
           // login failed
-          this.errors['login'] = 'Email or password is incorrect';
+          this.errors.login = 'Email or password is incorrect';
         }
       });
   }
@@ -61,10 +61,10 @@ export class LoginComponent implements OnInit {
     let user;
     if (pub) {
       user = this.newPublicUser;
-      user['type'] = 'Public';
+      user.type = 'Public';
     } else {
       user = this.newEminentUser;
-      user['type'] = 'Eminent';
+      user.type = 'Eminent';
     }
     this.authenticationService.subscribe(user)
     .subscribe(response => {
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
         'id': response.id,
         'token': response.token
       };
-      if (response && response['success'] === true) {
+      if (response && response.success) {
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.router.navigate(['/']);
       } else {

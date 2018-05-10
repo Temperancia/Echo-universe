@@ -15,8 +15,8 @@ export class SearchBoxComponent implements OnInit {
   ngOnInit() {
     this.userService.getUsers()
     .subscribe(response => {
-      if (response && response['success']) {
-        this.users = response['users'];
+      if (response && response.success) {
+        this.users = response.users;
       }
     })
   }
@@ -45,7 +45,7 @@ export class SearchBoxComponent implements OnInit {
     console.log(id);
     this.friendService.addFriend(id)
     .subscribe(response => {
-      if (response && response['success']) {
+      if (response && response.success) {
         location.reload();
       }
     })

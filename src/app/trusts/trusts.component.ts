@@ -26,13 +26,13 @@ export class TrustsComponent implements OnInit {
   getTrusts() {
     this.trustService.getTrusts()
     .subscribe(response => {
-      this.trusts = response['trusts'];
+      this.trusts = response.trusts;
     });
   }
   joinTrust(id: string, key: string) {
     this.trustService.joinTrust(id).subscribe(response => {
       if (response && response.success) {
-        this.router.navigate(['/trust/' + key]);
+        //this.router.navigate(['/trust/' + key]);
       }
     });
   }

@@ -36,7 +36,7 @@ export class AuthenticationService {
   }
 
   isAnonymous(): boolean {
-    return JSON.parse(localStorage.getItem('currentUser'))['id'] === undefined ? true : false;
+    return JSON.parse(localStorage.getItem('currentUser')).id === undefined ? true : false;
   }
 
   subscribe(user: any): Observable<any> {

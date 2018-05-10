@@ -27,10 +27,10 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
   public convertIntoFullName(user: User) {
-    if (user['type'] === UserType.Public) {
-      user['fullName'] = user['firstName'] + ' ' + user['lastName'];
-    } else if (user['type'] === UserType.Eminent) {
-      user['fullName'] = user['userName'];
+    if (user.type === UserType.Public) {
+      user.fullName = user.firstName + ' ' + user.lastName;
+    } else if (user.type === UserType.Eminent) {
+      user.fullName = user.userName;
     }
   }
   public convertIntoFullNames(users: User[]) {
@@ -38,13 +38,13 @@ export class UserService {
       this.convertIntoFullName(user);
     }
   }
-  getFriends(id=AppSettings.getId()): Observable<User[]> {
+  getFriends(id=AppSettings.getId()): Observable<any> {
     const url = AppSettings.API_ENDPOINT + 'user/' + id + '/friends';
-    return this.http.get<User[]>(url)
+    return this.http.get<any>(url)
     .pipe(
       tap(response => {
-        if (response && response['success']) {
-          this.convertIntoFullNames(response['friends']);
+        if (response && response.success) {
+          this.convertIntoFullNames(response.friends);
         }
       })
     );
@@ -53,28 +53,28 @@ export class UserService {
     const url = AppSettings.API_ENDPOINT + 'user/requests';
     return this.http.get<any>(url);
   }
-  getTrusts(id=AppSettings.getId()): Observable<Trust[]> {
+  getTrusts(id=AppSettings.getId()): Observable<any> {
     const url = AppSettings.API_ENDPOINT + 'user/' + id + '/trusts';
-    return this.http.get<Trust[]>(url);
+    return this.http.get<any>(url);
   }
-  getUsers(): Observable<User[]> {
+  getUsers(): Observable<any> {
     const url = AppSettings.API_ENDPOINT + 'user/users';
-    return this.http.get<User[]>(url)
+    return this.http.get<any>(url)
     .pipe(
       tap(response => {
-        if (response && response['success']) {
-          this.convertIntoFullNames(response['users']);
+        if (response && response.success) {
+          this.convertIntoFullNames(response.users);
         }
       })
     );
   }
-  getUser(id=AppSettings.getId()): Observable<User> {
+  getUser(id=AppSettings.getId()): Observable<any> {
     const url = AppSettings.API_ENDPOINT + 'user/' + id + '/profile';
-    return this.http.get<User>(url)
+    return this.http.get<any>(url)
     .pipe(
       tap(response => {
-        if (response && response['success']) {
-          this.convertIntoFullName(response['user']);
+        if (response && response.success) {
+          this.convertIntoFullName(response.user);
         }
       })
     );

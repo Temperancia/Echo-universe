@@ -6,15 +6,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class PostService {
-  private oposts: Post[] = [
-    {name: 'own', content: 'hello', owner: 'someone', createdOn: '23/10/15', reputation: 23}
-  ];
-  private fposts: Post[] = [
-    {name: 'own', content: 'hello', owner: 'someone', createdOn: '23/10/15', reputation: 23}
-  ];
-  private tposts: Post[] = [
-    {name: 'own', content: 'hello', owner: 'someone', createdOn: '23/10/15', reputation: 23}
-  ];
+  private oposts: Post[];
+  private fposts: Post[];
+  private tposts: Post[];
   public displayedFluxes = {
     'trending': false,
     'friends': false,
@@ -22,18 +16,20 @@ export class PostService {
     'style': false
   };
   constructor(private http: HttpClient) {
+    /*
     for (let iPost = 0; iPost < this.tposts.length; iPost++) {
-      const post = this.tposts[iPost];
-      post['type'] = 'trending';
+      let post = this.tposts[iPost];
+      post.type = 'trending';
       this.tposts[iPost] = post;
     }
     for (let iPost = 0; iPost < this.fposts.length; iPost++) {
-      const post = this.fposts[iPost];
-      post['type'] = 'friends';
+      let post = this.fposts[iPost];
+      post.type = 'friends';
       this.fposts[iPost] = post;
     }
+    */
   }
-  getPosts(): Observable<Post[]> {
+  getPosts(): Observable<any> {
     //return this.http.get<Post[]>('/api/user');
     return of(this.fposts.concat(this.tposts));
   }

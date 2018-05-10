@@ -99,24 +99,18 @@ trusting.delete('/trust/:trust/delete', (req, res) => {
   });
 });
 
-trusting.get('/trust/:id/join', (req, res) => {
+trusting.get('/trust/:id/requesting/send', (req, res) => {
   const thisUserId = req.decoded.id;
-  Trust.findById(req.params.id, 'owner', (err, trust) => {
+  const trustId = req.params.id;
+  // look if already member here ?
+  Trust.findById(trustId, 'owner', (err, trust) => {
     if (err) {
       return res.status(500).json({
         success: false,
         error: 'Error while finding trust : ' + err
       });
     }
-    const ownerId = trust.owner;
-    if (ownerId === thisUserId) {
-      return res.status(500).json({
-        success: false,
-        error: 'Cannot add yourself'
-      });
-    }
-    const trustId = trust._id;
-    User.findByIdAndUpdate(ownerId,
+    User.findByIdAndUpdate(trust.owner,
       {$push: {trustsRequesting: {user: thisUserId, trust: trustId}}},
       (err, thatUser) => {
       if (err) {

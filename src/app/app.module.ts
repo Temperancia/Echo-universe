@@ -29,6 +29,7 @@ import { FriendService } from './friend.service';
 import { TrustService } from './trust.service';
 import { UserService } from './user.service';
 import { TrustsComponent } from './trusts/trusts.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 import { TrustComponent } from './trust/trust.component';
 import { FeedHomeComponent } from './feed-home/feed-home.component';
 import { FeedMyProfileComponent } from './feed-my-profile/feed-my-profile.component';
@@ -52,6 +53,7 @@ import { JwtInterceptor } from './jwt.interceptor';
     SearchBoxComponent,
     LoginComponent,
     TrustsComponent,
+    NotificationsComponent,
     TrustComponent,
     FeedHomeComponent,
     FeedMyProfileComponent,

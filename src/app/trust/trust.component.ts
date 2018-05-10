@@ -39,35 +39,40 @@ export class TrustComponent implements OnInit {
       content: 'Dear employees , from now on , we will be providing you fresh free coffee from our own machines as long as you work with our daring team Cheers !',
       owner: 'James Laper',
       createdOn: '13/11/2018 6:39 PM',
-      reputation: 34
+      reputation: 34,
+      type: 'trust'
     },
     {
       name: 'OMG',
       content: 'I cannot believe you joined this one , cheers Oliver',
       owner: 'Vanessa Prikles',
       createdOn: '13/11/2018 4:20 PM',
-      reputation: 5
+      reputation: 5,
+      type: 'trust'
     },
     {
       name: 'Hey !!',
       content: 'Super glad to join this trust , thanks for letting me in. Fond of Starbucks since ever !!!',
       owner: 'Oliver Thomson',
       createdOn: '13/11/2018 3:28 AM',
-      reputation: 3
+      reputation: 3,
+      type: 'trust'
     },
     {
       name: 'Hey !!',
       content: 'Super glad to join this trust , thanks for letting me in. Fond of Starbucks since ever !!!',
       owner: 'Oliver Thomson',
       createdOn: '13/11/2018 3:28 AM',
-      reputation: 3
+      reputation: 3,
+      type: 'trust'
     },
     {
       name: 'Hey !!',
       content: 'Super glad to join this trust , thanks for letting me in. Fond of Starbucks since ever !!!',
       owner: 'Oliver Thomson',
       createdOn: '13/11/2018 3:28 AM',
-      reputation: 3
+      reputation: 3,
+      type: 'trust'
     }
   ];
   constructor(private router: Router, private trustService: TrustService) {
@@ -75,14 +80,7 @@ export class TrustComponent implements OnInit {
   ngOnInit() {
     this.getTrust();
     this.defineRole();
-    /*
-    this.trustService.getMembers(this.trust)
-      .subscribe(members => this.members = members);
-    this.trustService.getMembers(this.trust)
-      .subscribe(members => this.trustees = members);
-    this.trustService.getMembers(this.trust)
-      .subscribe(members => this.followers = members);
-      */
+  
   }
   private defineRole(): void {
     if (!this.trust) {
@@ -105,8 +103,8 @@ export class TrustComponent implements OnInit {
     this.trustService.getTrust(trustKey)
     .subscribe(response => {
       console.log(response);
-      if (response && response['success']) {
-        this.trust = response['trust'];
+      if (response && response.success) {
+        this.trust = response.trust;
       }
     });
   }

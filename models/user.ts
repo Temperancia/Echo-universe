@@ -21,11 +21,6 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  friendsRequested: [Schema.Types.ObjectId],
-  friendsRequesting: [{
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  }],
   trustsOwned: [{
     type: Schema.Types.ObjectId,
     ref: 'Trust'
@@ -34,10 +29,38 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Trust'
   }],
-  trustsRequested: [Schema.Types.ObjectId],
-  trustsRequesting: [{
-    type: Schema.Types.Mixed,
+  friendsRequested: [Schema.Types.ObjectId],
+  friendsRequesting: [{
+    type: Schema.Types.ObjectId,
     ref: 'User'
+  }],
+  trustsRequested: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Trust'
+  }],
+  trustsRequesting: [{
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    trust: {
+      type: Schema.Types.ObjectId,
+      ref: 'Trust'
+    }
+  }],
+  trustInvitationsSent: [{
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    trust: {
+      type: Schema.Types.ObjectId,
+      ref: 'Trust'
+    }
+  }],
+  trustInvitationsReceived: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Trust'
   }],
   password: String,
   createdOn: Date,

@@ -23,13 +23,13 @@ export class TrustService {
     });
   }
   joinTrust(trustId: string): Observable<any> {
-    return this.http.get(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustId + '/join');
+    return this.http.get(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustId + '/requesting/send');
   }
-  getTrusts(): Observable<Trust[]> {
-    return this.http.get<Trust[]>(AppSettings.API_ENDPOINT + 'trusting/trusts/get');
+  getTrusts(): Observable<any> {
+    return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trusts/get');
   }
-  getTrust(trustKey: string): Observable<Trust> {
-    return this.http.get<Trust>(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustKey + '/get')
+  getTrust(trustKey: string): Observable<any> {
+    return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustKey + '/get')
   }
   createPolicy(trustKey: string, newPolicy: string) {
 

@@ -56,7 +56,8 @@ export class PostBoxComponent implements OnInit {
       content: '',
       owner: '',
       createdOn: '',
-      reputation: 0
+      reputation: 0,
+      type: ''
     };
   }
   public post(): void {
