@@ -3,29 +3,56 @@ const User = require('../models/user');
 
 let friends = express.Router();
 
-friends.get('/user', (req, res) => {
-  let friends = [];
-  User.findById(req.decoded.id, 'friends', (err, user) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding user : ' + err
-      });
-    }
-    for (let id of user.friends) {
-      User.findById(id, 'type firstName lastName userName', (err, friend) => {
-        if (err) {
-          return res.status(500).json({
-            error: 'Error while finding friend : ' + err
-          });
-        }
-        friends.push(friend);
-      });
-    }
-    return res.json({
-      friends: friends
-    });
+function acceptFriend(thisUserId, thatUserId): string {
+  console.log('accept friend');
+  return User.findByIdAndUpdate(thisUserId,
+  {$push: {friends: thatUserId}, $pull: {friendsRequesting: thatUserId}})
+  .exec()
+  .then(
+    User.findByIdAndUpdate(thatUserId,
+    {$push: {friends: thisUserId}, $pull: {friendsRequested: thisUserId}})
+    .exec()
+  )
+  .catch(err => {
+    console.error('Error : ', err.message);
+    return err.message;
+  })
+  .then(() => {
+    return undefined;
   });
-});
+}
+
+function checkIfAlreadyAsked(thisUserId, friendsRequested, thatUserId): boolean {
+  console.log('checking if already asked');
+  if (friendsRequested.find((request) => {
+    return request == thisUserId;
+  })) {
+    acceptFriend(thisUserId, thatUserId);
+    return true;
+  }
+  return false;
+}
+
+function checkIfRequestIsPending(thisUserId, friendsRequesting) {
+  console.log('checking if request is still pending');
+  if (friendsRequesting.find((request) => {
+    return request == thisUserId;
+  })) {
+    throw new Error('Friend request is still pending');
+  }
+}
+
+function addFriendRequest(from, to) {
+  console.log('adding friend request to that user');
+  User.findByIdAndUpdate(to,
+  {$push: {friendsRequesting: from}}).exec();
+}
+
+function addFriendRequested(thisUser, to) {
+  console.log('adding friend request to this user')
+  User.findByIdAndUpdate(thisUser,
+  {$push: {friendsRequested: to}}).exec();
+}
 
 friends.get('/user/request/:id', (req, res) => {
   const thisUserId = req.decoded.id;
@@ -35,59 +62,34 @@ friends.get('/user/request/:id', (req, res) => {
       error: 'Cannot ask out yourself'
     });
   }
-  User.findById(thatUserId, 'friendsRequesting', (err, thatUser) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding user : ' + err
-      });
+  return User.findById(thatUserId, 'friendsRequested friendsRequesting')
+  .then(thatUser => {
+    if (checkIfAlreadyAsked(thisUserId, thatUser.friendsRequested, thatUserId)) {
+      return res.json({});
     }
-    if (thatUser.friendsRequesting.find((request) => {
-      return request == thisUserId;
-    })) {
-      return res.status(500).json({
-        error: 'Friend request is still pending'
-      });
-    }
-    User.findByIdAndUpdate(thatUserId,
-    {$push: {friendsRequesting: thisUserId}}, (err, thatUser) => {
-      if (err) {
-        return res.status(500).json({
-          error: 'Error while finding user : ' + err
-        });
-      }
-      User.findByIdAndUpdate(thisUserId,
-      {$push: {friendsRequested: thatUserId}}, (err, thisUser) => {
-        if (err) {
-          return res.status(500).json({
-            error: 'Error while finding user : ' + err
-          });
-        }
-        return res.json({});
-      })
+    checkIfRequestIsPending(thisUserId, thatUser.friendsRequesting);
+    addFriendRequest(thisUserId, thatUserId);
+    addFriendRequested(thisUserId, thatUserId);
+    return res.json({});
+  })
+  .catch(err => {
+    console.error('Error : ', err.message);
+    return res.status(500).json({
+      error: err.message
     });
-  });
+  })
 });
 
 friends.get('/user/accept/:id', (req, res) => {
   const thisUserId = req.decoded.id;
-  const thatUserId = req.params['id'];
-  User.findByIdAndUpdate(thisUserId,
-  {$push: {friends: thatUserId}, $pull: {friendsRequesting: thatUserId}}, (err, thisUser) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding or updating user : ' + err
-      });
-    }
-    User.findByIdAndUpdate(thatUserId,
-    {$push: {friends: thisUserId}, $pull: {friendsRequested: thisUserId}}, (err, thatUser) => {
-      if (err) {
-        return res.status(500).json({
-          error: 'Error while finding or updating user : ' + err
-        });
-      }
-      return res.json({});
+  const thatUserId = req.params.id;
+  const message = acceptFriend(thisUserId, thatUserId);
+  if (message) {
+    return res.status(500).json({
+      error: message
     });
-  });
+  }
+  return res.json({});
 });
 
 module.exports = friends;

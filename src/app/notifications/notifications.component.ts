@@ -30,7 +30,6 @@ export class NotificationsComponent implements OnInit {
   constructor(private userService: UserService) {
   }
   ngOnInit() {
-    console.log(this.requestType.FriendRequestSent);
     this.getRequests();
   }
   private getRequests() {

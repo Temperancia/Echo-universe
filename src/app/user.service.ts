@@ -46,7 +46,7 @@ export class UserService {
     return this.http.get<any>(url)
     .pipe(
       catchError(AppSettings.handleError('getRequests', []))
-    )
+    );
   }
   getTrusts(id=AppSettings.getId()): Observable<any> {
     const url = AppSettings.API_ENDPOINT + 'user/' + id + '/trusts';

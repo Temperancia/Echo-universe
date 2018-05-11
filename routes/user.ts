@@ -112,7 +112,6 @@ user.get('/requests', (req, res) => {
     requests = addRequests(requests, 'trustRequestReceived', thisUser.trustsRequesting);
     requests = addRequests(requests, 'trustInvitationSent', thisUser.trustInvitationsSent);
     requests = addRequests(requests, 'trustInvitationReceived', thisUser.trustInvitationsReceived);
-    console.log(requests);
     return res.json({
       requests: requests,
     });

@@ -23,6 +23,7 @@ authentication.post('/user/create', (req, res) => {
   if (newUser.type === 'Public') {
     newUser.firstName = user.firstName;
     newUser.lastName = user.lastName;
+    newUser.fullName = 
   } else if (newUser.type === 'Eminent') {
     newUser.userName = user.userName;
   }
