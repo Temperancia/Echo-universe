@@ -33,6 +33,7 @@ export class TrustComponent implements OnInit {
     'members': false,
     'policies': false
   };
+  /*
   posts: Post[] = [
     {
       name: 'Free coffee for new joiners',
@@ -75,12 +76,12 @@ export class TrustComponent implements OnInit {
       type: 'trust'
     }
   ];
+  */
   constructor(private router: Router, private trustService: TrustService) {
   }
   ngOnInit() {
     this.getTrust();
     this.defineRole();
-
   }
   private defineRole(): void {
     if (!this.trust) {

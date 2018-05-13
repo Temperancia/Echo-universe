@@ -1,8 +1,30 @@
 <!DOCTYPE html>
 <div class="post-box" [@itemAnim]>
-  <input class="form-control" placeholder="Whats that ?" [(ngModel)]="currentPost.name" (focus)="selectTitle()">
-  <textarea class="form-control" placeholder="Say something already" [(ngModel)]="currentPost.content" (focus)="selectContent()"></textarea>
+  <!--<input class="form-control" placeholder="Whats that ?" [(ngModel)]="currentPost.name" (focus)="selectTitle()">-->
+  <div class="row">
+    <div class="col-3">
+      <button [ngClass]="currentFlux === flux.Tendance ? 'btn-primary' : ''" (click)="toggle(flux.Tendance);">
+        Tendance
+      </button>
+    </div>
+    <div class="col-3">
+      <button [ngClass]="currentFlux === flux.DailyLife ? 'btn-primary' : ''" (click)="toggle(flux.DailyLife);">
+        Daily Life
+      </button>
+    </div>
+    <div class="col-3">
+      <button [ngClass]="currentFlux === flux.LifeStyle ? 'btn-primary' : ''" (click)="toggle(flux.LifeStyle);">
+        Life Style
+      </button>
+    </div>
+    <div class="col-3">
+      <button [ngClass]="currentFlux === flux.Friends ? 'btn-primary' : ''" (click)="toggle(flux.Friends);">
+        Friends
+      </button>
+    </div>
+  </div>
+  <textarea class="form-control" placeholder="Say something already" [(ngModel)]="currentPost.content"></textarea>
   <app-emojis ref-emojis class='emojis' (onEmoji)='onEmoji($event)'></app-emojis>
-  <button class="btn btn-primary show-emojis" type="button" (click)="emojis.show()">Emojis :O</button>
+  <button class="btn btn-primary show-emojis" type="button" (click)="emojis.show()">Emojis</button>
   <button class="w-100 btn btn-primary" type="button" (click)="post()">Echo it !</button>
 </div>

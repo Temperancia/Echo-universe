@@ -1,44 +1,50 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, Subject } from 'rxjs';
+import {
+   debounceTime, distinctUntilChanged, switchMap, tap
+ } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Post } from './post';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { AppSettings } from './app.settings';
+import { Flux } from './flux.enum';
 
 @Injectable()
 export class PostService {
-  private oposts: Post[];
-  private fposts: Post[];
-  private tposts: Post[];
-  public displayedFluxes = {
-    'trending': false,
-    'friends': false,
-    'daily': false,
-    'style': false
-  };
+  feed = new Subject<string>();
+
   constructor(private http: HttpClient) {
-    /*
-    for (let iPost = 0; iPost < this.tposts.length; iPost++) {
-      let post = this.tposts[iPost];
-      post.type = 'trending';
-      this.tposts[iPost] = post;
-    }
-    for (let iPost = 0; iPost < this.fposts.length; iPost++) {
-      let post = this.fposts[iPost];
-      post.type = 'friends';
-      this.fposts[iPost] = post;
-    }
-    */
-  }
-  getPosts(): Observable<any> {
-    //return this.http.get<Post[]>('/api/user');
-    return of(this.fposts.concat(this.tposts));
-  }
-  getOwnPosts(): Observable<Post[]> {
-    //return this.http.get<Post[]>('/api/posts');
-    return of(this.oposts);
+
   }
   create(post: Post) {
-    //post.id = this.posts.length;
-    //this.posts.unshift(post);
+    return this.http.post(AppSettings.API_ENDPOINT + 'posting/posts/create', {
+      post: post
+    })
+    .pipe(
+      catchError(AppSettings.handleError('create', []))
+    );
+  }
+  updateFeed(displayedFluxes: any) {
+    let fluxes = '';
+    for (const [flux, displayed] of Object.entries(displayedFluxes)) {
+      if (displayed) {
+        fluxes += flux + '+';
+      }
+    }
+    if (fluxes !== '') {
+      this.feed.next(fluxes.substring(0, fluxes.length - 1));
+    }
+  }
+  getFeed(): Observable<Post[]> {
+    return this.feed.pipe(
+      debounceTime(300),
+      switchMap((fluxes: string) => this.getPostsFromFlux(fluxes)),
+    );
+  }
+  getPostsFromFlux(fluxes: string): Observable<Post[]> {
+    return this.http.get<Post[]>(AppSettings.API_ENDPOINT + 'posting/posts/get?type=Flux&origin=' + fluxes);
+  }
+  getPostsFromUser(id=AppSettings.getId()): Observable<Post[]> {
+    return this.http.get<Post[]>(AppSettings.API_ENDPOINT + 'posting/posts/get?user=' + id);
   }
 }

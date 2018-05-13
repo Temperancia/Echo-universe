@@ -1,9 +1,8 @@
 export class Post {
-  name: string;
+  originType: string;
+  originName: string;
   owner: string;
   content: string;
-  createdOn: string;
-  reputation: number;
   type: string;
   /*
   constructor(id, name, content, createdOn, reputation) {

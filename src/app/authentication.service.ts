@@ -14,22 +14,6 @@ export class AuthenticationService {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;
   }
-  /**
- * Handle Http operation that failed.
- * Let the app continue.
- * @param operation - name of the operation that failed
- * @param result - optional value to return as the observable result
- */
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
 
   isLoggedIn(): boolean {
     return localStorage.getItem('currentUser') === null ? false : true;
@@ -52,7 +36,7 @@ export class AuthenticationService {
         password: credentials.password
       })
       .pipe(
-        catchError(this.handleError<any>('login'))
+        catchError(AppSettings.handleError<any>('login'))
       );
     }
     return this.http.get(AppSettings.API_ENDPOINT + 'authentication/user/login');

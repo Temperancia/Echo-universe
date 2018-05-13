@@ -4,7 +4,6 @@
     <div class="card">
       <div class="card-body">
         <button class="close-post-button" (click)="close(post.id)">x</button>
-        <h2 [innerHTML]="post.name | emojis"></h2>
         <div [innerHTML]="post.content | emojis"></div><a class="btn btn-primary">More</a>
         <div class="font-italic">Yesterday</div>
       </div>

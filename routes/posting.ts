@@ -1,32 +1,69 @@
 import * as express from 'express';
-import { Types } from 'mongoose';
+import { Types, Promise } from 'mongoose';
 
 let posting = express.Router();
 
 const Post = require('../models/post');
 
 posting.post('/posts/create', (req, res) => {
-  let post = {
+  const post = req.body.post;
+  const newPost = {
     '_id': new Types.ObjectId,
-    'title': req.body.title,
-    'content': req.body.content,
+    'originType': post.originType,
+    'originName': post.originName,
+    'content': post.content,
     'author': req.decoded.id,
+    'reputation': 0,
     'createdOn': Date.now()
   };
-  Post.create(post, (err, post) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while creating post : ' + err
-      });
-    }
-    return res.end();
+  console.log(newPost);
+  return Post.create(newPost)
+  .then(() => {
+    return res.json({});
+  })
+  .catch(err => {
+    return res.status(500).json('Error while creating post : ' + err);
   });
 });
 
-// get posts from the user
-posting.get('/posts/user/:id', (req, res) => {
-  console.log(req.decoded.id);
-  res.end();
+posting.get('/posts/get', (req, res) => {
+  const type = req.query.type;
+  const user = req.query.user;
+  if (type && type === 'Flux') {
+    findPostsFromFluxes(req.query.origin.split(' '))
+    .then(posts => {
+      console.log(posts);
+      return res.json(posts);
+    })
+    .catch(err => {
+      return res.status(500).json('Error while finding posts : ' + err);
+    });
+  } else if (user) {
+    findPostsFromUser(user)
+    .then(posts => {
+      return res.json(posts);
+    })
+    .catch(err => {
+      return res.status(500).json('Error while finding posts : ' + err);
+    })
+  }
 });
+
+function findPostsFromFluxes(fluxes: string): Promise {
+  const filter = {
+    'originType': 'Flux',
+    'originName': {$in: fluxes}
+  }
+  return Post.find(filter)
+  .select('originName content createdOn reputation')
+  .populate('author', 'fullName reputation')
+  .exec();
+}
+
+function findPostsFromUser(user: string): Promise {
+  return Post.find({author: user})
+  .select('content createdOn reputation')
+  .exec();
+}
 
 module.exports = posting;

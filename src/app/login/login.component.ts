@@ -54,15 +54,15 @@ export class LoginComponent implements OnInit {
   }
 
   public subscribe(pub) {
-    let user;
+    let newUser;
     if (pub) {
-      user = this.newPublicUser;
-      user.type = 'Public';
+      newUser = this.newPublicUser;
+      newUser.type = 'Public';
     } else {
-      user = this.newEminentUser;
-      user.type = 'Eminent';
+      newUser = this.newEminentUser;
+      newUser.type = 'Eminent';
     }
-    this.authenticationService.subscribe(user)
+    this.authenticationService.subscribe(newUser)
     .subscribe(response => {
       const user = {
         'id': response.id,

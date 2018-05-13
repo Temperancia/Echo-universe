@@ -18,21 +18,20 @@ export class TrustsComponent implements OnInit {
   }
   getTrusts() {
     this.trustService.getTrusts()
-    .subscribe(response => {
-      this.trusts = response.trusts;
+    .subscribe(trusts => {
+      this.trusts = trusts;
     }, err => {
       console.log(err);
     });
   }
   createTrust() {
-    this.trustService.createTrust(this.newTrust).subscribe(response => {
-      this.router.navigate(['/trust/' + this.newTrust.key]);
+    this.trustService.createTrust(this.newTrust).subscribe(trust => {
+      this.router.navigate(['/trust/' + trust.key]);
     });
   }
   joinTrust(id: string, key: string) {
-    console.log(key);
     this.trustService.joinTrust(id).subscribe(response => {
-      //this.router.navigate(['/trust/' + key]);
+      this.router.navigate(['/trust/' + key]);
     });
   }
 }

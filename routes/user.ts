@@ -80,13 +80,11 @@ user.get('/:user/trusts', (req, res) => {
   });
 });
 
-function addRequests(requests, type, source) {
-  for (const request of source) {
-    let newRequest = JSON.parse(JSON.stringify(request));
-    newRequest.type = type;
-    requests.push(newRequest);
+function addRequestType(type, source) {
+  for (let request of source) {
+    request.type = type;
   }
-  return requests;
+  return source;
 }
 
 user.get('/requests', (req, res) => {
@@ -99,6 +97,7 @@ user.get('/requests', (req, res) => {
   .populate('trustInvitationsSent.user', 'firstName lastName userName')
   .populate('trustInvitationsSent.trust', 'name key')
   .populate('trustInvitationsReceived', 'firstName lastName userName')
+  .lean()
   .exec((err, thisUser) => {
     if (err) {
       return res.status(500).json({
@@ -106,12 +105,12 @@ user.get('/requests', (req, res) => {
       });
     }
     let requests = [];
-    requests = addRequests(requests, 'friendRequestSent', thisUser.friendsRequested);
-    requests = addRequests(requests, 'friendRequestReceived', thisUser.friendsRequesting);
-    requests = addRequests(requests, 'trustRequestSent', thisUser.trustsRequested);
-    requests = addRequests(requests, 'trustRequestReceived', thisUser.trustsRequesting);
-    requests = addRequests(requests, 'trustInvitationSent', thisUser.trustInvitationsSent);
-    requests = addRequests(requests, 'trustInvitationReceived', thisUser.trustInvitationsReceived);
+    requests += addRequestType('friendRequestSent', thisUser.friendsRequested);
+    requests += addRequestType('friendRequestReceived', thisUser.friendsRequesting);
+    requests += addRequestType('trustRequestSent', thisUser.trustsRequested);
+    requests += addRequestType('trustRequestReceived', thisUser.trustsRequesting);
+    requests += addRequestType('trustInvitationSent', thisUser.trustInvitationsSent);
+    requests += addRequestType('trustInvitationReceived', thisUser.trustInvitationsReceived);
     return res.json({
       requests: requests,
     });

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PostService} from '../post.service';
+import { Flux } from '../flux.enum';
 
 @Component({
   selector: 'app-flux-box',
@@ -7,21 +8,22 @@ import {PostService} from '../post.service';
   styleUrls: ['flux-box.component.scss']
 })
 export class FluxBoxComponent implements OnInit {
-
-  constructor(public postService: PostService) { }
+  tendance = Flux.Tendance;
+  friends = Flux.Friends;
+  dailyLife = Flux.DailyLife;
+  lifeStyle = Flux.LifeStyle;
+  displayedFluxes = {
+    tendance: false,
+    friends: false,
+    dailyLife: false,
+    lifeStyle: false
+  };
+  constructor(private postService: PostService) { }
 
   ngOnInit() {
   }
-  public showTrendingFlux(): void {
-    this.postService.displayedFluxes.trending = !this.postService.displayedFluxes.trending;
-  }
-  public showFriendsFlux(): void {
-    this.postService.displayedFluxes.friends = !this.postService.displayedFluxes.friends;
-  }
-  public showDailyFlux(): void {
-    this.postService.displayedFluxes.daily = !this.postService.displayedFluxes.daily;
-  }
-  public showStyleFlux(): void {
-    this.postService.displayedFluxes.style = !this.postService.displayedFluxes.style;
+  public toggleFlux(flux: Flux): void {
+    this.displayedFluxes[flux] = !this.displayedFluxes[flux];
+    this.postService.updateFeed(this.displayedFluxes);
   }
 }

@@ -12,10 +12,10 @@ trusting.post('/trusts/create', (req, res) => {
   const data = req.body.trust;
   const thisUserId = req.decoded.id;
   const newTrust = {
-    '_id': new Types.ObjectId,
-    'name': data.name,
-    'key': encodeURIComponent(data.name),
-    'description': data.description,
+    _id: new Types.ObjectId,
+    name: data.name,
+    key: encodeURIComponent(data.name),
+    description: data.description,
     'owner': thisUserId,
     'moderators': [],
     'members': [],
@@ -35,21 +35,32 @@ trusting.post('/trusts/create', (req, res) => {
           error: 'Error while updating user : ' + err
         });
       }
-      return res.end();
+      return res.json(trust);
     });
   });
 });
 
 trusting.get('/trusts/get', (req, res) => {
-  Trust.find({}, 'name key description owner members reputation')
-  .populate('owner', 'firstName lastName')
-  .exec((err, trusts) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding trusts : ' + err
-      });
-    }
+  Trust.find()
+  .select('name key description owner members reputation')
+  .populate('owner', 'fullName reputation')
+  .lean()
+  .exec()
+  .then(trusts => {
+    const id = Types.ObjectId(req.decoded.id);
+    trusts.forEach((trust, index) => {
+      if (trust.owner._id.equals(id)
+      || trust.moderators.find(element => { return element.equals(id); })
+      || trust.members.find(element => { return element.equals(id); })) {
+        trusts[index].partOf = true;
+      } else {
+        trusts[index].partOf = false;
+      }
+    });
     return res.json(trusts);
+  })
+  .catch(err => {
+    return res.status(500).json('Error while finding trusts : ' + err);
   });
 });
 
@@ -66,7 +77,7 @@ trusting.get('/trust/:key/get', (req, res) => {
       });
     }
     return res.json({
-      trust: trust
+      trust
     });
   });
 });
@@ -83,7 +94,7 @@ trusting.delete('/trust/:trust/delete', (req, res) => {
         error: 'Error while deleting trust : ' + err
       });
     }
-    return res.end();
+    return res.json({});
   });
 });
 
@@ -113,7 +124,7 @@ trusting.get('/trust/:id/requesting/send', (req, res) => {
             error: 'Error while finding and updating user : ' + err
           });
         }
-        return res.end();
+        return res.json({});
       });
     });
   });

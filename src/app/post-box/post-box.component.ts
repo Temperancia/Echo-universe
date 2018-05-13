@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { trigger, style, transition, animate, group } from '@angular/animations';
 import { PostService } from '../post.service';
 import { Post } from '../post';
+import { Flux } from '../flux.enum';
 
 @Component({
   selector: 'app-post-box',
@@ -28,42 +29,27 @@ import { Post } from '../post';
 })
 export class PostBoxComponent implements OnInit {
   public currentPost: Post;
-  private onTitle: boolean;
-  private onContent: boolean;
+  flux = Flux;
+  currentFlux: Flux;
   constructor(private postService: PostService) {
   }
   ngOnInit() {
-    this.newPost();
-  }
-  public selectTitle() {
-    this.onTitle = true;
-    this.onContent = false;
-  }
-  public selectContent() {
-    this.onTitle = false;
-    this.onContent = true;
+    this.currentPost = new Post;
   }
   public onEmoji(emoji) {
-    if (this.onTitle) {
-      this.currentPost.name += emoji;
-    } else if (this.onContent) {
-      this.currentPost.content += emoji;
-    }
+    this.currentPost += emoji;
   }
-  public newPost () {
-    this.currentPost = {
-      name: '',
-      content: '',
-      owner: '',
-      createdOn: '',
-      reputation: 0,
-      type: ''
-    };
+  toggle(flux: Flux) {
+    this.currentFlux = flux;
+    this.currentPost.originType = 'Flux';
+    this.currentPost.originName = flux;
   }
   public post(): void {
-    if (this.currentPost.name !== '' && this.currentPost.content !== '') {
-      this.postService.create(this.currentPost);
-      this.newPost();
+    if (this.currentPost.content && this.currentPost.originName) {
+      this.postService.create(this.currentPost)
+      .subscribe(_ => {
+        location.reload();
+      });
     }
   }
 }

@@ -16,16 +16,15 @@ let authentication = Router();
 
 authentication.post('/user/create', (req, res) => {
   const user = req.body.user;
-  console.log(user);
   let newUser: any = {};
   newUser._id = new Types.ObjectId();
   newUser.type = user.type;
   if (newUser.type === 'Public') {
     newUser.firstName = user.firstName;
     newUser.lastName = user.lastName;
-    newUser.fullName = 
+    newUser.fullName = user.firstName + ' ' + user.lastName;
   } else if (newUser.type === 'Eminent') {
-    newUser.userName = user.userName;
+    newUser.fullName = newUser.userName = user.userName;
   }
   newUser.email = user.email;
   newUser.password = user.password;
@@ -35,6 +34,7 @@ authentication.post('/user/create', (req, res) => {
   newUser.friendsRequesting = [];
   newUser.trustsOwned = [];
   newUser.trustsJoined = [];
+  console.log(newUser);
   User.create(newUser, (err, user) => {
     if (err) {
       res.status(500).json({

@@ -22,9 +22,7 @@ export class SearchBoxComponent implements OnInit {
   }
   launchSearch() {
     this.users$ = this.searchTerms.pipe(
-      // wait 300ms after each keystroke before considering the term
       debounceTime(300),
-      // ignore new term if same as previous term
       distinctUntilChanged(),
       switchMap((term: string) => this.userService.getFriendableUsers(term)),
     );
@@ -34,7 +32,7 @@ export class SearchBoxComponent implements OnInit {
   }
   addFriend(id: string) {
     this.friendService.addFriend(id)
-    .subscribe(response => {
+    .subscribe(_ => {
       location.reload();
     })
   }
