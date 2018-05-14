@@ -1,6 +1,6 @@
-import * as express from 'express';
+import { Router } from 'express';
 import * as jwt from 'jsonwebtoken';
-let api = express.Router();
+let api = Router();
 
 global['secret'] = 'jsdjrfozej654541fkn';
 
@@ -31,7 +31,7 @@ api.use((req, res, next) => {
     if (token) {
       jwt.verify(token, global['secret'], (err, decoded) => {
          if (err) {
-           return res.json({ error: 'Failed to authenticate token.' });
+           return res.status(403).json('Failed to authenticate token.');
          } else {
            // if everything is good, save to request for use in other routes
            req.decoded = decoded;
@@ -39,9 +39,7 @@ api.use((req, res, next) => {
          }
        });
     } else {
-      return res.status(403).send({
-        error: 'No token provided.'
-      });
+      return res.status(403).send('No token provided.');
     }
   }
 });

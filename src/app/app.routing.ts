@@ -8,10 +8,10 @@ import { CirclesComponent } from './circles/circles.component';
 import { FindHelpComponent } from './find-help/find-help.component';
 import { TrustsComponent } from './trusts/trusts.component';
 import { TrustComponent } from './trust/trust.component';
+import { BlankComponent } from './blank/blank.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { AuthGuard } from './auth.guard';
 import { PublicGuard } from './public.guard';
-
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [AuthGuard] },
@@ -23,6 +23,7 @@ const appRoutes: Routes = [
   { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard] },
   { path: 'help', component: FindHelpComponent, canActivate: [AuthGuard] },
   { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
+  { path: 'blank', component: BlankComponent },
   // otherwise redirect to home
   { path: '**', redirectTo: '' }
 ];

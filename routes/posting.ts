@@ -1,24 +1,23 @@
 import * as express from 'express';
 import { Types, Promise } from 'mongoose';
+import { Post } from '../models/post';
 
 let posting = express.Router();
-
-const Post = require('../models/post');
 
 posting.post('/posts/create', (req, res) => {
   const post = req.body.post;
   const newPost = {
-    '_id': new Types.ObjectId,
-    'originType': post.originType,
-    'originName': post.originName,
-    'content': post.content,
-    'author': req.decoded.id,
-    'reputation': 0,
-    'createdOn': Date.now()
+    _id: new Types.ObjectId,
+    originType: post.originType,
+    originName: post.originName,
+    content: post.content,
+    author: req.decoded.id,
+    reputation: 0,
+    createdOn: Date.now()
   };
   console.log(newPost);
   return Post.create(newPost)
-  .then(() => {
+  .then(_ => {
     return res.json({});
   })
   .catch(err => {
@@ -32,7 +31,6 @@ posting.get('/posts/get', (req, res) => {
   if (type && type === 'Flux') {
     findPostsFromFluxes(req.query.origin.split(' '))
     .then(posts => {
-      console.log(posts);
       return res.json(posts);
     })
     .catch(err => {
@@ -51,8 +49,8 @@ posting.get('/posts/get', (req, res) => {
 
 function findPostsFromFluxes(fluxes: string): Promise {
   const filter = {
-    'originType': 'Flux',
-    'originName': {$in: fluxes}
+    originType: 'Flux',
+    originName: {$in: fluxes}
   }
   return Post.find(filter)
   .select('originName content createdOn reputation')

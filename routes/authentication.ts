@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Types } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
-const User = require('../models/user');
+import { User } from '../models/user';
 
 function makeToken(id = undefined) {
   const token = jwt.sign({
@@ -35,16 +35,15 @@ authentication.post('/user/create', (req, res) => {
   newUser.trustsOwned = [];
   newUser.trustsJoined = [];
   console.log(newUser);
-  User.create(newUser, (err, user) => {
-    if (err) {
-      res.status(500).json({
-        error: 'User already exists'
-      });
-    }
+  return User.create(newUser)
+  .then(user => {
     return res.json({
       id: user._id,
       token: makeToken(user._id)
     });
+  })
+  .catch(err => {
+    return res.status(500).json('User already exists');
   });
 });
 
@@ -56,28 +55,23 @@ authentication.get('/user/login', (req, res) => {
 });
 
 authentication.post('/user/login', (req, res) => {
-  const email = req.body['email'];
-  const password = req.body['password'];
+  const email = req.body.email;
+  const password = req.body.password;
   if (!email || !password) {
-    return res.status(401).json({
-      error: 'Wrong email or password'
-    });
+    return res.status(401).json('Wrong email or password');
   }
-  User.findOne(req.body, '_id', (err, user) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding user : ' + err
-      });
-    }
+  return User.findOne(req.body)
+  .then(user => {
     if (!user) {
-      return res.status(401).json({
-        error: 'Wrong email or password'
-      });
+      return res.status(401).json('Wrong email or password');
     }
     return res.json({
       id: user._id,
       token: makeToken(user._id)
     });
+  })
+  .catch(err => {
+    return res.status(500).json('Error while finding user : ' + err);
   });
 });
 

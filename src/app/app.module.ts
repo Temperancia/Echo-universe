@@ -14,6 +14,7 @@ import { HeaderComponent } from './header/header.component';
 import { AboutComponent } from './about/about.component';
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { CirclesComponent } from './circles/circles.component';
+import { BlankComponent } from './blank/blank.component';
 //import {TransferHttpCacheModule} from '@nguniversal/common';
 import { FindHelpComponent } from './find-help/find-help.component';
 import { FeedComponent } from './feed/feed.component';
@@ -59,6 +60,7 @@ import { JwtInterceptor } from './jwt.interceptor';
     FeedMyProfileComponent,
     FluxBoxComponent,
     OptionsBoxComponent,
+    BlankComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'echo'}),

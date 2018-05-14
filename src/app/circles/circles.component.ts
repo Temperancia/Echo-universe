@@ -35,8 +35,9 @@ export class CirclesComponent implements OnInit {
 
   private getFriends() {
     this.userService.getFriends()
-    .subscribe(response => {
-      this.friends = response.friends;
+    .subscribe(friends => {
+      this.friends = friends;
+      console.log(friends);
     }, err => {
       console.log(err);
     });

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {UserService} from '../user.service';
+import { FriendService } from '../friend.service';
+import { TrustService } from '../trust.service';
+import { AppSettings } from '../app.settings';
 
 export enum RequestType {
   FriendRequestSent = 'friendRequestSent',
@@ -18,25 +22,19 @@ export enum RequestType {
 export class NotificationsComponent implements OnInit {
   requests: any;
   requestType = RequestType;
-  displayedNotifications: any = {
-    'friendRequestsSent': false,
-    'friendRequestsReceived': false,
-    'trustRequestsSent': false,
-    'trustRequestsReceived': false,
-    'trustInvitationsSent': false,
-    'trustInvitationsReceived': false
-  };
-
-  constructor(private userService: UserService) {
+  displayedNotifications = AppSettings.displayedNotifications;
+  constructor(private router: Router,
+    private friendService: FriendService,
+    private trustService: TrustService,
+    private userService: UserService) {
   }
   ngOnInit() {
     this.getRequests();
   }
   private getRequests() {
     this.userService.getRequests()
-    .subscribe(response => {
-      this.requests = response.requests;
-      console.log(this.requests);
+    .subscribe(requests => {
+      this.requests = requests;
     });
   }
   getRequestsClass(): string {
@@ -47,5 +45,35 @@ export class NotificationsComponent implements OnInit {
   }
   private toggle(type: string) {
     this.displayedNotifications[type] = !this.displayedNotifications[type];
+  }
+  cancelFriendRequest(request) {
+    this.friendService.cancelFriend(request._id).subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
+  }
+  acceptFriendRequest(request) {
+    this.friendService.acceptFriend(request._id).subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
+  }
+  declineFriendRequest(request) {
+    this.friendService.declineFriend(request._id).subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
+  }
+  cancelTrustRequest(request) {
+    this.friendService.cancelFriend(request._id).subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
+  }
+  acceptTrustRequest(request) {
+    this.friendService.acceptFriend(request._id).subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
+  }
+  declineTrustRequest(request) {
+    this.friendService.declineFriend(request._id).subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
   }
 }

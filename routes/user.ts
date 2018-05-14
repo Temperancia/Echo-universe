@@ -1,34 +1,25 @@
-import * as express from 'express';
+import { Router } from 'express';
 import { Types } from 'mongoose';
-const User = require('../models/user');
-const Trust = require('../models/trust');
+import { User } from '../models/user';
+import { Trust } from '../models/trust';
 
-let user = express.Router();
+let user = Router();
 
 user.get('/:user/profile', (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.user;
-  User.findById(thatUserId, 'type firstName lastName userName reputation birth friends', (err, thatUser) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding user : ' + err
-      });
+  return User.findById(thatUserId)
+  .select('type firstName lastName userName reputation birth')
+  .populate('friends')
+  .then(thatUser => {
+    const friendIds = thatUser.friends.map(friend => { return friend._id; });
+    if (thisUserId.indexOf(friendIds) === -1) {
+      thatUser.friends = [];
     }
-    let returnedUser = {
-      'type': thatUser.type,
-      'firstName': thatUser.firstName,
-      'lastName': thatUser.lastName,
-      'userName': thatUser.userName,
-      'reputation': thatUser.reputation,
-      'birth': thatUser.birth,
-      'friends': []
-    };
-    if (thisUserId in thatUser.friends) {
-      returnedUser.friends = thatUser.friends;
-    }
-    return res.json({
-      user: returnedUser
-    });
+    return res.json(thatUser);
+  })
+  .catch(err => {
+    return res.status(500).json('Error while finding user : ' + err);
   });
 });
 
@@ -37,21 +28,20 @@ user.get('/users', (req, res) => {
   const name = req.query.name;
   if (name) {
     options = {$or: [
-      {'firstName': new RegExp('^' + name, 'i')},
-      {'lastName': new RegExp('^' + name, 'i')},
-      {'userName': new RegExp('^' + name, 'i')},
+      {firstName: new RegExp('^' + name, 'i')},
+      {lastName: new RegExp('^' + name, 'i')},
+      {userName: new RegExp('^' + name, 'i')},
+      {fullName: new RegExp('^' + name, 'i')},
     ]};
   }
-  User.find(options)
-  .select('firstName lastName userName type')
+  return User.find(options)
   .where('_id').ne(req.decoded.id)
-  .exec((err, users) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding users : ' + err
-      });
-    }
+  .select('fullName type')
+  .then(users => {
     return res.json(users);
+  })
+  .catch(err => {
+    return res.status(500).json('Error while finding users : ' + err);
   });
 });
 
@@ -59,36 +49,33 @@ user.get('/:user/trusts', (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.user;
   // check if the requiring user is friend with the required user
-  User.findById(thatUserId, 'friends')
+  return User.findById(thatUserId, 'friends')
   .populate('trustsOwned', 'name key')
   .populate('trustsJoined', 'name key')
-  .exec((err, thatUser) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding user : ' + err
-      });
-    }
-    if (thisUserId !== thatUserId && !(thisUserId in thatUser.friends)) {
-      return res.status(403).json({
-        error: 'Forbidden access'
-      });
+  .then(thatUser => {
+    if (thisUserId !== thatUserId && thatUser.friends.indexOf(thisUserId) === -1) {
+      return res.status(403).json('Forbidden access');
     }
     return res.json({
       trustsOwned: thatUser.trustsOwned,
       trustsJoined: thatUser.trustsJoined
     });
+  })
+  .catch(err => {
+    return res.status(500).json('Error while finding user : ' + err);
   });
 });
 
-function addRequestType(type, source) {
+function addRequests(requests, type, source) {
   for (let request of source) {
     request.type = type;
+    requests.push(request);
   }
-  return source;
+  return requests;
 }
 
 user.get('/requests', (req, res) => {
-  User.findById(req.decoded.id)
+  return User.findById(req.decoded.id)
   .populate('friendsRequested', 'firstName lastName userName')
   .populate('friendsRequesting', 'firstName lastName userName')
   .populate('trustsRequested', 'name key')
@@ -98,22 +85,18 @@ user.get('/requests', (req, res) => {
   .populate('trustInvitationsSent.trust', 'name key')
   .populate('trustInvitationsReceived', 'firstName lastName userName')
   .lean()
-  .exec((err, thisUser) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding user : ' + err
-      });
-    }
+  .then(thisUser => {
     let requests = [];
-    requests += addRequestType('friendRequestSent', thisUser.friendsRequested);
-    requests += addRequestType('friendRequestReceived', thisUser.friendsRequesting);
-    requests += addRequestType('trustRequestSent', thisUser.trustsRequested);
-    requests += addRequestType('trustRequestReceived', thisUser.trustsRequesting);
-    requests += addRequestType('trustInvitationSent', thisUser.trustInvitationsSent);
-    requests += addRequestType('trustInvitationReceived', thisUser.trustInvitationsReceived);
-    return res.json({
-      requests: requests,
-    });
+    requests = addRequests(requests, 'friendRequestSent', thisUser.friendsRequested);
+    requests = addRequests(requests, 'friendRequestReceived', thisUser.friendsRequesting);
+    requests = addRequests(requests, 'trustRequestSent', thisUser.trustsRequested);
+    requests = addRequests(requests, 'trustRequestReceived', thisUser.trustsRequesting);
+    requests = addRequests(requests, 'trustInvitationSent', thisUser.trustInvitationsSent);
+    requests = addRequests(requests, 'trustInvitationReceived', thisUser.trustInvitationsReceived);
+    return res.json(requests);
+  })
+  .catch(err => {
+    return res.status(500).json('Error while finding user : ' + err);
   });
 });
 
@@ -121,21 +104,18 @@ user.get('/:user/friends', (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.user;
   // check if the requiring user is friend with the required user
-  User.findById(thatUserId, '')
-  .populate('friends')
-  .exec((err, thatUser) => {
-    if (err) {
-      return res.status(500).json({
-        error: 'Error while finding user : ' + err
-      });
-    }
-    if (thisUserId !== thatUserId && !(thisUserId in thatUser.friends)) {
-      return res.status(403).json({
-        error: 'Forbidden access'
-      });
+  return User.findById(thatUserId)
+  .populate('friends', 'fullName reputation')
+  .then(thatUser => {
+    if (thisUserId !== thatUserId
+      && thatUser.friends.indexOf(thisUserId) === -1) {
+      return res.status(403).json('Forbidden access');
     }
     return res.json(thatUser.friends);
   })
+  .catch(err => {
+    return res.status(500).json('Error while finding friends : ' + err);
+  });
 });
 
 module.exports = user;

@@ -30,8 +30,9 @@
         <footer class="blockquote-footer">
           {{trust.specialDescription}}
         </footer>
-        <button class="btn btn-others" (click)="joinTrust(trust._id, trust.key)" *ngIf="!trust.partOf">Join</button>
-        <button class="btn btn-others" routerLink="/trust/{{trust.key}}" *ngIf="trust.partOf">Enter</button>
+        <button class="btn btn-others" *ngIf="trust.requested">Application sent</button>
+        <button class="btn btn-others" (click)="joinTrust(trust._id, trust.key)" *ngIf="!trust.requested && !trust.partOf">Join</button>
+        <button class="btn btn-others" routerLink="/trust/{{trust.key}}" *ngIf="!trust.requested && trust.partOf">Enter</button>
       </div>
     </div>
   </div>

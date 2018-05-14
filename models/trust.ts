@@ -32,4 +32,4 @@ const trustSchema = new Schema({
     default: Date.now
   }
 });
-module.exports = mongoose.model('Trust', trustSchema);
+export const Trust = mongoose.model('Trust', trustSchema);

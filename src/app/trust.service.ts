@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
 import { Trust } from './trust';
 import { User } from './user';
 import { HttpClient } from '@angular/common/http';

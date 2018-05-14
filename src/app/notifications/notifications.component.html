@@ -35,14 +35,18 @@
         <div *ngIf="request.type === 'friendRequestSent' && displayedNotifications.friendRequestsSent">
           Friend request sent :
           {{request.firstName}} {{request.lastName}}
+          <button (click)="cancelFriendRequest(request)">-</button>
         </div>
         <div *ngIf="request.type === 'friendRequestReceived' && displayedNotifications.friendRequestsReceived">
           Friend request received :
           {{request.firstName}} {{request.lastName}}
+          <button (click)="acceptFriendRequest(request)">+</button>
+          <button (click)="declineFriendRequest(request)">x</button>
         </div>
         <div *ngIf="request.type === 'trustRequestSent' && displayedNotifications.trustRequestsSent">
           Trust request sent :
           {{request.name}}
+          <button (click)="cancelTrustRequest(request)">-</button>
         </div>
         <div *ngIf="request.type === 'trustRequestReceived' && displayedNotifications.trustRequestsReceived">
           Trust request received :

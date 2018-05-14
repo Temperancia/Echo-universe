@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import {
    debounceTime, distinctUntilChanged, switchMap
@@ -6,6 +7,7 @@ import {
 import { UserService } from '../user.service';
 import { FriendService } from '../friend.service';
 import { User } from '../user';
+import { AppSettings } from '../app.settings';
 @Component({
   selector: 'app-search-box',
   templateUrl: 'search-box.component.html',
@@ -14,7 +16,7 @@ import { User } from '../user';
 export class SearchBoxComponent implements OnInit {
   users$: Observable<User[]>;
   private searchTerms = new Subject<string>();
-  constructor(private userService: UserService,
+  constructor(private router: Router, private userService: UserService,
     private friendService: FriendService) { }
 
   ngOnInit() {
@@ -33,7 +35,7 @@ export class SearchBoxComponent implements OnInit {
   addFriend(id: string) {
     this.friendService.addFriend(id)
     .subscribe(_ => {
-      location.reload();
+      AppSettings.refresh(this.router);
     })
   }
 }
