@@ -1,5 +1,4 @@
-import mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema, model } from 'mongoose';
 
 const trustSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -32,4 +31,4 @@ const trustSchema = new Schema({
     default: Date.now
   }
 });
-export const Trust = mongoose.model('Trust', trustSchema);
+export const Trust = model('Trust', trustSchema);

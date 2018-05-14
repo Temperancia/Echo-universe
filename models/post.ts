@@ -1,5 +1,4 @@
-import mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { Schema, model } from 'mongoose';
 
 const postSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -22,4 +21,4 @@ const postSchema = new Schema({
     default: Date.now
    }
 });
-export const Post = mongoose.model('Post', postSchema);
+export const Post = model('Post', postSchema);

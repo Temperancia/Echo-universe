@@ -50,14 +50,17 @@ export class UserService {
   getFriendableUsers(name: string = undefined): Observable<any> {
     return Observable.forkJoin([
       this.getFriends(),
-      this.getUsers(name)
+      this.getUsers(name),
+      this.getRequests()
     ])
     .pipe(
       tap(data => {
         const friends = data[0].map(friend => { return friend._id });
+        const requests = data[2];
         let users = data[1];
         for (let user of users) {
           user.friendWith = (user._id in friends);
+          user.friendable = (user._id in requests.friends)
         }
         console.log(users);
       }),

@@ -1,9 +1,26 @@
 import { Router } from 'express';
-import { Types } from 'mongoose';
+import { Types, Promise } from 'mongoose';
 import { User } from '../models/user';
 import { Trust } from '../models/trust';
 
 let user = Router();
+
+function findUsers(thisUserId, name = undefined): Promise {
+  let options = {};
+  if (name) {
+    options = {$or: [
+      {firstName: new RegExp('^' + name, 'i')},
+      {lastName: new RegExp('^' + name, 'i')},
+      {userName: new RegExp('^' + name, 'i')},
+      {fullName: new RegExp('^' + name, 'i')},
+    ]};
+  }
+  return User.find(options)
+  .where('_id').ne(thisUserId)
+  .select('fullName type')
+  .lean()
+  .exec();
+}
 
 user.get('/:user/profile', (req, res) => {
   const thisUserId = req.decoded.id;
@@ -24,21 +41,26 @@ user.get('/:user/profile', (req, res) => {
 });
 
 user.get('/users', (req, res) => {
-  let options = {};
-  const name = req.query.name;
-  if (name) {
-    options = {$or: [
-      {firstName: new RegExp('^' + name, 'i')},
-      {lastName: new RegExp('^' + name, 'i')},
-      {userName: new RegExp('^' + name, 'i')},
-      {fullName: new RegExp('^' + name, 'i')},
-    ]};
-  }
-  return User.find(options)
-  .where('_id').ne(req.decoded.id)
-  .select('fullName type')
+  return findUsers(req.decoded.id, req.query.name)
   .then(users => {
     return res.json(users);
+  })
+  .catch(err => {
+    return res.status(500).json('Error while finding users : ' + err);
+  });
+});
+
+user.get('/friendable-users', (req, res) => {
+  return findUsers(req.decoded.id)
+  .then(users => {
+    User.findById(req.decoded.id)
+    .select('friends friendsRequested')
+    .then(thisUser => {
+      
+    })
+    .catch(err => {
+      return res.status(500).json('Error while finding user : ' + err);
+    });
   })
   .catch(err => {
     return res.status(500).json('Error while finding users : ' + err);
