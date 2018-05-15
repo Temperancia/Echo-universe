@@ -9,7 +9,9 @@ import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import {join} from 'path';
-import bodyParser = require('body-parser');
+import * as bodyParser from 'body-parser';
+const api = require('./routes/api');
+import * as helmet from 'helmet';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
@@ -20,6 +22,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 // Express server
 const app = express();
+app.use(helmet());
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
@@ -38,16 +41,13 @@ app.engine('html', ngExpressEngine({
 app.set('view engine', 'html');
 app.set('views', join(DIST_FOLDER, 'browser'));
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 /* - Example Express Rest API endpoints -
   app.get('/api/**', (req, res) => { });
 */
-import api = require('./routes/api');
 app.use('/api', api);
-import helmet = require('helmet');
-app.use(helmet);
 // Server static files from /browser
 app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
   maxAge: '1y'

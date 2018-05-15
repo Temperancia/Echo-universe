@@ -15,7 +15,7 @@ api.use('/authentication', require('./authentication'));
 
 api.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
-      let headers = {
+      const headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
         'Access-Control-Max-Age': '86400', // 24 hours

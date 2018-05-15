@@ -43,7 +43,7 @@ export class NotificationsComponent implements OnInit {
     }
     return 'offset-3 col-6';
   }
-  private toggle(type: string) {
+  toggle(type: string) {
     this.displayedNotifications[type] = !this.displayedNotifications[type];
   }
   cancelFriendRequest(request) {
@@ -62,18 +62,20 @@ export class NotificationsComponent implements OnInit {
     });
   }
   cancelTrustRequest(request) {
-    this.friendService.cancelFriend(request._id).subscribe(_ => {
+    this.trustService.cancelTrustRequest(request._id).subscribe(_ => {
       AppSettings.refresh(this.router);
     });
   }
+  /*
   acceptTrustRequest(request) {
-    this.friendService.acceptFriend(request._id).subscribe(_ => {
+    this.friendService.acceptTrustRequest(request._id).subscribe(_ => {
       AppSettings.refresh(this.router);
     });
   }
   declineTrustRequest(request) {
-    this.friendService.declineFriend(request._id).subscribe(_ => {
+    this.friendService.declineTrustRequest(request._id).subscribe(_ => {
       AppSettings.refresh(this.router);
     });
   }
+  */
 }

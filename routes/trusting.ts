@@ -53,7 +53,6 @@ trusting.get('/trusts/get', (req, res) => {
     return User.findById(req.decoded.id)
     .select('trustsRequested')
     .then(thisUser => {
-      console.log('here');
       trusts.forEach((trust, index) => {
         trusts[index].requested = false;
         if (thisUser.trustsRequested.find(element => { return element.equals(trust._id); })) {
@@ -92,7 +91,7 @@ trusting.put('/trust/:trust/update', (req, res) => {
 
 // owner deletes the trust
 trusting.delete('/trust/:trust/delete', (req, res) => {
-  Trust.findOneAndRemove({name: req.params.trust}, (err, trust) => {
+  return Trust.findOneAndRemove({name: req.params.trust}, (err, trust) => {
     if (err) {
       return res.status(500).json('Error while deleting trust : ' + err);
     }
@@ -100,10 +99,9 @@ trusting.delete('/trust/:trust/delete', (req, res) => {
   });
 });
 
-trusting.get('/trust/:id/requesting/send', (req, res) => {
+trusting.get('/trust/:trustId/requesting/send', (req, res) => {
   const thisUserId = req.decoded.id;
-  const trustId = req.params.id;
-  // look if already member here ?
+  const trustId = req.params.trustId;
   return Trust.findById(trustId)
   .select('owner')
   .catch(err => {
@@ -116,6 +114,30 @@ trusting.get('/trust/:id/requesting/send', (req, res) => {
     User.findByIdAndUpdate(trust.owner, updateThatUser).exec();
     const updateThisUser = {
       $push: {trustsRequested: trustId}
+    };
+    User.findByIdAndUpdate(thisUserId, updateThisUser).exec();
+    return res.json({});
+  })
+  .catch(err => {
+    return res.status(500).json('Error while finding and updating user : ' + err);
+  });
+});
+
+trusting.get('/trust/:trustId/requesting/cancel', (req, res) => {
+  const thisUserId = req.decoded.id;
+  const trustId = req.params.trustId;
+  return Trust.findById(trustId)
+  .select('owner')
+  .catch(err => {
+    return res.status(500).json('Error while finding trust : ' + err);
+  })
+  .then(trust => {
+    const updateThatUser = {
+      $pull: {trustsRequesting: {user: thisUserId, trust: trustId}}
+    };
+    User.findByIdAndUpdate(trust.owner, updateThatUser).exec();
+    const updateThisUser = {
+      $pull: {trustsRequested: trustId}
     };
     User.findByIdAndUpdate(thisUserId, updateThisUser).exec();
     return res.json({});
