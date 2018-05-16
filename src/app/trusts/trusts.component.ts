@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TrustService } from '../trust.service';
 import { Trust } from '../trust';
+import { AppSettings } from '../app.settings';
 
 @Component({
   selector: 'app-trusts',
@@ -27,12 +28,12 @@ export class TrustsComponent implements OnInit {
   }
   createTrust() {
     this.trustService.createTrust(this.newTrust).subscribe(trust => {
-      this.router.navigate(['/trust/' + trust.key]);
+      AppSettings.refresh(this.router);
     });
   }
   joinTrust(id: string, key: string) {
     this.trustService.joinTrust(id).subscribe(response => {
-      location.reload();
+      AppSettings.refresh(this.router);
     });
   }
 }

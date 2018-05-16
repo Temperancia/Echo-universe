@@ -128,10 +128,9 @@ trusting.get('/trust/:trustId/requesting/cancel', (req, res) => {
   const trustId = req.params.trustId;
   return Trust.findById(trustId)
   .select('owner')
-  .catch(err => {
-    return res.status(500).json('Error while finding trust : ' + err);
-  })
+  
   .then(trust => {
+    console.log(trust);
     const updateThatUser = {
       $pull: {trustsRequesting: {user: thisUserId, trust: trustId}}
     };
@@ -139,10 +138,12 @@ trusting.get('/trust/:trustId/requesting/cancel', (req, res) => {
     const updateThisUser = {
       $pull: {trustsRequested: trustId}
     };
+    console.log('ok');
     User.findByIdAndUpdate(thisUserId, updateThisUser).exec();
     return res.json({});
   })
   .catch(err => {
+    console.log(err);
     return res.status(500).json('Error while finding and updating user : ' + err);
   });
 });

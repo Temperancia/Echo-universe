@@ -48,23 +48,11 @@ export class UserService {
     return this.http.get<User[]>(url);
   }
   getFriendableUsers(name: string = undefined): Observable<any> {
-    return Observable.forkJoin([
-      this.getFriends(),
-      this.getUsers(name),
-      this.getRequests()
-    ])
+    const url = AppSettings.API_ENDPOINT + 'user/friendable-users';
+    return this.http.get<any>(url)
     .pipe(
-      tap(data => {
-        const friends = data[0].map(friend => { return friend._id });
-        const requests = data[2];
-        let users = data[1];
-        for (let user of users) {
-          user.friendWith = (user._id in friends);
-          user.friendable = (user._id in requests.friends)
-        }
-        console.log(users);
-      }),
-      map((data: any[]) => data[1])
+      tap(users => { console.log(users) }),
+      catchError(AppSettings.handleError('getFriendableUsers', []))
     );
   }
   getUser(id=AppSettings.getId()): Observable<any> {

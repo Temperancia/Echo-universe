@@ -51,12 +51,19 @@ user.get('/users', (req, res) => {
 });
 
 user.get('/friendable-users', (req, res) => {
-  return findUsers(req.decoded.id)
+  const thisUserId = req.decoded.id;
+  return findUsers(thisUserId)
   .then(users => {
-    User.findById(req.decoded.id)
+    User.findById(thisUserId)
     .select('friends friendsRequested')
     .then(thisUser => {
-      
+      const thisUserFriends = thisUser.friends;
+      const thisUserFriendsRequested = thisUser.friendsRequested;
+      for (let user of users) {
+        user.friendWith = (thisUserFriends.indexOf(user._id) > -1);
+        user.friendRequested = (thisUserFriendsRequested.indexOf(user._id) > -1);
+      }
+      return res.json(users);
     })
     .catch(err => {
       return res.status(500).json('Error while finding user : ' + err);
