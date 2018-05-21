@@ -3,7 +3,7 @@
   <app-header></app-header>
   <div class="row">
     <h1 class="col-12 text-center w-100 my-5">
-      {{trust?.name}}
+      {{name}}
     </h1>
   </div>
   <div class="row">
@@ -24,9 +24,12 @@
           <div class="row">
             <div class="col-12 justify-content-center align-self-center">
               <form>
-                <input class="form-control" placeholder="Whats that ?" name="currentPostName" [(ngModel)]="currentPost.name">
                 <app-emojis ref-emojis class='emojis' (onEmoji)='onEmoji($event)'></app-emojis>
                 <textarea class="form-control" placeholder="Say something already" name="currentPostContent" [(ngModel)]="currentPost.content"></textarea>
+                <button (click)="post(postType.Echo)">Echo</button>
+                <button (click)="post(postType.Rumour)">Rumour</button>
+                <button (click)="post(postType.Inquiry)">Inquiry</button>
+                <button (click)="post(postType.Outrage)">Outrage</button>
               </form>
             </div>
           </div>
@@ -34,7 +37,7 @@
             <div class="col-12 feed">
               <div class="post m-3 p-3" *ngFor="let post of posts">
                 <h3>
-                  {{post.name}} -- {{post.owner}}
+                  {{post.owner.fullName}}
                 </h3>
                 <div class="reputation">
                   {{post.reputation}}
@@ -56,7 +59,7 @@
                 Inspiration
               </h2>
               <h3 class="">
-                {{owner}}
+                {{owner?.fullName}}
               </h3>
             </div>
           </div>
@@ -66,7 +69,7 @@
             </h2>
             <div class="col-3 trustee" *ngFor="let trustee of trustees">
               <div class="text-center">
-                {{trustee.name}}
+                {{trustee.fullName}}
               </div>
               <div class="text-center">
                 {{trustee.reputation}}
@@ -79,7 +82,7 @@
             </h2>
             <div class="col-3 follower" *ngFor="let follower of followers">
               <div class="text-center">
-                {{follower.name}}
+                {{follower.fullName}}
               </div>
               <div class="text-center">
                 {{follower.reputation}}

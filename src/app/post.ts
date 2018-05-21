@@ -1,6 +1,7 @@
 export class Post {
   originType: string;
   originName: string;
+  postType: string;
   owner: string;
   content: string;
   type: string;

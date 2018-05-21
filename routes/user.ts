@@ -26,7 +26,7 @@ user.get('/:user/profile', (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.user;
   return User.findById(thatUserId)
-  .select('type firstName lastName userName reputation birth')
+  .select('type fullName reputation birth')
   .populate('friends')
   .then(thatUser => {
     const friendIds = thatUser.friends.map(friend => { return friend._id; });

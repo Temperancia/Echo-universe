@@ -47,4 +47,7 @@ export class PostService {
   getPostsFromUser(id=AppSettings.getId()): Observable<Post[]> {
     return this.http.get<Post[]>(AppSettings.API_ENDPOINT + 'posting/posts/get?user=' + id);
   }
+  getPostsFromTrust(key: string): Observable<Post[]> {
+    return this.http.get<Post[]>(AppSettings.API_ENDPOINT + 'posting/posts/get?type=Trust&origin=' + key);
+  }
 }

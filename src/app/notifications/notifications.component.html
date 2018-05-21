@@ -51,6 +51,8 @@
         <div *ngIf="request.type === 'trustRequestReceived' && displayedNotifications.trustRequestsReceived">
           Trust request received :
           {{request.trust.name}} : {{request.user.firstName}} {{request.user.lastName}}
+          <button (click)="acceptTrustRequest(request)">+</button>
+          <button (click)="declineTrustRequest(request)">x</button>
         </div>
         <div *ngIf="request.type === 'trustInvitationSent' && displayedNotifications.trustInvitationsSent">
           Trust invitation sent :

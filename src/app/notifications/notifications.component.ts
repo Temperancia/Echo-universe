@@ -62,20 +62,20 @@ export class NotificationsComponent implements OnInit {
     });
   }
   cancelTrustRequest(request) {
-    this.trustService.cancelTrustRequest(request._id).subscribe(_ => {
+    this.trustService.cancelRequest(request._id).subscribe(_ => {
       AppSettings.refresh(this.router);
     });
   }
-  /*
   acceptTrustRequest(request) {
-    this.friendService.acceptTrustRequest(request._id).subscribe(_ => {
+    this.trustService.acceptRequest(request.trust._id, request.user._id).subscribe(r => {
+
       AppSettings.refresh(this.router);
+      console.log(r);
     });
   }
   declineTrustRequest(request) {
-    this.friendService.declineTrustRequest(request._id).subscribe(_ => {
+    this.trustService.declineRequest(request.trust._id, request.user._id).subscribe(_ => {
       AppSettings.refresh(this.router);
     });
   }
-  */
 }

@@ -17,16 +17,14 @@ export class MyProfileComponent implements OnInit {
   }
   public getFriends(): void {
     this.userService.getFriends()
-    .subscribe(response => {
-      console.log(response);
-      this.friends = response.friends;
+    .subscribe(friends => {
+      this.friends = friends;
     });
   }
   public getProfile(): void {
     this.userService.getUser()
-    .subscribe(response => {
-      console.log(response);
-      this.user = response.user;
+    .subscribe(user => {
+      this.user = user;
     });
   }
   public getReputation(friend: User): string {

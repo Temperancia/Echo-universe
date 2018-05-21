@@ -7,6 +7,10 @@ const postSchema = new Schema({
     enum: ['Trust', 'Flux'],
   },
   originName: String,
+  postType: {
+    type: String,
+    enum: ['Echo', 'Rumour', 'Inquiry', 'Outrage']
+  },
   title: String,
   content: String,
   author: {

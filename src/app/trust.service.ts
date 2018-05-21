@@ -25,10 +25,22 @@ export class TrustService {
   joinTrust(trustId: string): Observable<any> {
     return this.http.get(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustId + '/requesting/send');
   }
-  cancelTrustRequest(trustId: string) {
+  cancelRequest(trustId: string) {
     return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustId + '/requesting/cancel')
     .pipe(
-      catchError(AppSettings.handleError('cancelTrustRequest', []))
+      catchError(AppSettings.handleError('cancelRequest', []))
+    );
+  }
+  acceptRequest(trustId: string, userId: string) {
+    return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustId + '/requesting/accept/' + userId)
+    .pipe(
+      catchError(AppSettings.handleError('acceptRequest', []))
+    );
+  }
+  declineRequest(trustId: string, userId: string) {
+    return this.http.get<any>(AppSettings.API_ENDPOINT + 'trusting/trust/' + trustId + '/requesting/decline/' + userId)
+    .pipe(
+      catchError(AppSettings.handleError('declineRequest', []))
     );
   }
   getTrusts(): Observable<any> {

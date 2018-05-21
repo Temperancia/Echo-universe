@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TrustService } from '../trust.service';
+import { PostService } from '../post.service';
 import { Trust } from '../trust';
 import { Post } from '../post';
 import { AppSettings } from '../app.settings';
 import { TrustRole } from '../trust.service';
+import { PostType } from '../post-type.enum';
 
 @Component({
   selector: 'app-trust',
@@ -12,7 +14,8 @@ import { TrustRole } from '../trust.service';
   styleUrls: ['trust.component.scss']
 })
 export class TrustComponent implements OnInit {
-  trust: any;
+  name: string;
+  key: string;
   /* = {
     name: 'Coventry Starbuckers',
     policies: [
@@ -22,17 +25,18 @@ export class TrustComponent implements OnInit {
   };
   */
   role: TrustRole;
-  owner = 'James Laper';
+  postType = PostType;
+  owner: any;
   newPolicy: string;
   trustees: any[];
-  members: any[];
   followers: any[];
-  currentPost: any = {};
+  currentPost: any;
   toggles = {
     'home': true,
     'members': false,
     'policies': false
   };
+  posts: Post[];
   /*
   posts: Post[] = [
     {
@@ -77,41 +81,61 @@ export class TrustComponent implements OnInit {
     }
   ];
   */
-  constructor(private router: Router, private trustService: TrustService) {
+  constructor(private router: Router, private trustService: TrustService, private postService: PostService) {
   }
   ngOnInit() {
+    this.currentPost = new Post;
     this.getTrust();
-    this.defineRole();
+  }
+  private getTrust() {
+    const url = this.router.url;
+    const trustKey = this.key = url.substr(url.lastIndexOf('/') + 1);
+    this.trustService.getTrust(trustKey)
+    .subscribe(trust => {
+      console.log(trust);
+      this.name = trust.name;
+      this.owner = trust.owner;
+      this.followers = trust.members;
+      this.trustees = trust.moderators;
+      this.defineRole();
+      this.getPosts();
+    });
   }
   private defineRole(): void {
-    if (!this.trust) {
-      return;
-    }
     const id = AppSettings.getId();
-    if (id === this.trust.owner.id) {
+    if (id === this.owner._id) {
       this.role = TrustRole.Inspiration;
-    } else if (id in this.trust.moderators) {
+    } else if (this.trustees.map(trustee => { return trustee._id }).indexOf(id) > -1) {
       this.role = TrustRole.Trustee;
-    } else if (id in this.trust.members) {
+    } else if (this.followers.map(follower => { return follower._id }).indexOf(id) > -1) {
       this.role = TrustRole.Follower;
     } else {
       this.role = TrustRole.None;
     }
   }
-  private getTrust() {
-    const url = this.router.url;
-    const trustKey = url.substr(url.lastIndexOf('/') + 1);
-    this.trustService.getTrust(trustKey)
-    .subscribe(response => {
-      console.log(response);
-      this.trust = response.trust;
+  private getPosts(): void {
+    this.postService.getPostsFromTrust(this.key)
+    .subscribe(posts => {
+      console.log(posts);
+      this.posts = posts;
+    })
+  }
+  post(postType: PostType) {
+    console.log(postType);
+    console.log(this.key);
+    this.currentPost.originType = 'Trust';
+    this.currentPost.originName = this.key;
+    this.currentPost.postType = postType;
+    this.postService.create(this.currentPost)
+    .subscribe(_ => {
+      AppSettings.refresh(this.router);
     });
   }
   createPolicy(): void {
-    this.trustService.createPolicy(this.trust.key, this.newPolicy);
+    this.trustService.createPolicy(this.key, this.newPolicy);
   }
   toggle(tab) {
-    for (let toggle in this.toggles) {
+    for (const toggle in this.toggles) {
       this.toggles[toggle] = false;
     }
     this.toggles[tab] = true;

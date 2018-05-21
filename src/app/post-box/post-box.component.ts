@@ -45,6 +45,7 @@ export class PostBoxComponent implements OnInit {
     this.currentPost.originName = flux;
   }
   public post(): void {
+    this.currentPost.postType = 'Echo';
     if (this.currentPost.content && this.currentPost.originName) {
       this.postService.create(this.currentPost)
       .subscribe(_ => {
