@@ -8,6 +8,7 @@
     </div>
     <div class="card-body">
       <div [innerHTML]="post.content | emojis"></div>
+      <button (click)="upvote(post._id)"></button>
     </div>
   </div>
 </div>

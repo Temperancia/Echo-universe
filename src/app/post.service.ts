@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import {
    debounceTime, distinctUntilChanged, switchMap, tap
  } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { Post } from './post';
-import { HttpClient } from '@angular/common/http';
 import { AppSettings } from './app.settings';
 import { Flux } from './flux.enum';
 
 @Injectable()
 export class PostService {
   feed = new Subject<string>();
-
   constructor(private http: HttpClient) {
 
   }
@@ -23,6 +22,9 @@ export class PostService {
     .pipe(
       catchError(AppSettings.handleError('create', []))
     );
+  }
+  upvote(postId: string): Observable<any> {
+    return this.http.get(AppSettings.API_ENDPOINT + 'posting/post/' + postId + '/upvote');
   }
   updateFeed(displayedFluxes: any) {
     let fluxes = '';
@@ -39,6 +41,14 @@ export class PostService {
     return this.feed.pipe(
       debounceTime(300),
       switchMap((fluxes: string) => this.getPostsFromFlux(fluxes)),
+      tap(posts => {
+        for (let post of posts) {
+          const createdOn = new Date(post.createdOn);
+          post.createdOn = createdOn.toLocaleDateString('en-US', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+          }) + ' ' + createdOn.toLocaleTimeString('en-US');
+        }
+      })
     );
   }
   getPostsFromFlux(fluxes: string): Observable<Post[]> {

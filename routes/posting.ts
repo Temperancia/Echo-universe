@@ -13,7 +13,10 @@ posting.post('/posts/create', (req, res) => {
     postType: post.postType,
     content: post.content,
     author: req.decoded.id,
-    reputation: 0,
+    reputation: {
+      upvotes: 0,
+      downvotes: 0
+    },
     createdOn: Date.now()
   };
   console.log(newPost);
@@ -39,7 +42,6 @@ posting.get('/posts/get', (req, res) => {
         return res.status(500).json('Error while finding posts : ' + err);
       });
     } else if (type === 'Trust') {
-      console.log('ok');
       findPostsFromTrust(req.query.origin)
       .then(posts => {
         return res.json(posts);
@@ -57,6 +59,10 @@ posting.get('/posts/get', (req, res) => {
       return res.status(500).json('Error while finding posts : ' + err);
     })
   }
+});
+
+posting.get('/post/:postId/upvote', (req, res) => {
+
 });
 
 function findPostsFromFluxes(fluxes: string): Promise {

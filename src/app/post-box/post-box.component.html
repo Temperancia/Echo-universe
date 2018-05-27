@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <div class="post-box" [@itemAnim]>
+  <button type="button" (click)="emojis.show()">Emojis</button>
+  
   <!--<input class="form-control" placeholder="Whats that ?" [(ngModel)]="currentPost.name" (focus)="selectTitle()">-->
   <div class="row">
     <div class="col-3">
@@ -25,6 +27,8 @@
   </div>
   <textarea class="form-control" placeholder="Say something already" [(ngModel)]="currentPost.content"></textarea>
   <app-emojis ref-emojis class='emojis' (onEmoji)='onEmoji($event)'></app-emojis>
-  <button class="btn btn-primary show-emojis" type="button" (click)="emojis.show()">Emojis</button>
-  <button class="w-100 btn btn-primary" type="button" (click)="post()">Echo it !</button>
+  <button (click)="post(postType.Echo)">Echo</button>
+  <button (click)="post(postType.Rumour)">Rumour</button>
+  <button (click)="post(postType.Inquiry)">Inquiry</button>
+  <button (click)="post(postType.Outrage)">Outrage</button>
 </div>

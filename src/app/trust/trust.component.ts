@@ -121,8 +121,6 @@ export class TrustComponent implements OnInit {
     })
   }
   post(postType: PostType) {
-    console.log(postType);
-    console.log(this.key);
     this.currentPost.originType = 'Trust';
     this.currentPost.originName = this.key;
     this.currentPost.postType = postType;

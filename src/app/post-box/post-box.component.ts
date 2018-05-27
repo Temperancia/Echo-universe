@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { trigger, style, transition, animate, group } from '@angular/animations';
 import { PostService } from '../post.service';
 import { Post } from '../post';
 import { Flux } from '../flux.enum';
+import { PostType } from '../post-type.enum';
+import { AppSettings } from '../app.settings';
 
 @Component({
   selector: 'app-post-box',
@@ -31,7 +34,8 @@ export class PostBoxComponent implements OnInit {
   public currentPost: Post;
   flux = Flux;
   currentFlux: Flux;
-  constructor(private postService: PostService) {
+  postType = PostType;
+  constructor(private router: Router, private postService: PostService) {
   }
   ngOnInit() {
     this.currentPost = new Post;
@@ -44,13 +48,11 @@ export class PostBoxComponent implements OnInit {
     this.currentPost.originType = 'Flux';
     this.currentPost.originName = flux;
   }
-  public post(): void {
-    this.currentPost.postType = 'Echo';
-    if (this.currentPost.content && this.currentPost.originName) {
-      this.postService.create(this.currentPost)
-      .subscribe(_ => {
-        location.reload();
-      });
-    }
+  public post(postType: PostType): void {
+    this.currentPost.postType = postType;
+    this.postService.create(this.currentPost)
+    .subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
   }
 }

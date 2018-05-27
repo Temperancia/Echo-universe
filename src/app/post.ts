@@ -5,6 +5,7 @@ export class Post {
   owner: string;
   content: string;
   type: string;
+  createdOn: string;
   /*
   constructor(id, name, content, createdOn, reputation) {
     this.id = id;

@@ -11,13 +11,15 @@ const postSchema = new Schema({
     type: String,
     enum: ['Echo', 'Rumour', 'Inquiry', 'Outrage']
   },
-  title: String,
   content: String,
   author: {
      type: Schema.Types.ObjectId,
      ref: 'User'
   },
-  reputation: Number,
+  reputation: {
+    upvotes: Number,
+    downvotes: Number
+  },
   reports: Number,
   createdOn: Date,
   updatedOn: {
