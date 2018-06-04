@@ -8,17 +8,19 @@ import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-import {join} from 'path';
-import * as bodyParser from 'body-parser';
-const api = require('./routes/api');
 import * as helmet from 'helmet';
+import * as bodyParser from 'body-parser';
+import {join} from 'path';
+const api = require('./routes/api');
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
 
 mongoose.connect('mongodb://localhost/test');
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
+
+require('./routines');
 
 // Express server
 const app = express();

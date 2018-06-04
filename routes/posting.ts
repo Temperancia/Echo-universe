@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Types, Promise } from 'mongoose';
 import { Post } from '../models/post';
+import { User } from '../models/user';
 
 let posting = Router();
 
@@ -57,13 +58,47 @@ posting.get('/posts/get', (req, res) => {
     })
     .catch(err => {
       return res.status(500).json('Error while finding posts : ' + err);
-    })
+    });
   }
 });
 
 posting.get('/post/:postId/upvote', (req, res) => {
-
+  return vote(req.decoded.id, req.params.postId, 1)
+  .then(error => {
+    return error ? res.status(500).json(error) : res.json({});
+  });
 });
+posting.get('/post/:postId/downvote', (req, res) => {
+  const message = vote(req.decoded.id, req.params.postId, -1);
+  return message ? res.status(500).json(message) : res.json({});
+});
+
+function vote(voterId: string, postId: string, coefficient: number): Promise {
+  return Post.findById(postId)
+  .select('author reputation')
+  .then(post => {
+    if (post.author.equals(voterId)) {
+      return 'Cannot upvote your own post';
+    }
+    if (post.reputation.voters.find(voter => { return voter.equals(voterId); })) {
+      return 'Cannot upvote anymore';
+    }
+    let updateThisPost = {
+      $push: {'reputation.voters': voterId},
+    };
+    coefficient === 1
+    ? updateThisPost['$inc'] = {'reputation.upvotes': 1}
+    : updateThisPost['$inc'] = {'reputation.downvotes': 1};
+    Post.findByIdAndUpdate(postId, updateThisPost).exec();
+    User.findByIdAndUpdate(post.author, {
+      $set: {'reputation.refresh': true}
+    }).exec();
+    return undefined;
+  })
+  .catch(err => {
+    return 'Error while finding post : ' + err;
+  });
+}
 
 function findPostsFromFluxes(fluxes: string): Promise {
   const filter = {
@@ -78,7 +113,7 @@ function findPostsFromFluxes(fluxes: string): Promise {
 
 function findPostsFromUser(user: string): Promise {
   return Post.find({author: user})
-  .select('postType content createdOn reputation')
+  .select('originType originName postType content createdOn reputation')
   .exec();
 }
 
@@ -87,7 +122,6 @@ function findPostsFromTrust(trustKey: string): Promise {
     originType: 'Trust',
     originName: trustKey
   };
-  console.log(filter);
   return Post.find(filter)
   .select('postType content createdOn reputation')
   .populate('author', 'fullName reputation')

@@ -20,6 +20,7 @@ export class TrustsComponent implements OnInit {
   getTrusts() {
     this.trustService.getTrusts()
     .subscribe(trusts => {
+
       this.trusts = trusts;
       console.log(trusts);
     }, err => {
@@ -27,13 +28,18 @@ export class TrustsComponent implements OnInit {
     });
   }
   createTrust() {
-    this.trustService.createTrust(this.newTrust).subscribe(trust => {
+    this.trustService.createTrust(this.newTrust).subscribe(_ => {
       AppSettings.refresh(this.router);
     });
   }
   joinTrust(id: string, key: string) {
-    this.trustService.joinTrust(id).subscribe(response => {
+    this.trustService.joinTrust(id).subscribe(_ => {
       AppSettings.refresh(this.router);
     });
+  }
+  enterTrust(name: string) {
+    const url = '/trust/' + encodeURIComponent(name);
+    console.log(url);
+    this.router.navigate([url]);
   }
 }

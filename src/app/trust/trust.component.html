@@ -40,7 +40,8 @@
                   {{post.author.fullName}}
                 </h3>
                 <div class="reputation">
-                  {{post.reputation}}
+                  +{{post.reputation.upvotes}}
+                  -{{post.reputation.downvotes}}
                 </div>
                 <p>
                   {{post.content}}

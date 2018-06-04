@@ -15,7 +15,17 @@ const userSchema = new Schema({
     required: true,
     unique: true
   },
-  reputation: Number,
+  reputation: {
+    refresh: Boolean,
+    score: Number,
+    rank: Number,
+    tags: [{
+      name: String,
+      refresh: Boolean,
+      score: Number,
+      rank: Number
+    }]
+  },
   birth: Date,
   friends: [{
     type: Schema.Types.ObjectId,

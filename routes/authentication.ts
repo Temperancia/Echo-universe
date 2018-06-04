@@ -28,7 +28,12 @@ authentication.post('/user/create', (req, res) => {
   }
   newUser.email = user.email;
   newUser.password = user.password;
-  newUser.reputation = 0;
+  newUser.reputation = {
+    refresh: false,
+    score: 0,
+    rank: 0,
+    tags: []
+  };
   newUser.friends = [];
   newUser.friendsRequested = [];
   newUser.friendsRequesting = [];

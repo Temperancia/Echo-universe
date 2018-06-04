@@ -2,13 +2,14 @@
 <div *ngFor="let post of feed$ | async">
   <div class="row">
     <div class="col-3" [ngClass]="getPostTypeStyle(post.type)">
-      {{post.reputation}}
+      {{post.reputation.upvotes}}
       {{post.createdOn}}
       {{post.author.fullName}}
     </div>
     <div class="card-body">
       <div [innerHTML]="post.content | emojis"></div>
-      <button (click)="upvote(post._id)"></button>
+      <button *ngIf="canVote(post.author._id, post.reputation.voters)" (click)="upvote(post._id)">+</button>
+      <button *ngIf="canVote(post.author._id, post.reputation.voters)" (click)="downvote(post._id)">-</button>
     </div>
   </div>
 </div>

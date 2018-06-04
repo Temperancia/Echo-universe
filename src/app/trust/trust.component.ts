@@ -116,13 +116,13 @@ export class TrustComponent implements OnInit {
   private getPosts(): void {
     this.postService.getPostsFromTrust(this.key)
     .subscribe(posts => {
-      console.log(posts);
+      console.log('posts', posts);
       this.posts = posts;
     })
   }
   post(postType: PostType) {
     this.currentPost.originType = 'Trust';
-    this.currentPost.originName = this.key;
+    this.currentPost.originName = decodeURIComponent(this.key);
     this.currentPost.postType = postType;
     this.postService.create(this.currentPost)
     .subscribe(_ => {

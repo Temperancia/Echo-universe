@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <div class="post-box" [@itemAnim]>
   <button type="button" (click)="emojis.show()">Emojis</button>
-  
-  <!--<input class="form-control" placeholder="Whats that ?" [(ngModel)]="currentPost.name" (focus)="selectTitle()">-->
   <div class="row">
     <div class="col-3">
       <button [ngClass]="currentFlux === flux.Tendance ? 'btn-primary' : ''" (click)="toggle(flux.Tendance);">

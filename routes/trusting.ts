@@ -42,21 +42,21 @@ trusting.get('/trusts/get', (req, res) => {
   .lean()
   .then(trusts => {
     const id = Types.ObjectId(req.decoded.id);
-    trusts.forEach((trust, index) => {
-      trusts[index].partOf = false;
+    for (let trust of trusts) {
+      trust.partOf = false;
       if (checkIfMember(trust, id, trust.owner._id)) {
-        trusts[index].partOf = true;
+        trust.partOf = true;
       }
-    });
+    }
     return User.findById(req.decoded.id)
     .select('trustsRequested')
     .then(thisUser => {
-      trusts.forEach((trust, index) => {
-        trusts[index].requested = false;
+      for (let trust of trusts) {
+        trust.requested = false;
         if (thisUser.trustsRequested.find(element => { return element.equals(trust._id); })) {
-          trusts[index].requested = true;
+          trust.requested = true;
         }
-      });
+      }
       return res.json(trusts);
     })
     .catch(err => {
