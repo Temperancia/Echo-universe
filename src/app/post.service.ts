@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import {
-   debounceTime, distinctUntilChanged, switchMap, map
+   debounceTime, distinctUntilChanged, switchMap, map, flatMap, tap
  } from 'rxjs/operators';
 import { catchError } from 'rxjs/operators';
 import { Post } from './post';
@@ -11,7 +11,7 @@ import { Flux } from './flux.enum';
 
 @Injectable()
 export class PostService {
-  feed = new Subject<string>();
+  feed = new BehaviorSubject<string>(null);
   constructor(private http: HttpClient) {
 
   }
@@ -43,7 +43,7 @@ export class PostService {
   getFeed(): Observable<Post[]> {
     return this.feed.pipe(
       debounceTime(300),
-      switchMap((fluxes: string) => this.getPostsFromFlux(fluxes)),
+      flatMap((fluxes: string) => this.getPostsFromFlux(fluxes)),
     );
   }
   private convertDates(posts: Post[]): Post[] {

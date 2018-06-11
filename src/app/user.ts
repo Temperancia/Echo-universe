@@ -4,6 +4,5 @@ export class User {
   fullName: string;
   userName: string;
   type: string;
-  reputation: number;
-  reputationFromTrusts: [string, number][];
+  reputation: any;
 }

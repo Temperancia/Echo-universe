@@ -129,6 +129,20 @@ export class TrustComponent implements OnInit {
       AppSettings.refresh(this.router);
     });
   }
+  canVote(authorId: string, voters: any[]): boolean {
+    const id = AppSettings.getId();
+    return id !== authorId && authorId !== this.owner._id && !(voters.find(voter => { return voter === id; }));
+  }
+  upvote(postId) {
+    this.postService.upvote(postId).subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
+  }
+  downvote(postId) {
+    this.postService.downvote(postId).subscribe(_ => {
+      AppSettings.refresh(this.router);
+    });
+  }
   createPolicy(): void {
     this.trustService.createPolicy(this.key, this.newPolicy);
   }

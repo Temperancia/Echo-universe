@@ -77,13 +77,21 @@ user.get('/friendable-users', (req, res) => {
 user.get('/:user/trusts', (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.user;
-  // check if the requiring user is friend with the required user
-  return User.findById(thatUserId, 'friends')
+  return User.findById(thatUserId)
+  .select('friends trustReputation')
   .populate('trustsOwned', 'name key')
   .populate('trustsJoined', 'name key')
   .then(thatUser => {
     if (thisUserId !== thatUserId && thatUser.friends.indexOf(thisUserId) === -1) {
       return res.status(403).json('Forbidden access');
+    }
+    const trustReputation = thatUser.trustReputation;
+    for (let trust of thatUser.trustsJoined) {
+      console.log(trust);
+      console.log(trustReputation);
+      const index = trustReputation.map(rep => rep.trust).indexOf(trust.name);
+      console.log(index);
+      trust.reputation = trustReputation[index].rank;
     }
     return res.json({
       trustsOwned: thatUser.trustsOwned,

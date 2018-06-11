@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {PostService} from '../post.service';
 import { Flux } from '../flux.enum';
+import { AppSettings } from '../app.settings';
 
 @Component({
   selector: 'app-flux-box',
@@ -12,12 +13,7 @@ export class FluxBoxComponent implements OnInit {
   friends = Flux.Friends;
   dailyLife = Flux.DailyLife;
   lifeStyle = Flux.LifeStyle;
-  displayedFluxes = {
-    tendance: false,
-    friends: false,
-    dailyLife: false,
-    lifeStyle: false
-  };
+  displayedFluxes = AppSettings.displayedFluxes;
   constructor(private postService: PostService) { }
 
   ngOnInit() {
@@ -25,5 +21,6 @@ export class FluxBoxComponent implements OnInit {
   public toggleFlux(flux: Flux): void {
     this.displayedFluxes[flux] = !this.displayedFluxes[flux];
     this.postService.updateFeed(this.displayedFluxes);
+    console.log(this.displayedFluxes)
   }
 }

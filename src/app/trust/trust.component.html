@@ -39,7 +39,7 @@
                 <h3>
                   {{post.author.fullName}}
                 </h3>
-                <div class="reputation">
+                <div class="reputation" *ngIf="post.author._id !== owner._id">
                   +{{post.reputation.upvotes}}
                   -{{post.reputation.downvotes}}
                 </div>
@@ -49,6 +49,9 @@
                 <div>
                   {{post.createdOn}}
                 </div>
+                <button *ngIf="canVote(post.author._id, post.reputation.voters)" (click)="upvote(post._id)">+</button>
+                <button *ngIf="canVote(post.author._id, post.reputation.voters)" (click)="downvote(post._id)">-</button>
+
               </div>
             </div>
           </div>
@@ -73,7 +76,7 @@
                 {{trustee.fullName}}
               </div>
               <div class="text-center">
-                {{trustee.reputation}}
+                rank {{trustee.reputation.rank}}
               </div>
             </div>
           </div>
@@ -86,7 +89,7 @@
                 {{follower.fullName}}
               </div>
               <div class="text-center">
-                {{follower.reputation}}
+                rank {{follower.reputation.rank}}
               </div>
             </div>
           </div>

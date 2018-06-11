@@ -26,6 +26,12 @@ const userSchema = new Schema({
       rank: Number
     }]
   },
+  trustReputation: [{
+    trust: String,
+    refresh: Boolean,
+    score: Number,
+    rank: Number
+  }],
   birth: Date,
   friends: [{
     type: Schema.Types.ObjectId,

@@ -4,6 +4,12 @@ import { of } from 'rxjs/observable/of';
 
 export class AppSettings {
   public static API_ENDPOINT='http://localhost:4000/api/';
+  static displayedFluxes = {
+    Tendance: false,
+    Friends: false,
+    DailyLife: false,
+    LifeStyle: false
+  };
   static displayedNotifications: any = {
     'friendRequestsSent': false,
     'friendRequestsReceived': false,

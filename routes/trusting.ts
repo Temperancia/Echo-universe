@@ -31,7 +31,7 @@ trusting.post('/trusts/create', (req, res) => {
     return res.json(trust);
   })
   .catch(err => {
-    return res.status(500).json( 'Error while creating trust : ' + err);
+    return res.status(500).json('Error while creating trust : ' + err);
   });
 });
 
@@ -165,7 +165,7 @@ trusting.get('/trust/:trustId/requesting/accept/:userId', (req, res) => {
   const thatUserId = req.params.userId;
   const trustId = req.params.trustId;
   return Trust.findById(trustId)
-  .select('owner moderators members')
+  .select('name owner moderators members')
   .then(trust => {
     if (!trust.owner.equals(thisUserId)) {
       return res.status(403).json('Forbidden access');
@@ -176,7 +176,15 @@ trusting.get('/trust/:trustId/requesting/accept/:userId', (req, res) => {
     removeRequestFrom(trustId, thisUserId, thatUserId);
     const updateThatUser = {
       $pull: {trustsRequested: trustId},
-      $push: {trustsJoined: trustId}
+      $push: {
+        trustsJoined: trustId,
+        trustReputation: {
+          trust: trust.name,
+          refresh: false,
+          score: 0,
+          rank: 0
+        }
+      }
     };
     User.findByIdAndUpdate(thatUserId, updateThatUser).exec();
     const updateTrust = {

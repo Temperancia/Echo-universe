@@ -34,6 +34,7 @@ authentication.post('/user/create', (req, res) => {
     rank: 0,
     tags: []
   };
+  newUser.trustReputation = [];
   newUser.friends = [];
   newUser.friendsRequested = [];
   newUser.friendsRequesting = [];

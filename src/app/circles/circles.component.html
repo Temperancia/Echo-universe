@@ -21,8 +21,9 @@
       Joined trusts
     </div>
     <div class="col-4" *ngFor="let trust of joinedTrusts">
-      <a routerLink="/trust/{{trust}}">
+      <a routerLink="/trust/{{trust.key}}">
         {{trust?.name}}
+        {{trust?.reputation}}
       </a>
     </div>
   </div>
