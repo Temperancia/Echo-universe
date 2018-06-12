@@ -7,7 +7,7 @@
         <button (click)="previousRow()"><</button>
         <div class="emoji-block" *ngFor="let range of actualEmojis; let index = index;">
           <div *ngIf="isDisplayed(index)">
-            <div class="emoji" (click)="addEmoji(e)" *ngFor="let e of range" [innerHTML]="e | emojis"></div>
+            <div class="emoji" (click)="addEmoji(e)" *ngFor="let e of range" [innerHTML]="e"></div>
           </div>
         </div>
         <button (click)="nextRow()">></button>

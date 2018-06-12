@@ -71,6 +71,7 @@ authentication.post('/user/login', (req, res) => {
     if (!user) {
       return res.status(401).json('Wrong email or password');
     }
+    console.log(user._id);
     return res.json({
       id: user._id,
       token: makeToken(user._id)

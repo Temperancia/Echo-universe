@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { Types, Promise } from 'mongoose';
+import { Types } from 'mongoose';
 import { Trust } from '../models/trust';
 import { User } from '../models/user';
 
 let trusting = Router();
 
 // owner creates a trust
-trusting.post('/trusts/create', (req, res) => {
+trusting.post('/trusts/create', async (req, res) => {
   console.log('BODY', req.body);
   const data = req.body.trust;
   const thisUserId = req.decoded.id;
@@ -22,65 +22,63 @@ trusting.post('/trusts/create', (req, res) => {
     reputation: 0,
     createdOn: Date.now()
   };
-  return Trust.create(newTrust)
-  .then(trust => {
+  try {
+    const trust = await Trust.create(newTrust);
     const update = {
        $push: {trustsOwned: newTrust._id}
     };
-    User.findByIdAndUpdate(thisUserId, update).exec();
+    await User.findByIdAndUpdate(thisUserId, update);
     return res.json(trust);
-  })
-  .catch(err => {
+  } catch(err) {
+    console.log(err);
     return res.status(500).json('Error while creating trust : ' + err);
-  });
+  }
 });
 
-trusting.get('/trusts/get', (req, res) => {
-  return Trust.find()
-  .select('name key description owner moderators members reputation')
-  .populate('owner', 'fullName reputation')
-  .lean()
-  .then(trusts => {
+trusting.get('/trusts/get', async (req, res) => {
+  try {
+    const trusts = await Trust.find()
+    .select('name key description owner moderators members reputation')
+    .populate('owner', 'fullName reputation')
+    .lean();
+    const thisUser = await User.findById(req.decoded.id)
+    .select('trustsRequested');
+    const trustsRequested = thisUser.trustsRequested;
     const id = Types.ObjectId(req.decoded.id);
     for (let trust of trusts) {
       trust.partOf = false;
       if (checkIfMember(trust, id, trust.owner._id)) {
         trust.partOf = true;
       }
-    }
-    return User.findById(req.decoded.id)
-    .select('trustsRequested')
-    .then(thisUser => {
-      for (let trust of trusts) {
-        trust.requested = false;
-        if (thisUser.trustsRequested.find(element => { return element.equals(trust._id); })) {
-          trust.requested = true;
-        }
+      trust.requested = false;
+      if (trustsRequested.find(element => {
+        return element.equals(trust._id);
+      })) {
+        trust.requested = true;
       }
-      return res.json(trusts);
-    })
-    .catch(err => {
-      return res.status(500).json('Error while finding user : ' + err);
-    });
-  })
-  .catch(err => {
+    }
+    return res.json(trusts);
+  }
+  catch(err) {
     return res.status(500).json('Error while finding trusts : ' + err);
-  });
+  }
 });
 
 // data from the trust
-trusting.get('/trust/:key/get', (req, res) => {
-  return Trust.findOne({key: req.params.key})
-  .select('name reputation')
-  .populate('owner', 'fullName reputation')
-  .populate('moderators', 'fullName reputation')
-  .populate('members', 'fullName reputation')
-  .then(trust => {
+trusting.get('/trust/:key/get', async (req, res) => {
+  try {
+    console.log(req.params.key);
+    const trust = await Trust.findOne({key: req.params.key})
+    .select('name reputation')
+    .populate('owner', 'fullName reputation')
+    .populate('moderators', 'fullName reputation')
+    .populate('members', 'fullName reputation');
+    console.log(trust);
     return res.json(trust);
-  })
-  .catch(err => {
+  }
+  catch(err) {
     return res.status(500).json('Error while finding trust : ' + err);
-  });
+  }
 });
 
 // owner changes the trust
@@ -98,7 +96,6 @@ trusting.delete('/trust/:trust/delete', (req, res) => {
 });
 
 function checkIfMember(trust, id, owner=trust.owner): boolean {
-  console.log(trust);
   return owner.equals(id)
   || trust.moderators.find(element => { return element.equals(id); })
   || trust.members.find(element => { return element.equals(id); });

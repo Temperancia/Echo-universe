@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { Ng2EmojiModule } from 'ng2-emoji';
+//import { Ng2EmojiModule } from 'ng2-emoji';
 import {Ng2PageScrollModule} from 'ng2-page-scroll';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -68,7 +68,7 @@ import { JwtInterceptor } from './jwt.interceptor';
     HttpClientModule,
     FormsModule,
     //TransferHttpCacheModule,
-    Ng2EmojiModule.forRoot(),
+  //  Ng2EmojiModule.forRoot(),
     Ng2PageScrollModule,
     BrowserAnimationsModule
   ],

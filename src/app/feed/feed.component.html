@@ -3,10 +3,10 @@
   <div *ngFor="let post of posts">
     <div class="row" *ngIf="post.type === 'trending' && postService.displayedFluxes.trending
     || post.type === 'friends' && postService.displayedFluxes.friends">
-    
+
       <div class="card-body">
-        <h2 [innerHTML]="post.name | emojis"></h2>
-        <div [innerHTML]="post.content | emojis"></div><a class="btn btn-primary">More</a>
+        <h2 [innerHTML]="post.name"></h2>
+        <div [innerHTML]="post.content"></div><a class="btn btn-primary">More</a>
         <div class="font-italic">Yesterday</div>
       </div>
     </div>

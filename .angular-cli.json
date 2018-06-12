@@ -20,8 +20,7 @@
         "prefix": "app",
         "styles": [
           "styles.scss",
-          "assets/vendor/css/bootstrap.min.css",
-          "../node_modules/ng2-emoji/css/ng2-emoji.css"
+          "assets/vendor/css/bootstrap.min.css"
         ],
         "scripts": [],
         "environmentSource": "environments/environment.ts",

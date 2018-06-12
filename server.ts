@@ -60,7 +60,7 @@ app.get('*', (req, res) => {
   res.render('index', { req });
 });
 
-app.use(function(req, res){
+app.use((req, res) => {
   res.send(404);
 });
 
@@ -68,3 +68,5 @@ app.use(function(req, res){
 app.listen(PORT, () => {
   console.log(`Node Express server listening on http://localhost:${PORT}`);
 });
+
+module.exports = app;

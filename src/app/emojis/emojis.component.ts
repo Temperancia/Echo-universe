@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { Ng2EmojiService } from 'ng2-emoji';
+//import { Ng2EmojiService } from 'ng2-emoji';
 
 @Component({
   selector: 'app-emojis',
@@ -14,7 +14,7 @@ export class EmojisComponent implements OnInit {
   private rowsDisplayed: Array<Boolean> = [];
   @Output() onEmoji = new EventEmitter<String>();
   constructor() {
-    this.emojis = Ng2EmojiService.emojis;
+    this.emojis = []//Ng2EmojiService.emojis;
     this.actualEmojis = [];
     for (let emoji = 0, index = -1; emoji < this.emojis.length; emoji++) {
       if (emoji % 10 === 0) {
