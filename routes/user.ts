@@ -113,14 +113,14 @@ function addRequests(requests, type, source) {
 
 user.get('/requests', (req, res) => {
   return User.findById(req.decoded.id)
-  .populate('friendsRequested', 'firstName lastName userName')
-  .populate('friendsRequesting', 'firstName lastName userName')
+  .populate('friendsRequested', 'fullName')
+  .populate('friendsRequesting', 'fullName')
   .populate('trustsRequested', 'name key')
-  .populate('trustsRequesting.user', 'firstName lastName userName')
+  .populate('trustsRequesting.user', 'fullName')
   .populate('trustsRequesting.trust', 'name key')
-  .populate('trustInvitationsSent.user', 'firstName lastName userName')
+  .populate('trustInvitationsSent.user', 'fullName')
   .populate('trustInvitationsSent.trust', 'name key')
-  .populate('trustInvitationsReceived', 'firstName lastName userName')
+  .populate('trustInvitationsReceived', 'fullName')
   .lean()
   .then(thisUser => {
     let requests = [];
@@ -130,6 +130,7 @@ user.get('/requests', (req, res) => {
     requests = addRequests(requests, 'trustRequestReceived', thisUser.trustsRequesting);
     requests = addRequests(requests, 'trustInvitationSent', thisUser.trustInvitationsSent);
     requests = addRequests(requests, 'trustInvitationReceived', thisUser.trustInvitationsReceived);
+    console.log(thisUser, requests);
     return res.json(requests);
   })
   .catch(err => {

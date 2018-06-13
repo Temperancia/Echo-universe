@@ -13,8 +13,8 @@ export function create(user): any {
   .send({
     user: {
       type: 'Public',
-      firstName: 'a',
-      lastName: 'a',
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       password: user.password
     }

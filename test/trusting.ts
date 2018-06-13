@@ -1,12 +1,12 @@
-import { login } from './authentication';
-import { request, userA, trustA } from './config';
+import { login, create } from './authentication';
+import { request, userA, userB, trustA } from './config';
 import * as mongoose from 'mongoose';
 import { Trust } from '../models/Trust';
 
 mongoose.connect('mongodb://localhost/test');
 const db = mongoose.connection;
 
-export function create(owner, trust): any {
+export function createTrust(owner, trust): any {
   return request.post('/api/trusting/trusts/create')
   .set('x-access-token', owner.token)
   .send({
@@ -17,17 +17,20 @@ export function create(owner, trust): any {
   });
 }
 
-describe('Trusting', () => {
+describe('Trusting : API tests', () => {
   let user;
   before(async () => {
     await Trust.remove({});
-    const res = await login(userA);
-    userA.id = res.body.id;
-    userA.token = res.body.token;
+    const resA = await login(userA);
+    userA.id = resA.body.id;
+    userA.token = resA.body.token;
+    const resB = await create(userB);
+    userB.id = resB.body.id;
+    userB.token = resB.body.token;
   });
   describe('/trusts/create', () => {
     it('it should create a trust', (done) => {
-      create(userA, trustA)
+      createTrust(userA, trustA)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.have.property('_id');
@@ -40,6 +43,7 @@ describe('Trusting', () => {
         res.body.should.have.property('policies').eql([]);
         res.body.should.have.property('reputation').eql(0);
         res.body.should.have.property('createdOn');
+        trustA.id = res.body._id;
         done();
       });
     });
@@ -58,11 +62,9 @@ describe('Trusting', () => {
   describe('/trust/:key/get', () => {
     it('it should get the trust data', (done) => {
       const url = '/api/trusting/trust/' + encodeURIComponent(trustA.key) + '/get';
-      console.log(url);
       request.get(url)
       .set('x-access-token', userA.token)
       .end((err, res) => {
-        console.log(res);
         res.should.have.status(200);
         res.body.should.have.property('name').eql(trustA.name);
         res.body.should.have.property('reputation');
@@ -72,6 +74,25 @@ describe('Trusting', () => {
         res.body.should.have.property('moderators');
         res.body.should.have.property('members');
         done();
+      });
+    });
+  });
+  describe('/trust/:trustId/requesting/send', () => {
+    it('it should send a trust request', async () => {
+      let err, res = await request.get('/api/trusting/trust/' + trustA.id + '/requesting/send')
+      .set('x-access-token', userB.token);
+      res.should.have.status(200);
+      request.get('/api/user/requests')
+      .set('x-access-token', userB.token)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('array');
+        res.body.should.include.something.that.deep.equals({
+          _id: trustA.id,
+          name: trustA.name,
+          key: trustA.key,
+          type: 'trustRequestSent'
+        });
       });
     });
   });

@@ -58,8 +58,7 @@ trusting.get('/trusts/get', async (req, res) => {
       }
     }
     return res.json(trusts);
-  }
-  catch(err) {
+  } catch(err) {
     return res.status(500).json('Error while finding trusts : ' + err);
   }
 });
@@ -67,16 +66,13 @@ trusting.get('/trusts/get', async (req, res) => {
 // data from the trust
 trusting.get('/trust/:key/get', async (req, res) => {
   try {
-    console.log(req.params.key);
     const trust = await Trust.findOne({key: req.params.key})
     .select('name reputation')
     .populate('owner', 'fullName reputation')
     .populate('moderators', 'fullName reputation')
     .populate('members', 'fullName reputation');
-    console.log(trust);
     return res.json(trust);
-  }
-  catch(err) {
+  } catch(err) {
     return res.status(500).json('Error while finding trust : ' + err);
   }
 });
@@ -101,69 +97,68 @@ function checkIfMember(trust, id, owner=trust.owner): boolean {
   || trust.members.find(element => { return element.equals(id); });
 }
 
-trusting.get('/trust/:trustId/requesting/send', (req, res) => {
+trusting.get('/trust/:trustId/requesting/send', async (req, res) => {
   const thisUserId = req.decoded.id;
   const trustId = req.params.trustId;
-  return Trust.findById(trustId)
-  .select('owner moderators members')
-  .catch(err => {
-    return res.status(500).json('Error while finding trust : ' + err);
-  })
-  .then(trust => {
+  try {
+    const trust = await Trust.findById(trustId)
+    .select('owner moderators members');
     if (checkIfMember(trust, thisUserId)) {
       return res.status(500).json('Already member');
     }
     const updateThatUser = {
-      $push: {trustsRequesting: {user: thisUserId, trust: trustId}}
+      $push: {trustsRequesting: {
+        user: thisUserId,
+        trust: trustId
+      }}
     };
-    User.findByIdAndUpdate(trust.owner, updateThatUser).exec();
+    await User.findByIdAndUpdate(trust.owner, updateThatUser);
+    console.log('updated');
     const updateThisUser = {
       $push: {trustsRequested: trustId}
     };
     User.findByIdAndUpdate(thisUserId, updateThisUser).exec();
     return res.json({});
-  })
-  .catch(err => {
+  } catch(err) {
     return res.status(500).json('Error while finding and updating user : ' + err);
-  });
+  }
 });
 
-function removeRequestTo(trustId, owner): void {
+async function removeRequestTo(trustId, owner): Promise<void> {
   const updateThisUser = {
     $pull: {trustsRequested: trustId}
   };
-  User.findByIdAndUpdate(owner, updateThisUser).exec();
+  await User.findByIdAndUpdate(owner, updateThisUser);
 }
 
-function removeRequestFrom(trustId, owner, requestor): void {
+async function removeRequestFrom(trustId, owner, requestor): Promise<void> {
   const updateThatUser = {
     $pull: {trustsRequesting: {user: requestor, trust: trustId}}
   };
-  User.findOneAndUpdate(owner, updateThatUser).exec();
+  await User.findOneAndUpdate(owner, updateThatUser);
 }
 
-trusting.get('/trust/:trustId/requesting/cancel', (req, res) => {
+trusting.get('/trust/:trustId/requesting/cancel', async (req, res) => {
   const thisUserId = req.decoded.id;
   const trustId = req.params.trustId;
-  return Trust.findById(trustId)
-  .select('owner')
-  .then(trust => {
+  try {
+    const trust = await Trust.findById(trustId)
+    .select('owner');
     removeRequestTo(trustId, thisUserId);
     removeRequestFrom(trustId, thisUserId, trust.owner);
     return res.json({});
-  })
-  .catch(err => {
+  } catch(err) {
     return res.status(500).json('Error while finding and updating user : ' + err);
-  });
+  };
 });
 
-trusting.get('/trust/:trustId/requesting/accept/:userId', (req, res) => {
+trusting.get('/trust/:trustId/requesting/accept/:userId', async (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.userId;
   const trustId = req.params.trustId;
-  return Trust.findById(trustId)
-  .select('name owner moderators members')
-  .then(trust => {
+  try {
+    const trust = await Trust.findById(trustId)
+    .select('name owner moderators members');
     if (!trust.owner.equals(thisUserId)) {
       return res.status(403).json('Forbidden access');
     }
@@ -183,16 +178,15 @@ trusting.get('/trust/:trustId/requesting/accept/:userId', (req, res) => {
         }
       }
     };
-    User.findByIdAndUpdate(thatUserId, updateThatUser).exec();
+    await User.findByIdAndUpdate(thatUserId, updateThatUser);
     const updateTrust = {
       $push: {members: thatUserId}
     };
-    Trust.findByIdAndUpdate(trustId, updateTrust).exec();
+    await Trust.findByIdAndUpdate(trustId, updateTrust);
     return res.json({});
-  })
-  .catch(err => {
+  } catch(err) {
     return res.status(500).json('Error while finding trust : ' + err);
-  });
+  }
 });
 
 trusting.get('/trust/:trustId/requesting/refuse/:userId', (req, res) => {
