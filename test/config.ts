@@ -7,6 +7,7 @@ export const userA = {
   id: undefined,
   token: undefined
 }
+
 export const userB = {
   firstName: 'b',
   lastName: 'b',

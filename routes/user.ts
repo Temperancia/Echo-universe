@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { Types, Promise } from 'mongoose';
+import { Types } from 'mongoose';
 import { User } from '../models/user';
 import { Trust } from '../models/trust';
 
 let user = Router();
 
-function findUsers(thisUserId, name = undefined): Promise {
+function findUsers(thisUserId, name = undefined) {
   let options = {};
   if (name) {
     options = {$or: [
@@ -111,31 +111,23 @@ function addRequests(requests, type, source) {
   return requests;
 }
 
-user.get('/requests', (req, res) => {
-  return User.findById(req.decoded.id)
-  .populate('friendsRequested', 'fullName')
-  .populate('friendsRequesting', 'fullName')
-  .populate('trustsRequested', 'name key')
-  .populate('trustsRequesting.user', 'fullName')
-  .populate('trustsRequesting.trust', 'name key')
-  .populate('trustInvitationsSent.user', 'fullName')
-  .populate('trustInvitationsSent.trust', 'name key')
-  .populate('trustInvitationsReceived', 'fullName')
-  .lean()
-  .then(thisUser => {
+user.get('/requests', async (req, res) => {
+  try {
+    const thisUser = await User.findById(req.decoded.id)
+    .populate('friendsRequested', 'fullName')
+    .populate('friendsRequesting', 'fullName')
+    .populate('trustRequests', 'name key')
+    .populate('trustInvitations', 'name key')
+    .lean();
     let requests = [];
     requests = addRequests(requests, 'friendRequestSent', thisUser.friendsRequested);
     requests = addRequests(requests, 'friendRequestReceived', thisUser.friendsRequesting);
-    requests = addRequests(requests, 'trustRequestSent', thisUser.trustsRequested);
-    requests = addRequests(requests, 'trustRequestReceived', thisUser.trustsRequesting);
-    requests = addRequests(requests, 'trustInvitationSent', thisUser.trustInvitationsSent);
-    requests = addRequests(requests, 'trustInvitationReceived', thisUser.trustInvitationsReceived);
-    console.log(thisUser, requests);
+    requests = addRequests(requests, 'trustRequest', thisUser.trustRequests);
+    requests = addRequests(requests, 'trustInvitation', thisUser.trustInvitations);
     return res.json(requests);
-  })
-  .catch(err => {
-    return res.status(500).json('Error while finding user : ' + err);
-  });
+  } catch(err) {
+    return res.status(500).json('Error while finding user');
+  }
 });
 
 user.get('/:user/friends', (req, res) => {

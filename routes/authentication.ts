@@ -40,7 +40,9 @@ authentication.post('/user/create', (req, res) => {
   newUser.friendsRequesting = [];
   newUser.trustsOwned = [];
   newUser.trustsJoined = [];
-  console.log(newUser);
+  newUser.trustRequests = [];
+  newUser.trustInvitations = [];
+  console.log('new user', newUser);
   return User.create(newUser)
   .then(user => {
     return res.json({
@@ -71,7 +73,6 @@ authentication.post('/user/login', (req, res) => {
     if (!user) {
       return res.status(401).json('Wrong email or password');
     }
-    console.log(user._id);
     return res.json({
       id: user._id,
       token: makeToken(user._id)

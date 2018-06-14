@@ -23,6 +23,20 @@ const trustSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
+  requests: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  invitations: [{
+    invitor: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    invited: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  }],
   policies: [String],
   reputation: Number,
   createdOn: Date,

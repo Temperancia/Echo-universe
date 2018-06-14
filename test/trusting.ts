@@ -78,21 +78,19 @@ describe('Trusting : API tests', () => {
     });
   });
   describe('/trust/:trustId/requesting/send', () => {
-    it('it should send a trust request', async () => {
+    it('it should send and accept a trust request', async () => {
       let err, res = await request.get('/api/trusting/trust/' + trustA.id + '/requesting/send')
       .set('x-access-token', userB.token);
       res.should.have.status(200);
-      request.get('/api/user/requests')
-      .set('x-access-token', userB.token)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
-        res.body.should.include.something.that.deep.equals({
-          _id: trustA.id,
-          name: trustA.name,
-          key: trustA.key,
-          type: 'trustRequestSent'
-        });
+      let err2, res2 = await request.get('/api/user/requests')
+      .set('x-access-token', userB.token);
+      res2.should.have.status(200);
+      res2.body.should.be.a('array');
+      res2.body.should.include.something.that.deep.equals({
+        _id: trustA.id,
+        name: trustA.name,
+        key: trustA.key,
+        type: 'trustRequest'
       });
     });
   });

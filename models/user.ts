@@ -50,31 +50,11 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  trustsRequested: [{
+  trustRequests: [{
     type: Schema.Types.ObjectId,
     ref: 'Trust'
   }],
-  trustsRequesting: [{
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    trust: {
-      type: Schema.Types.ObjectId,
-      ref: 'Trust'
-    }
-  }],
-  trustInvitationsSent: [{
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    trust: {
-      type: Schema.Types.ObjectId,
-      ref: 'Trust'
-    }
-  }],
-  trustInvitationsReceived: [{
+  trustInvitations: [{
     type: Schema.Types.ObjectId,
     ref: 'Trust'
   }],

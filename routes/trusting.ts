@@ -42,8 +42,8 @@ trusting.get('/trusts/get', async (req, res) => {
     .populate('owner', 'fullName reputation')
     .lean();
     const thisUser = await User.findById(req.decoded.id)
-    .select('trustsRequested');
-    const trustsRequested = thisUser.trustsRequested;
+    .select('trustRequests');
+    const trustRequests = thisUser.trustRequests;
     const id = Types.ObjectId(req.decoded.id);
     for (let trust of trusts) {
       trust.partOf = false;
@@ -51,7 +51,7 @@ trusting.get('/trusts/get', async (req, res) => {
         trust.partOf = true;
       }
       trust.requested = false;
-      if (trustsRequested.find(element => {
+      if (trustRequests.find(element => {
         return element.equals(trust._id);
       })) {
         trust.requested = true;
@@ -59,6 +59,7 @@ trusting.get('/trusts/get', async (req, res) => {
     }
     return res.json(trusts);
   } catch(err) {
+    console.log(err);
     return res.status(500).json('Error while finding trusts : ' + err);
   }
 });
@@ -73,7 +74,8 @@ trusting.get('/trust/:key/get', async (req, res) => {
     .populate('members', 'fullName reputation');
     return res.json(trust);
   } catch(err) {
-    return res.status(500).json('Error while finding trust : ' + err);
+    console.log(err);
+    return res.status(500).json('Error while finding trust');
   }
 });
 
@@ -83,12 +85,6 @@ trusting.put('/trust/:trust/update', (req, res) => {
 
 // owner deletes the trust
 trusting.delete('/trust/:trust/delete', (req, res) => {
-  return Trust.findOneAndRemove({name: req.params.trust}, (err, trust) => {
-    if (err) {
-      return res.status(500).json('Error while deleting trust : ' + err);
-    }
-    return res.json({});
-  });
 });
 
 function checkIfMember(trust, id, owner=trust.owner): boolean {
@@ -102,41 +98,22 @@ trusting.get('/trust/:trustId/requesting/send', async (req, res) => {
   const trustId = req.params.trustId;
   try {
     const trust = await Trust.findById(trustId)
-    .select('owner moderators members');
+    .select('owner moderators members requests');
     if (checkIfMember(trust, thisUserId)) {
       return res.status(500).json('Already member');
     }
-    const updateThatUser = {
-      $push: {trustsRequesting: {
-        user: thisUserId,
-        trust: trustId
-      }}
-    };
-    await User.findByIdAndUpdate(trust.owner, updateThatUser);
-    console.log('updated');
-    const updateThisUser = {
-      $push: {trustsRequested: trustId}
-    };
-    User.findByIdAndUpdate(thisUserId, updateThisUser).exec();
+    await User.findByIdAndUpdate(thisUserId, {
+      $push: {trustRequests: trustId}
+    });
+    await Trust.findByIdAndUpdate(trustId, {
+      $push: {requests: thisUserId}
+    });
     return res.json({});
   } catch(err) {
-    return res.status(500).json('Error while finding and updating user : ' + err);
+    console.log(err);
+    return res.status(500).json('Error while finding and updating user');
   }
 });
-
-async function removeRequestTo(trustId, owner): Promise<void> {
-  const updateThisUser = {
-    $pull: {trustsRequested: trustId}
-  };
-  await User.findByIdAndUpdate(owner, updateThisUser);
-}
-
-async function removeRequestFrom(trustId, owner, requestor): Promise<void> {
-  const updateThatUser = {
-    $pull: {trustsRequesting: {user: requestor, trust: trustId}}
-  };
-  await User.findOneAndUpdate(owner, updateThatUser);
-}
 
 trusting.get('/trust/:trustId/requesting/cancel', async (req, res) => {
   const thisUserId = req.decoded.id;
@@ -144,8 +121,6 @@ trusting.get('/trust/:trustId/requesting/cancel', async (req, res) => {
   try {
     const trust = await Trust.findById(trustId)
     .select('owner');
-    removeRequestTo(trustId, thisUserId);
-    removeRequestFrom(trustId, thisUserId, trust.owner);
     return res.json({});
   } catch(err) {
     return res.status(500).json('Error while finding and updating user : ' + err);
@@ -165,7 +140,6 @@ trusting.get('/trust/:trustId/requesting/accept/:userId', async (req, res) => {
     if (checkIfMember(trust, thatUserId)) {
       return res.status(500).json('Already member');
     }
-    removeRequestFrom(trustId, thisUserId, thatUserId);
     const updateThatUser = {
       $pull: {trustsRequested: trustId},
       $push: {
@@ -193,8 +167,6 @@ trusting.get('/trust/:trustId/requesting/refuse/:userId', (req, res) => {
   const thisUserId = req.decoded.id;
   const trustId = req.params.trustId;
   const thatUserId = req.params.userId;
-  removeRequestTo(trustId, thatUserId);
-  removeRequestFrom(trustId, thisUserId, thatUserId);
   return res.json({});
 });
 
