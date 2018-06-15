@@ -2,8 +2,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './../authentication/login/login.component';
 import { HomeComponent } from './../authentication/home/home.component';
+import { MyProfileComponent } from './../user/my-profile/my-profile.component';
 /*
-import { MyProfileComponent } from './my-profile/my-profile.component';
 import { CirclesComponent } from './circles/circles.component';
 import { TrustsComponent } from './trusts/trusts.component';
 import { TrustComponent } from './trust/trust.component';
@@ -15,8 +15,8 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  /*
   { path: 'my-profile', component: MyProfileComponent, canActivate: [AuthGuard] },
+  /*
   { path: 'circles', component: CirclesComponent, canActivate: [AuthGuard] },
   { path: 'trusts', component: TrustsComponent, canActivate: [AuthGuard, PublicGuard] },
   { path: 'trust/:name', component: TrustComponent, canActivate: [AuthGuard, PublicGuard] },
