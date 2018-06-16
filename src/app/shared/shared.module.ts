@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule }  from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {Ng2PageScrollModule} from 'ng2-page-scroll';
 
 import { PostService } from './post.service';
 
@@ -25,15 +28,22 @@ import { FooterComponent } from './footer/footer.component';
   ],
   exports: [
     HttpClientModule,
+    RouterModule,
     BrowserModule,
     FormsModule,
+    Ng2PageScrollModule,
+    BrowserAnimationsModule,
     HeaderComponent,
     FooterComponent,
+    EmojisComponent
   ],
   imports: [
     BrowserModule,
+    RouterModule,
     HttpClientModule,
     FormsModule,
+    Ng2PageScrollModule,
+    BrowserAnimationsModule
   ],
   providers: [
     PostService

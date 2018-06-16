@@ -13,6 +13,7 @@ export class FluxBoxComponent implements OnInit {
   friends = Flux.Friends;
   dailyLife = Flux.DailyLife;
   lifeStyle = Flux.LifeStyle;
+  displayedFluxes = displayedFluxes;
   constructor(private postService: PostService) { }
 
   ngOnInit() {
