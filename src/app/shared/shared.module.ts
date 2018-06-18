@@ -8,6 +8,7 @@ import {Ng2PageScrollModule} from 'ng2-page-scroll';
 
 import { PostService } from './post.service';
 
+import { BlankComponent } from './blank/blank.component';
 import { HeaderComponent } from './header/header.component';
 import { FluxBoxComponent } from './header/flux-box/flux-box.component';
 import { OptionsBoxComponent } from './header/options-box/options-box.component';
@@ -18,6 +19,7 @@ import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
+    BlankComponent,
     HeaderComponent,
     FluxBoxComponent,
     OptionsBoxComponent,
@@ -33,6 +35,7 @@ import { FooterComponent } from './footer/footer.component';
     FormsModule,
     Ng2PageScrollModule,
     BrowserAnimationsModule,
+    BlankComponent,
     HeaderComponent,
     FooterComponent,
     EmojisComponent

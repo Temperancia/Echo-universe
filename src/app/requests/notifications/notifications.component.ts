@@ -22,6 +22,7 @@ export enum RequestType {
 export class NotificationsComponent implements OnInit {
   requests: any;
   requestType = RequestType;
+  displayedNotifications = displayedNotifications;
   constructor(private router: Router,
     private friendService: FriendService,
     private trustService: TrustService,

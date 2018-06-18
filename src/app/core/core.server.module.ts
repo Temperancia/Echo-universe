@@ -18,4 +18,4 @@ import {CoreComponent} from './core.component';
   // imported AppModule, it needs to be repeated here.
   bootstrap: [CoreComponent],
 })
-export class AppServerModule {}
+export class CoreServerModule {}

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Types } from 'mongoose';
-import { Trust } from '../models/trust';
-import { User } from '../models/user';
+import { Trust } from './../models/trust';
+import { User } from './../models/user';
 
 let trusting = Router();
 
@@ -140,7 +140,7 @@ trusting.get('/trust/:trustId/requesting/accept/:userId', async (req, res) => {
     if (checkIfMember(trust, thatUserId)) {
       return res.status(500).json('Already member');
     }
-    const updateThatUser = {
+    await User.findByIdAndUpdate(thatUserId, {
       $pull: {trustsRequested: trustId},
       $push: {
         trustsJoined: trustId,
@@ -151,12 +151,10 @@ trusting.get('/trust/:trustId/requesting/accept/:userId', async (req, res) => {
           rank: 0
         }
       }
-    };
-    await User.findByIdAndUpdate(thatUserId, updateThatUser);
-    const updateTrust = {
+    });
+    await Trust.findByIdAndUpdate(trustId, {
       $push: {members: thatUserId}
-    };
-    await Trust.findByIdAndUpdate(trustId, updateTrust);
+    });
     return res.json({});
   } catch(err) {
     return res.status(500).json('Error while finding trust : ' + err);

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as jwt from 'jsonwebtoken';
+import { verify } from 'jsonwebtoken';
 let api = Router();
 
 global['secret'] = 'jsdjrfozej654541fkn';
@@ -29,7 +29,7 @@ api.use((req, res, next) => {
   } else {
     const token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (token) {
-      jwt.verify(token, global['secret'], (err, decoded) => {
+      verify(token, global['secret'], (err, decoded) => {
          if (err) {
            return res.status(403).json('Failed to authenticate token.');
          } else {
@@ -39,7 +39,7 @@ api.use((req, res, next) => {
          }
        });
     } else {
-      return res.status(403).send('No token provided.');
+      return res.status(403).json('No token provided.');
     }
   }
 });

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { Types } from 'mongoose';
 import * as jwt from 'jsonwebtoken';
-import { User } from '../models/user';
+import { User } from './../models/user';
 
 function makeToken(id = undefined) {
   const token = jwt.sign({
@@ -51,6 +51,7 @@ authentication.post('/user/create', (req, res) => {
     });
   })
   .catch(err => {
+    console.log(err);
     return res.status(500).json('User already exists');
   });
 });

@@ -1,13 +1,9 @@
 import { login, create } from './authentication';
 import { request, userA, userB, trustA } from './config';
-import * as mongoose from 'mongoose';
 import { Trust } from '../models/Trust';
 
-mongoose.connect('mongodb://localhost/test');
-const db = mongoose.connection;
-
-export function createTrust(owner, trust): any {
-  return request.post('/api/trusting/trusts/create')
+export async function createTrust(owner, trust): Promise<any> {
+  const res = await request.post('/api/trusting/trusts/create')
   .set('x-access-token', owner.token)
   .send({
     trust: {
@@ -15,78 +11,69 @@ export function createTrust(owner, trust): any {
       description: trust.description
     }
   });
+  trust.id = res.body._id;
+  return res;
 }
 
-describe('Trusting : API tests', () => {
-  let user;
+describe('Trusting : API tests', async () => {
   before(async () => {
     await Trust.remove({});
-    const resA = await login(userA);
-    userA.id = resA.body.id;
-    userA.token = resA.body.token;
-    const resB = await create(userB);
-    userB.id = resB.body.id;
-    userB.token = resB.body.token;
+    await login(userA);
+    await login(userB);
   });
   describe('/trusts/create', () => {
-    it('it should create a trust', (done) => {
-      createTrust(userA, trustA)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.have.property('_id');
-        res.body.should.have.property('name').eql(trustA.name);
-        res.body.should.have.property('key').eql(trustA.key);
-        res.body.should.have.property('description').eql(trustA.description);
-        res.body.should.have.property('owner').eql(userA.id);
-        res.body.should.have.property('moderators').eql([]);
-        res.body.should.have.property('members').eql([]);
-        res.body.should.have.property('policies').eql([]);
-        res.body.should.have.property('reputation').eql(0);
-        res.body.should.have.property('createdOn');
-        trustA.id = res.body._id;
-        done();
-      });
+    it('it should create a trust', async () => {
+      const res = await createTrust(userA, trustA);
+      res.should.have.status(200);
+      res.body.should.have.property('_id');
+      res.body.should.have.property('name').eql(trustA.name);
+      res.body.should.have.property('key').eql(trustA.key);
+      res.body.should.have.property('description').eql(trustA.description);
+      res.body.should.have.property('owner').eql(userA.id);
+      res.body.should.have.property('moderators').eql([]);
+      res.body.should.have.property('members').eql([]);
+      res.body.should.have.property('policies').eql([]);
+      res.body.should.have.property('reputation').eql(0);
+      res.body.should.have.property('createdOn');
     });
   });
   describe('/trusts/get', () => {
-    it('it should get all the trusts', (done) => {
-      request.get('/api/trusting/trusts/get')
-      .set('x-access-token', userA.token)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
-        done();
-      });
+    it('it should get all the trusts', async () => {
+      const res = await request.get('/api/trusting/trusts/get')
+      .set('x-access-token', userA.token);
+      res.should.have.status(200);
+      res.body.should.be.a('array');
     });
   });
   describe('/trust/:key/get', () => {
-    it('it should get the trust data', (done) => {
+    it('it should get the trust data', async () => {
       const url = '/api/trusting/trust/' + encodeURIComponent(trustA.key) + '/get';
-      request.get(url)
+      const res = await request.get(url)
       .set('x-access-token', userA.token)
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.have.property('name').eql(trustA.name);
-        res.body.should.have.property('reputation');
-        res.body.should.have.property('owner')
-        res.body.owner.should.have.property('fullName').eql(userA.fullName);
-        res.body.owner.should.have.property('reputation');
-        res.body.should.have.property('moderators');
-        res.body.should.have.property('members');
-        done();
-      });
+      res.should.have.status(200);
+      res.body.should.have.property('name').eql(trustA.name);
+      res.body.should.have.property('reputation');
+      res.body.should.have.property('owner')
+      res.body.owner.should.have.property('fullName').eql(userA.fullName);
+      res.body.owner.should.have.property('reputation');
+      res.body.should.have.property('moderators');
+      res.body.should.have.property('members');
     });
   });
+  /*
   describe('/trust/:trustId/requesting/send', () => {
     it('it should send and accept a trust request', async () => {
-      let err, res = await request.get('/api/trusting/trust/' + trustA.id + '/requesting/send')
+      let res;
+
+      res = await request.get('/api/trusting/trust/' + trustA.id + '/requesting/send')
       .set('x-access-token', userB.token);
       res.should.have.status(200);
-      let err2, res2 = await request.get('/api/user/requests')
+
+      res = await request.get('/api/user/requests')
       .set('x-access-token', userB.token);
-      res2.should.have.status(200);
-      res2.body.should.be.a('array');
-      res2.body.should.include.something.that.deep.equals({
+      res.should.have.status(200);
+      res.body.should.be.a('array');
+      res.body.should.include.something.that.deep.equals({
         _id: trustA.id,
         name: trustA.name,
         key: trustA.key,
@@ -94,4 +81,6 @@ describe('Trusting : API tests', () => {
       });
     });
   });
+  */
+  
 });

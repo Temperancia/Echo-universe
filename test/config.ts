@@ -25,9 +25,15 @@ export const trustA = {
   id: undefined
 }
 
+import 'mocha';
+import 'chai/register-should';
+
 import * as chai from 'chai';
 import * as chaiHttp from 'chai-http';
 import * as chaiThings from 'chai-things';
 chai.use(chaiHttp);
 chai.use(chaiThings);
 export const request = chai.request('http://localhost:4000');
+
+import * as mongoose from 'mongoose';
+mongoose.connect('mongodb://localhost/test');

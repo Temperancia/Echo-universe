@@ -1,24 +1,24 @@
-import * as express from 'express';
-import { User } from '../models/user';
-import { Promise } from 'mongoose';
+import { Router } from 'express';
+import { User } from './../models/user';
 
-let friends = express.Router();
+let friends = Router();
 
-function acceptFriend(thisUserId, thatUserId): Promise {
+async function acceptFriend(thisUserId, thatUserId) {
   console.log('accept friend');
-  return User.findByIdAndUpdate(thisUserId,
-  {$push: {friends: thatUserId}, $pull: {friendsRequesting: thatUserId}})
-  .then(_ => {
-    User.findByIdAndUpdate(thatUserId,
-    {$push: {friends: thisUserId}, $pull: {friendsRequested: thisUserId}})
-    .then(_ => {
-      return undefined;
+  try {
+    await User.findByIdAndUpdate(thisUserId, {
+      $push: {friends: thatUserId},
+      $pull: {friendsRequesting: thatUserId}
     });
-  })
-  .catch(err => {
-    console.error('Error : ', err.message);
+    await User.findByIdAndUpdate(thatUserId, {
+      $push: {friends: thisUserId},
+      $pull: {friendsRequested: thisUserId}
+    });
+    return undefined;
+  } catch(err) {
+    console.log('Error : ', err.message);
     return err.message;
-  });
+  }
 }
 
 function checkIfAlreadyAsked(thisUserId, friendsRequested, thatUserId): boolean {
@@ -34,7 +34,7 @@ function checkIfAlreadyAsked(thisUserId, friendsRequested, thatUserId): boolean 
 
 function checkIfFriends(thisUserId, friends) {
   console.log('checking if friends');
-  if (friends.find((request) => {
+  if (friends.find(request => {
     return request.equals(thisUserId);
   })) {
     throw new Error('Already friends');
@@ -50,28 +50,31 @@ function checkIfRequestIsPending(thisUserId, friendsRequesting) {
   }
 }
 
-function addFriendRequest(from, to): Promise {
+async function addFriendRequest(from, to) {
   console.log('adding friend request to that user');
-  User.findByIdAndUpdate(to,
-  {$push: {friendsRequesting: from}}).exec();
+  await User.findByIdAndUpdate(to, {
+    $push: {
+      friendsRequesting: from
+    }
+  });
 }
 
-function addFriendRequested(thisUser, to): Promise {
+async function addFriendRequested(thisUser, to) {
   console.log('adding friend request to this user')
-  const updateThisUser = {
+  await User.findByIdAndUpdate(thisUser, {
     $push: {friendsRequested: to}
-  };
-  User.findByIdAndUpdate(thisUser, updateThisUser).exec();
+  });
 }
 
-friends.get('/user/request/:id', (req, res) => {
+friends.get('/user/request/:id', async (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.id;
+  console.log(thisUserId + ' asks to be friend with ' + thatUserId);
   if (thisUserId === thatUserId) {
     return res.status(500).json('Cannot ask out yourself');
   }
-  return User.findById(thatUserId, 'friends friendsRequested friendsRequesting')
-  .then(thatUser => {
+  try {
+    const thatUser = await User.findById(thatUserId, 'friends friendsRequested friendsRequesting')
     checkIfFriends(thisUserId, thatUser.friends);
     if (checkIfAlreadyAsked(thisUserId, thatUser.friendsRequested, thatUserId)) {
       return res.json({});
@@ -80,65 +83,52 @@ friends.get('/user/request/:id', (req, res) => {
     addFriendRequest(thisUserId, thatUserId);
     addFriendRequested(thisUserId, thatUserId);
     return res.json({});
-  })
-  .catch(err => {
+  } catch(err) {
     console.error('Error : ', err.message);
     return res.status(500).json(err.message);
-  })
+  }
 });
 
-friends.get('/user/cancel/:id', (req, res) => {
+friends.get('/user/cancel/:id', async (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.id;
-  const updateThisUser = {
-    $pull: {friendsRequested: thatUserId}
-  };
-  return User.findByIdAndUpdate(thisUserId, updateThisUser)
-  .then(_ => {
-    const updateThatUser = {
+  try {
+    await User.findByIdAndUpdate(thisUserId, {
+      $pull: {friendsRequested: thatUserId}
+    });
+    await User.findByIdAndUpdate(thatUserId, {
       $pull: {friendsRequesting: thisUserId}
-    };
-    return User.findByIdAndUpdate(thatUserId, updateThatUser).exec();
-  })
-  .then (_ => {
+    });
     return res.json({});
-  })
-  .catch(err => {
+  } catch(err) {
     return res.status(500).json('Error while finding and updating : ' + err);
-  });
+  }
 });
 
-friends.get('/user/accept/:id', (req, res) => {
+friends.get('/user/accept/:id', async (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.id;
-  acceptFriend(thisUserId, thatUserId)
-  .then(message => {
-    if (message) {
-      return res.status(500).json(message);
-    }
-    return res.json({});
-  })
+  const message = await acceptFriend(thisUserId, thatUserId);
+  if (message) {
+    return res.status(500).json(message);
+  }
+  return res.json({});
 });
 
-friends.get('/user/refuse/:id', (req, res) => {
+friends.get('/user/refuse/:id', async (req, res) => {
   const thisUserId = req.decoded.id;
   const thatUserId = req.params.id;
-  const updateThisUser = {
-    $pull: {friendsRequesting: thatUserId}
-  };
-  return User.findByIdAndUpdate(thisUserId, updateThisUser)
-  .then(_ => {
-    const updateThatUser = {
+  try {
+    await User.findByIdAndUpdate(thisUserId, {
+      $pull: {friendsRequesting: thatUserId}
+    });
+    await User.findByIdAndUpdate(thatUserId, {
       $pull: {friendsRequested: thisUserId}
-    };
-    return User.findByIdAndUpdate(thatUserId, updateThatUser).exec();
-  })
-  .then (_ => {
+    });
     return res.json({});
-  })
-  .catch(err => {
+  } catch(err) {
     return res.status(500).json('Error while finding and updating : ' + err);
-  });
+  }
 });
 
 module.exports = friends;
