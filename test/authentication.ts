@@ -28,29 +28,31 @@ export async function login(user): Promise<any> {
   return res;
 }
 
+let res;
 describe('Authentication', () => {
   before(async () => {
     await User.remove({});
   });
-  describe('/user/create', () => {
-    it('it should create users', async () => {
-      let res;
-      res = await create(userA);
-      res.should.have.status(200);
-      res.body.should.have.property('id');
-      res.body.should.have.property('token');
-      res = await create(userB);
-      res.should.have.status(200);
-      res.body.should.have.property('id');
-      res.body.should.have.property('token');
+  describe('Expected behaviour', () => {
+    describe('/user/create', () => {
+      it('it should create users', async () => {
+        res = await create(userA);
+        res.should.have.status(200);
+        res.body.should.have.property('id');
+        res.body.should.have.property('token');
+        res = await create(userB);
+        res.should.have.status(200);
+        res.body.should.have.property('id');
+        res.body.should.have.property('token');
+      });
     });
-  });
-  describe('/user/login', () => {
-    it('it should log in', async () => {
-      const res = await login(userA);
-      res.should.have.status(200);
-      res.body.should.have.property('id');
-      res.body.should.have.property('token');
+    describe('/user/login', () => {
+      it('it should log in', async () => {
+        res = await login(userA);
+        res.should.have.status(200);
+        res.body.should.have.property('id');
+        res.body.should.have.property('token');
+      });
     });
   });
 });

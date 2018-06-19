@@ -34,7 +34,7 @@ user.get('/:user/profile', async (req, res) => {
     }
     return res.json(thatUser);
   } catch(err) {
-    return res.status(500).json('Error while finding user : ' + err);
+    return res.status(500).json('Error while finding user');
   }
 });
 

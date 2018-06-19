@@ -10,6 +10,7 @@ async function acceptFriend(thisUserId, thatUserId) {
       $push: {friends: thatUserId},
       $pull: {friendsRequesting: thatUserId}
     });
+    console.log('removing ' + thisUserId + ' from ' + thatUserId);
     await User.findByIdAndUpdate(thatUserId, {
       $push: {friends: thisUserId},
       $pull: {friendsRequested: thisUserId}
@@ -128,6 +129,22 @@ friends.get('/user/refuse/:id', async (req, res) => {
     return res.json({});
   } catch(err) {
     return res.status(500).json('Error while finding and updating : ' + err);
+  }
+});
+
+friends.get('/user/remove/:id', async (req, res) => {
+  const thisUserId = req.decoded.id;
+  const thatUserId = req.params.id;
+  try {
+    await User.findByIdAndUpdate(thisUserId, {
+      $pull: {friends: thatUserId}
+    });
+    await User.findByIdAndUpdate(thatUserId, {
+      $pull: {friends: thisUserId}
+    });
+    return res.json({});
+  } catch(err) {
+    return res.status(500).json('Error while finding and updating : ');
   }
 });
 

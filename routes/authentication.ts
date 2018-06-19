@@ -63,14 +63,14 @@ authentication.get('/user/login', (req, res) => {
   });
 });
 
-authentication.post('/user/login', (req, res) => {
+authentication.post('/user/login', async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   if (!email || !password) {
     return res.status(401).json('Wrong email or password');
   }
-  return User.findOne(req.body)
-  .then(user => {
+  try {
+    const user = await User.findOne(req.body);
     if (!user) {
       return res.status(401).json('Wrong email or password');
     }
@@ -78,10 +78,9 @@ authentication.post('/user/login', (req, res) => {
       id: user._id,
       token: makeToken(user._id)
     });
-  })
-  .catch(err => {
-    return res.status(500).json('Error while finding user : ' + err);
-  });
+  } catch(err) {
+    return res.status(500).json('Error while finding user');
+  }
 });
 
 module.exports = authentication;

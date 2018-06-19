@@ -31,8 +31,12 @@ import 'chai/register-should';
 import * as chai from 'chai';
 import * as chaiHttp from 'chai-http';
 import * as chaiThings from 'chai-things';
+import * as chaiLike from 'chai-like';
+import * as chaiSubset from 'chai-subset';
 chai.use(chaiHttp);
 chai.use(chaiThings);
+chai.use(chaiLike);
+chai.use(chaiSubset);
 export const request = chai.request('http://localhost:4000');
 
 import * as mongoose from 'mongoose';

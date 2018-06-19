@@ -76,10 +76,10 @@ posting.get('/post/:postId/downvote', (req, res) => {
   });
 });
 
-function vote(voterId: string, postId: string, coefficient: number): Promise {
-  return Post.findById(postId)
-  .select('originType originName author reputation')
-  .then(post => {
+async function vote(voterId: string, postId: string, coefficient: number): Promise {
+  try {
+    const post = await Post.findById(postId)
+    .select('originType originName author reputation')
     if (post.author.equals(voterId)) {
       return 'Cannot upvote your own post';
     }
@@ -94,21 +94,20 @@ function vote(voterId: string, postId: string, coefficient: number): Promise {
     : updateThisPost['$inc'] = {'reputation.downvotes': 1};
     Post.findByIdAndUpdate(postId, updateThisPost).exec();
     if (post.originType === 'Flux') {
-      User.findByIdAndUpdate(post.author, {
+      await User.findByIdAndUpdate(post.author, {
         $set: {'reputation.refresh': true}
-      }).exec();
+      });
     } else {
       console.log('refresh trust rep on next', post.author, post.originName)
-      User.update({_id: post.author, 'trustReputation.trust': post.originName}, {
+      await User.update({_id: post.author, 'trustReputation.trust': post.originName}, {
         $set: {'trustReputation.$.refresh': true}
-      }).exec();
+      });
     }
 
     return undefined;
-  })
-  .catch(err => {
+  } catch(err) {
     return 'Error while finding post : ' + err;
-  });
+  }
 }
 
 function findPostsFromFluxes(fluxes: string): Promise {
