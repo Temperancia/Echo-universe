@@ -8,11 +8,11 @@ import { Post } from './../../core/models/post';
 import { getId, refresh } from './../../core/core.settings';
 
 @Component({
-  selector: 'app-feed-home',
-  templateUrl: 'feed-home.component.html',
-  styleUrls: ['feed-home.component.scss']
+  selector: 'app-feed',
+  templateUrl: 'feed.component.html',
+  styleUrls: ['feed.component.scss']
 })
-export class FeedHomeComponent {
+export class FeedComponent {
   flux = Flux;
   feed$: Observable<Post[]>;
   constructor(private router: Router, private postService: PostService) {

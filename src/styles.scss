@@ -8,7 +8,11 @@
 }
 body {
   color: black !important;
+  background-color: $trickle !important;
   font-family: 'Roboto-Regular' !important;
+}
+.content {
+  margin-top: 20%;
 }
 button {
   cursor: pointer;
@@ -16,11 +20,6 @@ button {
 .btn-others {
   color: white;
   background-color: $trickle;
-}
-
-.content {
-  margin-top: 80px;
-  margin-bottom: 80px;
 }
 
 input, button, textarea {

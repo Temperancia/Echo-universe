@@ -13,7 +13,7 @@ export class PublicGuard implements CanActivate {
     }
 
     // not logged in so redirect to login page
-    this.router.navigate(['/home']);
+    this.router.navigate(['/flux']);
     return false;
   }
 }

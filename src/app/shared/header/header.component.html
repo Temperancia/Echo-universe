@@ -1,8 +1,28 @@
 <!DOCTYPE html>
 <nav>
+  <div class="header">
+    <div class="row banner">
+      <div class="col-6">
+        <a (click)="toggle('navigation')">
+          <img class="w-100" src="assets/img/logo_width.png">
+        </a>
+      </div>
+      <div class="offset-3 col-3">
+        <a (click)="toggle('menu')">
+          <img class="w-100" src="assets/img/megaphone.png">
+        </a>
+      </div>
+    </div>
+    <app-navigation-box (toggle)="toggle($event)" *ngIf="this.toggles['navigation']"></app-navigation-box>
+    <app-post-box *ngIf="this.toggles['echo']" [@itemAnim]></app-post-box>
+    <app-flux-box *ngIf="this.toggles['menu']" [@itemAnim]></app-flux-box>
+  </div>
+
+
+  <!--
   <div class="row align-items-center">
     <div class="col-1 pr-0">
-      <a routerLink="/home"><img class="w-100" src="assets/img/logo_width.png"></a>
+      <a routerLink="/flux"><img class="w-100" src="assets/img/logo_width.png"></a>
     </div>
     <div class="col-10">
       <div class="container">
@@ -29,7 +49,6 @@
           </div>
           <div class="col-1 align-self-center" *ngIf="!isAnonymous">
             <img src="assets/img/idk2.png" (click)="showPostBox()">
-            <app-post-box *ngIf="showPost" [@itemAnim]></app-post-box>
           </div>
           <div class="col-5 d-flex align-self-center" *ngIf="isAnonymous">
             <p class="m-0 align-self-center">
@@ -44,4 +63,5 @@
       </div>
     </div>
   </div>
+-->
 </nav>

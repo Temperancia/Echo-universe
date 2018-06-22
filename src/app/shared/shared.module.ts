@@ -11,7 +11,7 @@ import { PostService } from './post.service';
 import { BlankComponent } from './blank/blank.component';
 import { HeaderComponent } from './header/header.component';
 import { FluxBoxComponent } from './header/flux-box/flux-box.component';
-import { OptionsBoxComponent } from './header/options-box/options-box.component';
+import { NavigationBoxComponent } from './header/navigation-box/navigation-box.component';
 import { PostBoxComponent } from './header/post-box/post-box.component';
 import { SearchBoxComponent } from './header/search-box/search-box.component';
 import { EmojisComponent } from './emojis/emojis.component';
@@ -22,7 +22,7 @@ import { FooterComponent } from './footer/footer.component';
     BlankComponent,
     HeaderComponent,
     FluxBoxComponent,
-    OptionsBoxComponent,
+    NavigationBoxComponent,
     PostBoxComponent,
     SearchBoxComponent,
     EmojisComponent,

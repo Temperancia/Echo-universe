@@ -1,15 +1,29 @@
 <!DOCTYPE html>
-<div class="flux-box">
-  <div class="col-12 w-100">
-    <button class="btn d-block mx-auto" [ngClass]="displayedFluxes.Tendance ? 'btn-tendance' : 'btn-secondary'" (click)="toggleFlux(tendance)">Tendance</button>
+
+<div class="row flux-box">
+  <div class="col-4">
+    <button class="btn d-block mx-auto py-3" [ngClass]="displayedFluxes.Tendance ? 'btn-tendance' : 'btn-secondary'" (click)="toggleFlux(tendance)">Tendance</button>
+    <button class="btn d-block mx-auto py-3" [ngClass]="displayedFluxes.Friends ? 'btn-friend' : 'btn-secondary'" (click)="toggleFlux(friends)">Friend</button>
+    <button class="btn d-block mx-auto py-3" [ngClass]="displayedFluxes.DailyLife ? 'btn-daily' : 'btn-secondary'" (click)="toggleFlux(dailyLife)" >Daily Life</button>
+    <button class="btn d-block mx-auto py-3" [ngClass]="displayedFluxes.LifeStyle ? 'btn-style' : 'btn-secondary'" (click)="toggleFlux(lifeStyle)">Life Style</button>
+  </div>
+  <div class="col-4">
+    <button class="btn d-block mx-auto py-3">Echo</button>
+    <button class="btn d-block mx-auto py-3">Rumour</button>
+    <button class="btn d-block mx-auto py-3">Inquiry</button>
+    <button class="btn d-block mx-auto py-3">Outrage</button>
+  </div>
+  <div class="col-4">
+    <button class="btn d-block mx-auto my-3">Popular</button>
+    <button class="btn d-block mx-auto my-3">Strife</button>
+    <button class="btn d-block mx-auto my-3">Celebs</button>
   </div>
   <div class="col-12 w-100">
-    <button class="btn d-block mx-auto" [ngClass]="displayedFluxes.Friends ? 'btn-friend' : 'btn-secondary'" (click)="toggleFlux(friends)">Friend</button>
   </div>
   <div class="col-12 w-100">
-    <button class="btn d-block mx-auto" [ngClass]="displayedFluxes.DailyLife ? 'btn-daily' : 'btn-secondary'" (click)="toggleFlux(dailyLife)" >Daily Life</button>
   </div>
   <div class="col-12 w-100">
-    <button class="btn d-block mx-auto" [ngClass]="displayedFluxes.LifeStyle ? 'btn-style' : 'btn-secondary'" (click)="toggleFlux(lifeStyle)">Life Style</button>
+  </div>
+  <div class="col-12 w-100">
   </div>
 </div>

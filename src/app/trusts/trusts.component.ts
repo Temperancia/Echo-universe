@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {Trust} from './../../core/models/trust';
-import {User} from './../../core/models/user';
-import {UserService} from './../user.service';
-import {FriendService} from './../../requests/friend.service';
+import {Trust} from './../core/models/trust';
+import {User} from './../core/models/user';
+import {UserService} from './../user/user.service';
+import {FriendService} from './../requests/friend.service';
 
 @Component({
-  selector: 'circles-component',
-  templateUrl: 'circles.component.html'
+  selector: 'trusts-component',
+  templateUrl: 'trusts.component.html'
 })
-export class CirclesComponent implements OnInit {
+export class TrustsComponent implements OnInit {
   showTrusts: boolean = false;
   showFriends: boolean = true;
   ownedTrusts: Trust[];

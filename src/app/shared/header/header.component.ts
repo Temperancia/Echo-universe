@@ -27,10 +27,12 @@ export class HeaderComponent implements OnInit {
   public isLoggedIn: boolean;
   public isAnonymous: boolean;
   public searchInput: string;
-  public showSearch = false;
-  public showPost = false;
-  public showFlux = false;
-  public showOptions = false;
+  public toggles = {
+    navigation: false,
+    echo: false,
+    menu: false,
+    none: true
+  };
   @ViewChild('search') search;
   constructor(private postService: PostService,
                private authenticationService: AuthenticationService,
@@ -43,36 +45,11 @@ export class HeaderComponent implements OnInit {
     this.isAnonymous = this.authenticationService.isAnonymous();
   }
 
-  public showSearchBox(): void {
-    this.showSearch = true;
-    this.showPost = false;
-    this.showFlux = false;
-    this.showOptions = false;
-  }
-
-  public showPostBox(): void {
-    this.showPost = !this.showPost;
-    this.showSearch = false;
-    this.showFlux = false;
-    this.showOptions = false;
-  }
-
-  public showFluxBox(): void {
-    if (this.router.url !== '/home') {
-      this.router.navigate(['/home']);
-    } else {
-      this.showFlux = !this.showFlux;
-      this.showSearch = false;
-      this.showPost = false;
-      this.showOptions = false;
+  toggle(element: string): void {
+    const state = this.toggles[element];
+    for (const toggle in this.toggles) {
+      this.toggles[toggle] = false;
     }
+    this.toggles[element] = !state;
   }
-
-  public showOptionsBox(): void {
-    this.showOptions = !this.showOptions;
-    this.showSearch = false;
-    this.showFlux = false;
-    this.showPost = false;
-  }
-
 }

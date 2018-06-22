@@ -6,13 +6,11 @@ import { UserService } from './user.service';
 
 import { MyProfileComponent } from './my-profile/my-profile.component';
 import { FeedMyProfileComponent } from './my-profile/feed-my-profile/feed-my-profile.component';
-import { CirclesComponent } from './circles/circles.component';
 
 @NgModule({
   declarations: [
     MyProfileComponent,
-    FeedMyProfileComponent,
-    CirclesComponent
+    FeedMyProfileComponent
   ],
   imports: [
     SharedModule

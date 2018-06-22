@@ -2,18 +2,19 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from './../shared/shared.module';
 
-import { FeedHomeComponent } from './feed-home/feed-home.component';
+import { FluxComponent } from './flux.component';
+import { FeedComponent } from './feed/feed.component';
 
 @NgModule({
   declarations: [
-    FeedHomeComponent
+    FluxComponent,
+    FeedComponent
   ],
   imports: [
     SharedModule
   ],
-
   exports: [
-    FeedHomeComponent
+    FluxComponent
   ]
 })
 export class FluxModule { }

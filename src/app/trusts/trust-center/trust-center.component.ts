@@ -5,11 +5,11 @@ import { Trust } from './../../core/models/trust';
 import { refresh } from './../../core/core.settings';
 
 @Component({
-  selector: 'app-trusts',
-  templateUrl: 'trusts.component.html',
-  styleUrls: ['trusts.component.scss']
+  selector: 'app-trust-center',
+  templateUrl: 'trust-center.component.html',
+  styleUrls: ['trust-center.component.scss']
 })
-export class TrustsComponent implements OnInit {
+export class TrustCenterComponent implements OnInit {
   newTrust: any = {};
   trusts: Trust[];
   constructor(private trustService: TrustService, private router: Router) {
